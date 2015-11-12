@@ -50,7 +50,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public void quitarValor(int pFila, int pColumna) {
-        Casilla unaCasilla = matriz[pFila-1][pColumna-1];
+        Casilla unaCasilla = matriz[pFila][pColumna];
         unaCasilla.quitarValor();
     }
 

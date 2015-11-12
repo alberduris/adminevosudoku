@@ -122,13 +122,25 @@ public class Sudoku {
     		}
     		for(int i=0; i<9; i++){
     			for(int j=0; j<9; j++){
-    				matriz.obtCasilla(i, j).rellenarListaPosibles(comprobarListaPosibles(i, j, matriz));
-    				if(!matriz.obtCasilla(i, j).comprobarCorrecto()){
+    				pMatriz.obtCasilla(i, j).rellenarListaPosibles(comprobarListaPosibles(i, j, pMatriz));
+    				
+    				if(!pMatriz.obtCasilla(i, j).comprobarCorrecto()){
     					casillasFallo[i][j] = true;
     				}
     			}
     		}
     	}else{
+    		casillasFallo = new boolean[0][0];
+    	}
+    	boolean todo = false;
+    	for(int i=0; !todo && i<9; i++){
+			for(int j=0; !todo && j<9; j++){
+				if(casillasFallo[i][j]){
+					todo = true;
+				}
+			}
+		}
+    	if(!todo){
     		casillasFallo = new boolean[0][0];
     	}
     	return casillasFallo;
@@ -138,43 +150,43 @@ public class Sudoku {
 		boolean completo = true;
 		for(int i =0; i<9 && completo; i++){
 			for(int j =0; j<9 && completo; j++){
-				//TODO: completo = matriz.obtCasilla(i, j).comprobarCompleto();
+				completo = pMatriz.obtCasilla(i, j).estaCompletada();
 			}
 		}
 		return completo;
 	}
     
-    private char[] comprobarListaPosibles(int pFila, int pColumna, Matriz pMatriz){
-    	char[] lista = new char[9];
-    	for(int i =0; i<9; i++) lista[i] = Integer.toString(i+1).charAt(0);
-    	for(int i=0; i<9; i++){
-			if(i != pFila){
-				if(esta(lista, pMatriz.obtValor(i, pColumna))){
-					lista[pMatriz.obtValor(i, pColumna)-1] = ' ';
+    private char[] comprobarListaPosibles(int pI, int pJ, Matriz pMatriz){
+		char[] lista = new char[9];
+		for(int i=0; i<9; i++) lista[i] = Integer.toString(i+1).charAt(0);
+		for(int i= 0; i<9; i++){
+			if(i!=pI){
+				if(esta(lista, pMatriz.obtCasilla(i, pJ).obtValor())){
+					lista[pMatriz.obtCasilla(i, pJ).obtValor()-1] = ' ';
 				}
 			}
 		}
-    	for(int i=0; i<9; i++){
-    		if(i != pFila){
-				if(esta(lista, pMatriz.obtValor(pFila, i))){
-					lista[pMatriz.obtValor(pFila, i)-1] = ' ';
-				}
+		for(int j =0; j<9; j++){
+			if(j!= pJ){
+				if(esta(lista, pMatriz.obtCasilla(pI, j).obtValor())){
+					lista[pMatriz.obtCasilla(pI, j).obtValor()-1] = ' ';
+				}	
 			}
 		}
-    	int i = 0, j = 0, iMax = 3, jMax = 3;
-		if(pFila<3){ i = 0; iMax = 3;}
-		else if(pFila<6 && pFila >=3){ i = 3; iMax = 6;}
-		else if(pFila>=6){ i = 6; iMax = 9;}
-		if(pColumna<3){ j = 0; jMax = 3;}
-		else if(pColumna<6 && pColumna >=3){ j = 3; jMax = 6;}
-		else if(pColumna>=6){ j = 6; jMax = 9;}
+		int i = 0, j = 0, iMax = 3, jMax = 3;
+		if(pI<3){ i = 0; iMax = 3;}
+		else if(pI<6 && pI >=3){ i = 3; iMax = 6;}
+		else if(pI>=6){ i = 6; iMax = 9;}
+		if(pJ<3){ j = 0; jMax = 3;}
+		else if(pJ<6 && pJ >=3){ j = 3; jMax = 6;}
+		else if(pJ>=6){ j = 6; jMax = 9;}
 		while(i<iMax){
 			j = jMax-3;
 			while(j<jMax){
-				if(j!= pColumna || i!=pFila){
-					if(esta(lista, pMatriz.obtValor(i,  j))){
-						lista[pMatriz.obtValor(i, j)-1] = ' ';
-					}	
+				if(j!= pJ || i!=pI){
+					if(esta(lista, pMatriz.obtCasilla(i, j).obtValor())){
+						lista[pMatriz.obtCasilla(i, j).obtValor()-1] = ' ';
+					}
 				}
 				j++;
 			}
@@ -187,7 +199,7 @@ public class Sudoku {
 		boolean esta = false;
 		if(pValor != 0){
 			for(int i=0; i<pLista.length && !esta; i++){
-				if(Integer.valueOf(pLista[i]) == pValor){
+				if((int)(pLista[i]-'0') == pValor){
 					esta = true;
 				}
 			}

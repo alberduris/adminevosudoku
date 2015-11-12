@@ -57,21 +57,23 @@ public class Casilla{
      * @param pValor int
      */
     public void asgValor(int pValor) {
-     //  ocupada = true;
        if(!valorInicial){
 			char num = String.valueOf(pValor).charAt(0);
 			if(valor != 0){
 				if(valor == pValor){
 					valor = 0;
+					ocupada = false;
 				}else{
 					int aux = valor;
 					listaNotas[aux-1] = String.valueOf(valor).charAt(0);
 					listaNotas[pValor-1] = num;
 					valor = 0;
+					ocupada = false;
 				}
 			}else{
 				if(cantidadDeNumeros(listaNotas) == 0){
 					valor = pValor;
+					ocupada = true;
 				}else if(cantidadDeNumeros(listaNotas) == 2){
 					if(Character.isDigit(listaNotas[pValor-1])){
 						listaNotas[pValor-1] = ' ';
@@ -158,6 +160,10 @@ public class Casilla{
      */
      public boolean mismoValor(Casilla pCasilla) {
         return this.obtValor() == pCasilla.obtValor();
+     }
+     
+     public boolean estaCompletada() {
+    	 return ocupada;
      }
      
      public char[] getListaNotas(){

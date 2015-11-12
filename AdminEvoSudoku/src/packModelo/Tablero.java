@@ -169,7 +169,7 @@ public class Tablero extends Observable {
     }
     
     public void borrarNumero(int pI, int pJ){
-		sudoku.obtMatriz().quitarValor(pI, pJ);
+		matrizJuego.quitarValor(pI, pJ);
 		setChanged();
 		notifyObservers();
 	}

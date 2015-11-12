@@ -1,24 +1,54 @@
 package packModelo;
 
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import packAdminSudoku.CatalogoJugadores;
+import packAdminSudoku.Puntuacion;
 import packExcepciones.NoHaySudokuCargadoException;
+import packVistaAdminSudoku.VentanaRanking;
 
 public class Tablero extends Observable {
 	private static Tablero miTablero = new Tablero();
 	private Sudoku sudoku;
 	private Matriz matrizJuego;
 	private boolean terminado = false;
+	
+	private int tiempo;
+	private Timer time;
 
 	private Tablero() {
             matrizJuego = new Matriz();
+            tiempo = -1;
+            terminado = false;
+            time = new Timer();
+            TimerTask timerTask = new TimerTask(){
+            	@Override
+            	public void run(){
+            		if(!terminado){
+            			aumentarTiempo();
+            		}
+            	}
+            };
+            time.scheduleAtFixedRate(timerTask, 0, 1000);
     }
 
     public static Tablero obtTablero()
     {
         return miTablero;
     }
+    
+    private void aumentarTiempo(){
+    	tiempo++;
+    	notifyObservers();
+    	setChanged();
+    }
 
+    public int obtTiempo(){
+    	return tiempo;
+    }
+    
     /**
      * inicializar
      *
@@ -29,8 +59,8 @@ public class Tablero extends Observable {
     	sudoku=pSudoku;
         Matriz matrizSolucion = sudoku.obtMatriz();
     	int valor;
-       for (int fila=1; fila<=9; fila++)
-            for (int columna=1; columna<=9; columna++){
+       for (int fila=0; fila<9; fila++)
+            for (int columna=0; columna<9; columna++){
             	if (matrizSolucion.esInicial(fila,columna)){
                     valor = matrizSolucion.obtValor(fila,columna);
                     matrizJuego.asgValorInicial(fila,columna,valor);
@@ -127,27 +157,78 @@ public class Tablero extends Observable {
     /**
      * @return
      */
-    public int obtValorCasilla(int pFila, int pColumna)
-    {
-	if (!esValorInicial(pFila,pColumna))
-	{
-	    return matrizJuego.obtValor(pFila, pColumna);
-	}
-	else
-	{
-	    return sudoku.obtMatriz().obtValor(pFila, pColumna);
-	}
+    public int obtValorCasilla(int pFila, int pColumna){
+		if (!esValorInicial(pFila,pColumna))
+		{
+		    return matrizJuego.obtValor(pFila, pColumna);
+		}
+		else
+		{
+		    return matrizJuego.obtValor(pFila, pColumna);
+		}
     }
+    
+    public void borrarNumero(int pI, int pJ){
+		sudoku.obtMatriz().quitarValor(pI, pJ);
+		setChanged();
+		notifyObservers();
+	}
+    
 
     /**
      * @return
      */
-    public String obtIdSudoku() throws NoHaySudokuCargadoException
-    {
-	if (sudoku != null)
-	return sudoku.obtIdentificador();
-	else
-	    throw new NoHaySudokuCargadoException();
+    public int obtIdSudoku() throws NoHaySudokuCargadoException {
+		if (sudoku != null)
+		return sudoku.obtIdentificador();
+		else
+		    throw new NoHaySudokuCargadoException();
+	}
+    
+    public void eliminateValues(){
+    	if(matrizJuego.eliminateValues()){
+    		tiempo += 300;
+    		setChanged();
+    		notifyObservers();
+    	}
+    }
+    
+    public char[] obtListaNotas(int pFila, int pColumna){
+    	return matrizJuego.obtListaNotas(pFila, pColumna);
+    }
+    
+    public boolean[][] comprobarCorrecto(){
+    	return sudoku.comprobarCorrecto(matrizJuego);
+    }
+    
+    public boolean[][] todosLosNumeros(int pValor){
+    	return matrizJuego.todosLosNumeros(pValor);
     }
 
+    public void terminar(){
+    	System.out.println("HA terminado");
+		
+	}
+    
+    public int puntuacionConPenalizacion(){
+		int penalizacion = 1;
+		if(sudoku.obtDificultad()==5){
+			penalizacion = 1;
+		}else if(sudoku.obtDificultad()==4){
+			penalizacion = 2;
+		}else{
+			penalizacion = (int) (Math.pow(2,(5-sudoku.obtDificultad()))-1);
+		}
+		
+		return tiempo*penalizacion;
+	}
+    
+    public void lanzarRanking(){
+    	System.out.println("RANKING LANZADO");
+	}
+    
+    public void reiniciar(){
+    	tiempo = 0;
+    }
+    
 }

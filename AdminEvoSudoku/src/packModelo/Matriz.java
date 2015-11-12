@@ -25,7 +25,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public void asgValorInicial(int pFila, int pColumna, int pValor) {
-        Casilla unaCasilla = matriz[pFila-1][pColumna-1];
+        Casilla unaCasilla = matriz[pFila][pColumna];
         unaCasilla.asgValorInicial(pValor);
     }
 
@@ -38,7 +38,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public void asgValor(int pFila, int pColumna, int pValor) {
-        Casilla unaCasilla = matriz[pFila-1][pColumna-1];
+        Casilla unaCasilla = matriz[pFila][pColumna];
         unaCasilla.asgValor(pValor);
     }
 
@@ -74,7 +74,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public boolean esInicial(int pFila, int pColumna) {
-        Casilla unaCasilla = matriz[pFila-1][pColumna-1];
+        Casilla unaCasilla = matriz[pFila][pColumna];
         return unaCasilla.esInicial();
     }
 
@@ -86,7 +86,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public int obtValor(int pFila, int pColumna) {
-        Casilla unaCasilla = matriz[pFila-1][pColumna-1];
+        Casilla unaCasilla = matriz[pFila][pColumna];
         return unaCasilla.obtValor();
     }
 
@@ -136,7 +136,7 @@ public class Matriz {
      * @todo Implement this packsudoku.IMatriz method
      */
     public Casilla obtCasilla(int pFila, int pColumna) {
-        return matriz[pFila-1][pColumna-1];
+        return matriz[pFila][pColumna];
     }
 
     /**
@@ -270,6 +270,122 @@ public class Matriz {
        }
        return !faltan;
     }
-
-
+    
+    public char[] obtListaNotas(int pFila,int pColumna){
+    	return obtCasilla(pFila, pColumna).getListaNotas();
+    }
+    
+    public char[] obtListaPosibles(int pFila,int pColumna){
+    	return obtCasilla(pFila, pColumna).getListaPosibles();
+    }
+       
+    public char[] obtenerListaNotas(int pFila,int pColumna){
+		return obtListaNotas(pFila, pColumna);		
+	}
+    
+    public boolean[][] todosLosNumeros(int pValor){
+    	boolean[][] casillasNumero;
+    	casillasNumero = new boolean[9][9];
+    	for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				if(obtCasilla(i, j).obtValor() == pValor){
+					casillasNumero[i][j] = true;
+				}else{
+					casillasNumero[i][j] = false;
+				}
+			}
+		}
+    	return casillasNumero;
+    }
+    
+   private boolean esta(char[] pLista, int pValor){
+		boolean esta = false;
+		if(pValor != 0){
+			for(int i=0; i<pLista.length && !esta; i++){
+				if((int)(pLista[i]-'0') == pValor){
+					esta = true;
+				}
+			}
+		}
+		return esta;
+	}
+	
+   
+   public boolean eliminateValues(){
+		Casilla[][] casillasAux = new Casilla[9][9];
+		casillasAux = crearCasillasAux();
+		boolean modificado = false;
+		for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				obtCasilla(i, j).rellenarListaPosibles(comprobarListaPosibles(i, j, casillasAux));
+				if(obtCasilla(i, j).eliminateValues()){
+					modificado = true;
+				}
+			}
+		}
+		return modificado;
+	}	
+	
+	private Casilla[][] crearCasillasAux(){
+		Casilla[][] cas = new Casilla [9][9];
+		char[] listAux = new char[9];
+		for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				if(obtValor(i, j) != 0){
+					cas[i][j] = new Casilla();
+					cas[i][j].asgValorInicial(obtValor(i, j));
+				}else{
+					cas[i][j] = new Casilla();
+					cas[i][j].asgValor(0);					
+					listAux = obtCasilla(i, j).getListaPosibles();
+					for(int k =0; k<9; k++){
+						if(Character.isDigit(listAux[k])){
+							cas[i][j].asgValor((int)(listAux[k]-'0'));
+						}						
+					}
+				}
+				cas[i][j] = obtCasilla(i, j);
+			}
+		}
+		return cas;
+	}
+    
+    private char[] comprobarListaPosibles(int pI, int pJ, Casilla[][] pCas){
+		char[] lista = new char[9];
+		for(int i=0; i<9; i++) lista[i] = Integer.toString(i+1).charAt(0);
+		for(int i= 0; i<9; i++){
+			if(i!=pI){
+				if(esta(lista, pCas[i][pJ].obtValor())){
+					lista[pCas[i][pJ].obtValor()-1] = ' ';
+				}
+			}
+		}
+		for(int j =0; j<9; j++){
+			if(j!= pJ){
+				if(esta(lista, pCas[pI][j].obtValor())){
+					lista[pCas[pI][j].obtValor()-1] = ' ';
+				}	
+			}
+		}
+		int i = 0, j = 0, iMax = 3, jMax = 3;
+		if(pI<3){ i = 0; iMax = 3;}
+		else if(pI<6 && pI >=3){ i = 3; iMax = 6;}
+		else if(pI>=6){ i = 6; iMax = 9;}
+		if(pJ<3){ j = 0; jMax = 3;}
+		else if(pJ<6 && pJ >=3){ j = 3; jMax = 6;}
+		else if(pJ>=6){ j = 6; jMax = 9;}
+		while(i<iMax){
+			j = jMax-3;
+			while(j<jMax){
+				if(j!= pJ || i!=pI){
+					if(esta(lista, pCas[i][j].obtValor())){
+						lista[pCas[i][j].obtValor()-1] = ' ';
+					}
+				}
+				j++;
+			}
+			i++;
+		}
+		return lista;
+	}
 }

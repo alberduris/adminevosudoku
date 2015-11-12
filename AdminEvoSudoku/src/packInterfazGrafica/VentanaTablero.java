@@ -1,712 +1,914 @@
 package packInterfazGrafica;
 
-import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
-import javax.swing.BorderFactory;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+import javax.swing.border.LineBorder;
 
+import packAdminSudoku.ListaPuntuaciones;
 import packExcepciones.NoHaySudokuCargadoException;
+import packModelo.CatalogoSudoku;
+import packModelo.ListaSudokus;
+import packModelo.Sudoku;
 import packModelo.Tablero;
 
 public class VentanaTablero extends JDialog implements Observer {
 
-	    private boolean packframe = false;
-	    // Atributos
-	    private final int NUMFILAS = 9;
-	    private final int NUMCOLUMNAS = 9;
-	    private final int NUMZONAS = 9;
-
-
-	    private Vector listaPaneles = new Vector();
-	    private Vector listaCasillas = new Vector();
-
-	    // private String caminoIconos = "Img//";
-	    private JPanel panelCasillas = new JPanel();
-	    private JPanel panelTerminar = new JPanel();
-	    private JButton botonTerminar = new JButton();
-	    private JButton botonAyuda = new JButton();
-
-	    private BorderLayout borderLayout1 = new BorderLayout();
-
-	    private JPopupMenu miMenu = new JPopupMenu();
-
-
-	    private GridLayout gridLayoutCasillas = new GridLayout();
-	    private Border border1 = BorderFactory.createEmptyBorder(20, 20, 20, 20);
-	    private JPanel panelInfo = new JPanel();
-	    private JLabel lblErroresEtiq = new JLabel();
-	    private JLabel lblIDSudoku = new JLabel();
-	    private GridLayout gridLayoutInfo = new GridLayout();
-	    private JLabel lblSudoku = new JLabel();
-	    private JLabel lblEtiqNivel = new JLabel();
-	    private JLabel lblNivel = new JLabel();
-	    private JLabel lblErrores = new JLabel();
-
-	    private final Color COLORRESALTADO = Color.YELLOW;
-
-	    private static VentanaTablero miVentana;
-	    private Border border2 = BorderFactory.createEmptyBorder(20, 10, 20, 10);
-	    private Border border3 = BorderFactory.createEmptyBorder(20, 20, 20, 20);
-	    private Controlador controlador = new Controlador();
-	    private Tablero tablero = Tablero.obtTablero();
-	    
-	    //Construcci�n del tablero
-	    private VentanaTablero() {
-
-		tablero.obtTablero().addObserver(this);
-	        // Crear Menu
-	        crearMenu();
-
-	        // CrearPanelesZonas
-	        crearPanelesZonas();
-
-	        // Crear CasillasGraficas
-	        crearCasillas();
-
-	        //Inicializaci�n de la recepci�n de eventos en la ventana
-	        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-	        try {
-	            jbInit();
-	            pack();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
-
-	    public static VentanaTablero obtVentanaTablero() {
-	        if (miVentana == null) {
-	            miVentana = new VentanaTablero();
-	        }
-	        return miVentana;
-	    }
-
-	    /**
-	     * crearPanelesZonas
-	     */
-	    private void crearPanelesZonas() {
-	        // Generaci�n de Paneles
-	        for (int i = 0; i < NUMZONAS; i++) {
-	            listaPaneles.addElement(crearPanel());
-	        }
-	    }
-
-	    /**
-	     * crearPanel
-	     *
-	     * @return JPanel
-	     */
-	    private JPanel crearPanel() {
-	        JPanel panelZona = new JPanel();
-	        // panelZona.setBorder(BorderFactory.createLineBorder(Color.black));
-	        GridLayout gridLayoutZona = new GridLayout();
-	        gridLayoutZona.setColumns(3);
-	        gridLayoutZona.setRows(3);
-	        //  gridLayoutZona.setHgap(2);
-	        // gridLayoutZona.setVgap(2);
-	        panelZona.setLayout(gridLayoutZona);
-	        return panelZona;
-	    }
-
-	    private void crearCasillas() {
-	        //Generaci�n de las casillas
-	        int columna = 0;
-	        int fila = 0;
-	        for (fila = 0; fila < NUMFILAS; fila++) {
-	            for (columna = 0; columna < NUMCOLUMNAS; columna++) {
-	                listaCasillas.addElement(crearCasilla());
-	            }
-	        }
-
-	    }
-
-	    //M�todo privado para crear una casilla vac�a del tablero
-	    private JTextField crearCasilla() {
-	        JTextField cuadroTexto = new JTextField();
-	        cuadroTexto.setMaximumSize(new Dimension(50, 50));
-	        cuadroTexto.setMinimumSize(new Dimension(50, 50));
-	        cuadroTexto.setSize(new Dimension(50, 50));
-	        cuadroTexto.setHorizontalAlignment(JTextField.CENTER);
-	        cuadroTexto.setFont(new Font("Helvetica", Font.PLAIN, 16));
-	        cuadroTexto.setComponentPopupMenu(miMenu);
-	        cuadroTexto.setFocusable(false);
-	        return cuadroTexto;
-	    }
-
-
-	    //M�todo privado para obtener la casilla
-	    private JTextField obtCasilla(int fila, int columna) {
-	        return (JTextField) listaCasillas.elementAt((fila * NUMCOLUMNAS) +
-	                columna);
-	    }
-
-	    private JPanel obtPanelFilaCol(int pFila, int pCol) {
-	        JPanel panel = (JPanel) listaPaneles.elementAt((pFila / 3 * 3) +
-	                pCol / 3);
-	        return panel;
-	    }
-
-	    //Inicializaci�n de componentes
-	    private void jbInit() throws Exception {
-	        this.setModal(true);
-	        this.setTitle("Sudoku: ");
-	        this.getContentPane().setLayout(borderLayout1);
-
-	        botonTerminar.setBorder(BorderFactory.createRaisedBevelBorder());
-	        botonTerminar.setPreferredSize(new Dimension(60, 30));
-	        botonTerminar.setMargin(new Insets(5, 25, 5, 25));
-	        botonTerminar.setText("Finalizar");
-	        botonTerminar.addActionListener((ActionListener) controlador);
-	        botonTerminar.setActionCommand("botonTerminar");
-	  
-	        botonAyuda.setBorder(BorderFactory.createRaisedBevelBorder());
-	        botonAyuda.setPreferredSize(new Dimension(60, 30));
-	        botonAyuda.setMargin(new Insets(5, 25, 5, 25));
-
-	        botonAyuda.setText("Ayuda");
-	        botonAyuda.addActionListener(controlador);
-	        botonAyuda.setActionCommand("botonAyuda");
-
-	        // panelTerminar.setPreferredSize(new Dimension(70, 50));
-	        borderLayout1.setVgap(10);
-
-	        panelCasillas.setLayout(gridLayoutCasillas);
-	        gridLayoutCasillas.setColumns(3);
-	        gridLayoutCasillas.setHgap(5);
-	        gridLayoutCasillas.setRows(3);
-	        gridLayoutCasillas.setVgap(5);
-
-	        // A�adir Paneles
-	        anadirPanelesZona();
-	        // A�adir Casillas a los paneles
-	        anadirCasillasAPaneles();
-	        // A�adir Men�
-	        // crearMenu();
-
-	        panelCasillas.setBorder(border1);
-	        panelCasillas.setMaximumSize(new Dimension(250, 300));
-	        panelCasillas.setMinimumSize(new Dimension(250, 300));
-	        panelCasillas.setPreferredSize(new Dimension(250, 300));
-	        panelInfo.setLayout(gridLayoutInfo);
-	        lblIDSudoku.setText("Sudoku:");
-	        gridLayoutInfo.setColumns(2);
-	        gridLayoutInfo.setRows(3);
-	        lblSudoku.setText("");
-	        lblErroresEtiq.setText("Errores:");
-	        lblEtiqNivel.setText("Nivel:");
-	        lblNivel.setText("");
-	        lblErrores.setText("");
-	        panelInfo.setBorder(border3);
-
-	        this.getContentPane().add(panelTerminar, BorderLayout.SOUTH);
-	        panelTerminar.add(botonAyuda);
-	        panelTerminar.add(botonAyuda);
-	        panelTerminar.add(botonTerminar);
-	        this.getContentPane().add(panelCasillas, BorderLayout.CENTER);
-	        this.getContentPane().add(panelInfo, java.awt.BorderLayout.NORTH);
-	        panelInfo.add(lblIDSudoku);
-	        panelInfo.add(lblSudoku);
-	        panelInfo.add(lblEtiqNivel);
-	        panelInfo.add(lblNivel);
-	        panelInfo.add(lblErroresEtiq);
-	        panelInfo.add(lblErrores);
-	        lblErrores.setVisible(false);
-	        lblErroresEtiq.setVisible(false);
-	        this.setSize(new Dimension(450, 300));
-
-	        this.setResizable(false);
-
-	    }
-
-	    private void crearMenu() {
-	        JMenuItem menuItem;
-	        for (int i = 1; i <= 9; i++) {
-	            menuItem = new JMenuItem("" + i + "");
-	            menuItem.setActionCommand("asignarValor");
-	            menuItem.addMouseListener((MouseListener) controlador);
-	            miMenu.add(menuItem);
-	        }
-	        miMenu.add(new JPopupMenu.Separator());
-	        menuItem = new JMenuItem("Quitar Valor");
-	        menuItem.setActionCommand("quitarValor");
-	        menuItem.addMouseListener(controlador);
-	        miMenu.add(menuItem);
-	        miMenu.setFocusable(true);
-	        miMenu.addPopupMenuListener((PopupMenuListener) controlador);
-
-	    }
-
-	    private void anadirPanelesZona() {
-	        for (int i = 0; i < listaPaneles.size(); i++) {
-	            JPanel panel = (JPanel) listaPaneles.elementAt(i);
-	            panelCasillas.add(panel);
-	        }
-	    }
-
-	    private void anadirCasillasAPaneles() {
-
-	        int columna = 0;
-	        int fila = 0;
-	        for (fila = 0; fila < NUMFILAS; fila++) {
-	            for (columna = 0; columna < NUMCOLUMNAS; columna++) {
-
-	                JPanel panel = obtPanelFilaCol(fila, columna);
-	                panel.add(obtCasilla(fila, columna),
-	                          new GridBagConstraints(columna, fila, 1, 1, 0.0, 0.0,
-	                                                 GridBagConstraints.CENTER,
-	                                                 GridBagConstraints.NONE,
-	                                                 new Insets(2, 2, 2, 2), 0, 0));
-	            }
-	        }
-
-	    }
-
-	    //Para salir de la aplicaci�n cuando se cierra la ventana
-	    protected void processWindowEvent(WindowEvent e) {
-	        super.processWindowEvent(e);
-	        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-	            this.setVisible(false);
-	        }
-	    }
-
-	    private void botonTerminar_actionPerformed(ActionEvent e) {
-	        this.setVisible(false);
-	    }
-
-	    public void bloquear() {
-	        for (int i = 0; i < NUMFILAS * NUMCOLUMNAS; i++) {
-	            JTextField etiq = (JTextField) listaCasillas.elementAt(i);
-	            etiq.setComponentPopupMenu(null);
-	        }
-	    }
-
-
-
-	    private void quitarInfoAyuda() {
-	        lblErroresEtiq.setVisible(false);
-	        lblErrores.setVisible(false);
-	        JTextField cuadroTexto;
-	        for (int fila = 0; fila < NUMFILAS; fila++) {
-	            for (int columna = 0; columna < NUMCOLUMNAS; columna++) {
-	                cuadroTexto = obtCasilla(fila, columna);
-	                cuadroTexto.setBackground(Color.WHITE);
-	            }
-	        }
-	    }
-
-	    public void inicializarTablero() {
-	        JTextField casilla;
-	        for (int fila = 1; fila <= NUMFILAS; fila++) {
-	            for (int columna = 1; columna <= NUMCOLUMNAS; columna++) {
-	                quitarValor(fila, columna);
-	                casilla = obtCasilla(fila - 1, columna - 1);
-	                casilla.setForeground(Color.BLACK);
-	                casilla.setFont(new Font("Helvetica", Font.PLAIN, 14));
-	                casilla.setComponentPopupMenu(miMenu);
-	            }
-	        }
-	    }
-
-	    private void resaltarArea(char pTipo, int pId) {
-	        switch (pTipo) {
-	        case 'F':
-	        case 'f':
-	            resaltarFila(pId);
-	            break;
-	        case 'C':
-	        case 'c':
-	            resaltarColumna(pId);
-	            break;
-	        case 'Z':
-	        case 'z':
-	            resaltarZona(pId);
-	            break;
-	        }
-	    }
-
-	    private void resaltarColumna(int pIdCol) {
-	        int columna = pIdCol - 1;
-	        JTextField cuadroTexto;
-	        for (int fila = 0; fila < NUMFILAS; fila++) {
-	            cuadroTexto = obtCasilla(fila, columna);
-	            cuadroTexto.setBackground(COLORRESALTADO);
-	        }
-	    }
-
-
-	    private void resaltarFila(int pIdFila) {
-	        int fila = pIdFila - 1;
-	        JTextField cuadroTexto;
-	        for (int columna = 0; columna < NUMCOLUMNAS; columna++) {
-	            cuadroTexto = obtCasilla(fila, columna);
-	            cuadroTexto.setBackground(COLORRESALTADO);
-	        }
-	    }
-
-	    private void resaltarZona(int pIdZona) {
-	        pIdZona = pIdZona - 1; //S�lo si las zonas se numeran de 1-9
-	        int auxZona = pIdZona / 3;
-	        int filaIni = auxZona * 3;
-	        int filaFin = filaIni + 3;
-	        int colIni = (pIdZona % 3) * 3;
-	        int colFin = colIni + 3;
-	        JTextField cuadroTexto;
-	        for (int fila = filaIni; fila < filaFin; fila++) {
-	            for (int columna = colIni; columna < colFin; columna++) {
-	                cuadroTexto = obtCasilla(fila, columna);
-	                cuadroTexto.setBackground(COLORRESALTADO);
-	            }
-	        }
-	    }
-
-	    private void asgValor(int pFila, int pCol, int pValor) {
-	        quitarInfoAyuda();
-
-	        JTextField cuadroTexto = obtCasilla(pFila - 1, pCol - 1);
-	        cuadroTexto.setText("" + pValor + "");
-	    }
-
-	    private void asgValorInicial(int pFila, int pCol, int pValor) {
-	        quitarInfoAyuda();
-	        JTextField cuadroTexto = obtCasilla(pFila - 1, pCol - 1);
-	        cuadroTexto.setForeground(Color.RED);
-	        cuadroTexto.setFont(new Font("Helvetica", Font.BOLD, 16));
-	        cuadroTexto.setText("" + pValor + "");
-	        cuadroTexto.setComponentPopupMenu(null);
-	    }
-
-	    private void quitarValor(int pFila, int pCol) {
-	        quitarInfoAyuda();
-	        JTextField cuadroTexto = obtCasilla(pFila - 1, pCol - 1);
-	        cuadroTexto.setText("");
-	    }
-
-	    private void ponerIdSudoku(String pID) {
-	        lblSudoku.setText(pID);
-	    }
-
-	    public void ponerNivelSudoku(int pNivel) {
-	        lblNivel.setText("" + pNivel + "");
-	    }
-
-	    public void mostrarErrores(int pErrores) {
-	        lblErrores.setText("" + pErrores + "");
-	        if (pErrores > 0) {
-	            lblErrores.setForeground(Color.RED);
-	            lblErroresEtiq.setForeground(Color.RED);
-	        } else {
-	            lblErrores.setForeground(Color.BLACK);
-	            lblErroresEtiq.setForeground(Color.BLACK);
-	        }
-	        lblErroresEtiq.setVisible(true);
-	        lblErrores.setVisible(true);
-
-	    }
-
-	    private void asignarValorCasilla(MouseEvent e) {
-
-	        JTextField casilla = (JTextField) miMenu.getInvoker();
-	        int posicion = listaCasillas.indexOf(casilla);
-	        System.out.println("Posicion en la que pincha con el derecho: " +
-	                           posicion);
-	        int filaInicial = (int) (posicion / NUMCOLUMNAS);
-	        int columnaInicial = posicion % NUMCOLUMNAS;
-	        System.out.println("Posicion de la casilla: " + filaInicial + ", " +
-	                           columnaInicial);
-
-	        JMenuItem menuItem = (JMenuItem) e.getComponent();
-	        int val = Integer.parseInt(menuItem.getText());
-	        // Aldatu behar da
-	        try {
-	            Tablero.obtTablero().asgValor(filaInicial + 1, columnaInicial + 1,
-	                                          val);
-	        } catch (Exception ex) {
-	            // En principio aqu� habr�a que tratar cada una de las excepciones
-	            // por separado. Como no se vana a producir y algunos hab�is definido
-	            // las excepciones en distintos paquetes, lo hemos simplificado
-	            VentanaError.obtVentanaError().mostrar(ex.getMessage());
-
-	        }
-	        miMenu.setVisible(false);
-	    }
-
-	    private void quitarValorCasilla(MouseEvent e) {
-	        JTextField casilla = (JTextField) miMenu.getInvoker();
-	        int posicion = listaCasillas.indexOf(casilla);
-	        System.out.println("Posicion en la que pincha con el derecho: " +
-	                           posicion);
-	        int filaInicial = (int) (posicion / NUMCOLUMNAS);
-	        int columnaInicial = posicion % NUMCOLUMNAS;
-	        System.out.println("Posicion de la casilla: " + filaInicial + ", " +
-	                           columnaInicial);
-
-	        JMenuItem menuItem = (JMenuItem) e.getComponent();
-	        // Aldatu behar da
-	        try {
-	            Tablero.obtTablero().quitarValor(filaInicial + 1,
-	                                             columnaInicial + 1);
-	        } catch (Exception ex) {
-	            // En principio aqu� habr�a que tratar cada una de las excepciones
-	            // por separado. Como no se vana a producir y algunos hab�is definido
-	            // las excepciones en distintos paquetes, lo hemos simplificado
-	            VentanaError.obtVentanaError().mostrar(ex.getMessage());
-	        }
-	        miMenu.setVisible(false);
-	    }
-
-	    
-
-	    public void mostrar() {
-	        if (packframe) {
-	            this.pack();
-	        } else {
-	            this.validate();
-	        }
-	        this.setModal(true);
-	        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	        Dimension ventanaTableroSize = this.getSize();
-	        if (ventanaTableroSize.height > screenSize.height) {
-	            ventanaTableroSize.height = screenSize.height;
-	        }
-	        if (ventanaTableroSize.width > screenSize.width) {
-	            ventanaTableroSize.width = screenSize.width;
-	        }
-	        this.setLocation((screenSize.width - ventanaTableroSize.width) / 2,
-	                         (screenSize.height - ventanaTableroSize.height) / 2);
-	        update(null,null);
-
-	        this.setVisible(true);
-	    
-	    }
-
-	    /* (non-Javadoc)
-	     * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
-	     */
-	    @Override
-	    public void update(Observable pO, Object pArg)
-	    {
-		inicializarTablero();
-		try
-		{
-		    this.lblSudoku.setText(tablero.obtIdSudoku());
-		    this.lblNivel.setText("" + tablero.obtNivel());
-		} catch (NoHaySudokuCargadoException e)
-		{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	static VentanaTablero ventana;
+	JLabel[][] cajas;
+	JPanel[][] paneles;
+	JLabel tiempo;
+	JPanel centro, sur;
+	JPanel norte;
+	JButton btn1,btn2,btn3, btnGuide, btnSound;
+	JButton[] listBotones;
+	KeyListener keyListener;
+	JDialog dialogFinal;
+	private JDialog dialogGuide;
+	
+	
+	private Clip sonido, sonido2;
+	int pI = 0;
+	int filaColumna = 0;
+	
+	//boolean flag;
+	private boolean dispose = false;
+	static final int MAX = 9;
+	int[] activado;
+	Tablero tab = Tablero.obtTablero();
+	
+
+	/**
+	 * Create the frame.
+	 * @throws LineUnavailableException 
+	 * @throws UnsupportedAudioFileException 
+	 * @throws IOException 
+	 */
+	public VentanaTablero() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+		tab = Tablero.obtTablero();
+		tab.reiniciar();
+		tab.addObserver(this);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(500,500);
+		setLocationRelativeTo(null);
+		setVisible(true);
+		/*sonido = AudioSystem.getClip();
+		sonido.open(AudioSystem.getAudioInputStream(getClass().getResource("tetris.wav")));
+		sonido.start();
+		sonido.loop(MAX);
+		sonido2 = AudioSystem.getClip();
+		sonido2.open(AudioSystem.getAudioInputStream(getClass().getResource("Mario Bros.wav")));*/
+		norte = new JPanel();
+		tiempo = new JLabel();
+		crearTiempo();
+		
+		
+		crearListener();
+		centro = new JPanel();
+		centro.setLayout(new GridLayout(3,3,5,5));
+		cajas = new JLabel[MAX][MAX];
+		paneles = new JPanel[3][3];
+		listBotones = new JButton[MAX];
+		centro.setBackground(Color.black);
+		activado = new int[2]; activado[0] = -1; activado[1] = -1;
+		setLayout(new BorderLayout());
+
+		add(norte,"North");
+		add(centro);
+		
+		crearPaneles();
+		crearCajas();
+				
+		sur = new JPanel();
+		sur.setLayout(new GridLayout(3,4,0,2));
+		add(sur,"South");
+		
+		getBotones();
+		
+		norte.setLayout(new GridLayout(1, 8));
+		norte.add(new JLabel(" "));
+		norte.add(btnSound);
+		norte.add(new JLabel(" "));
+		norte.add(tiempo);
+		norte.add(new JLabel(" "));
+		norte.add(btnGuide);
+		norte.add(new JLabel(" "));	
+		try{
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			addWindowListener(new WindowAdapter(){
+				public void windowClosing(WindowEvent e){
+					getSeguro();
+				}
+			});
+			setVisible(true);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		
-		this.lblErrores.setText("");
-		if (!tablero.finalDeJuego())
-		{
-		    mostrarCasillas();
+	}
+	
+	
+	private void getSeguro(){
+		int valor = JOptionPane.showConfirmDialog(this, "¿Estas seguro de que quieres cerrar?", "CERRAR", JOptionPane.YES_NO_OPTION);
+		if(valor==JOptionPane.YES_OPTION){
+			JOptionPane.showMessageDialog(null, "Gracias por jugar", "Gracias", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(0);
 		}
-		else
+	}
+	
+	
+	private void hiloCelebracion(){
+		new Thread(new Runnable()
 		{
-		    descubrirCasillas();
-		}
+			public void run()
+			{
+				while(true){
+					celebracion(pI,filaColumna);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					pI++;
+					if(pI == 10){pI=0;}
+					if(filaColumna == 0 && pI == 0) filaColumna = 1;
+					else if (filaColumna == 1 && pI == 0) filaColumna = 2;
+					else if (filaColumna == 2 && pI == 0) filaColumna = 3;
+					else if (filaColumna == 3 && pI == 0) filaColumna = 4;
+					else if (filaColumna == 4 && pI == 0) filaColumna = 5;
+					else if (filaColumna == 5 && pI == 0) filaColumna = 6;
+					else if (filaColumna == 6 && pI == 0) filaColumna = 0;
+					if(dispose){
+						break;
+					}
+				}
+			}
+		}).start();
 		
-	    }
-	    
-	    /**
-	     * 
-	     */
-	    private void descubrirCasillas()
-	    {
-		for (int i = 1; i <= NUMFILAS; i++)
-		{
-		    for (int j = 1; j <= NUMCOLUMNAS; j++)
-		    {
-			if (!tablero.esValorInicial(i, j) )
-			{
-			    asgValor(i, j,tablero.obtValorCasilla(i,j));
-			}
-			else if (tablero.esValorInicial(i, j))
-			{
-			    asgValorInicial(i,j,tablero.obtValorCasilla(i,j));
-			}
-		    }
-		}
-		bloquear();
-	    }
-
-	    /**
-	     * 
-	     */
-	    private void mostrarCasillas()
-	    {
-		for (int i = 1; i <= NUMFILAS; i++)
-		{
-		    for (int j = 1; j <= NUMCOLUMNAS; j++)
-		    {
-			if (!tablero.esValorInicial(i, j) && !tablero.estaLibre(i, j))
-			{
-			    asgValor(i, j,tablero.obtValorCasilla(i,j));
-			}
-			else if (tablero.esValorInicial(i, j))
-			{
-			    asgValorInicial(i,j,tablero.obtValorCasilla(i,j));
-			}
-		    }
-		}
 		
-	    }
-	    
-	    private void mostrarErroresInconsistencias()
-	    {
-		mostrarErrores(tablero.obtNumErrores());
-		resaltarInconsistencias();
-	    }
+	}
 
-	    /**
-	     * 
-	     */
-	    private void resaltarInconsistencias()
-	    {
-		for (int i = 1; i <= 9; i++)
-		{
-		    if (tablero.hayInconsistencias('F', i))
-			resaltarArea('F', i);
-		    if (tablero.hayInconsistencias('C', i))
-		    	resaltarArea('C', i);
-		    if (tablero.hayInconsistencias('Z', i))
-		    	resaltarArea('Z', i);
-		    
+	
+	
+	
+	private void celebracion(int pI,int pFilaColumna){
+		
+		Color azul = Color.blue;
+		Color verde = Color.green;
+		Color rojo = Color.red;
+		int i = pI;
+		
+		
+		switch(pFilaColumna){
+		
+		case 0:
+			switch(i){
+			case 0: cambiarColorFila(azul,0);break;
+			case 1: cambiarColorFila(verde,1);break;
+			case 2: cambiarColorFila(rojo,2);break;
+			case 3: cambiarColorFila(azul,3);break;
+			case 4: cambiarColorFila(verde,4);break;
+			case 5: cambiarColorFila(rojo,5);break;
+			case 6: cambiarColorFila(azul,6);break;
+			case 7: cambiarColorFila(verde,7);break;
+			case 8: cambiarColorFila(rojo,8);break;
+			case 9: desactivar();break;	
+			}break;
+		case 1:	
 			
+			switch(i){
+			case 0: cambiarColorColumna(azul,0);break;
+			case 1: cambiarColorColumna(verde,1);break;
+			case 2: cambiarColorColumna(rojo,2);break;
+			case 3: cambiarColorColumna(azul,3);break;
+			case 4: cambiarColorColumna(verde,4);break;
+			case 5: cambiarColorColumna(rojo,5);break;
+			case 6: cambiarColorColumna(azul,6);break;
+			case 7: cambiarColorColumna(verde,7);break;
+			case 8: cambiarColorColumna(rojo,8);break;
+			case 9: desactivar();break;	
+			}break;
+		
+		
+		case 2:	
+		
+			switch(i){
+			case 8: cambiarColorColumnaInverso(azul,0);break;
+			case 7: cambiarColorColumnaInverso(verde,1);break;
+			case 6: cambiarColorColumnaInverso(rojo,2);break;
+			case 5: cambiarColorColumnaInverso(azul,3);break;
+			case 4: cambiarColorColumnaInverso(verde,4);break;
+			case 3: cambiarColorColumnaInverso(rojo,5);break;
+			case 2: cambiarColorColumnaInverso(azul,6);break;
+			case 1: cambiarColorColumnaInverso(verde,7);break;
+			case 0: cambiarColorColumnaInverso(rojo,8);break;
+			case 9: desactivar();break;	
+			}break;
+		
+		case 3:	
+			
+			switch(i){
+			case 8: cambiarColorFilaInverso(azul,0);break;
+			case 7: cambiarColorFilaInverso(verde,1);break;
+			case 6: cambiarColorFilaInverso(rojo,2);break;
+			case 5: cambiarColorFilaInverso(azul,3);break;
+			case 4: cambiarColorFilaInverso(verde,4);break;
+			case 3: cambiarColorFilaInverso(rojo,5);break;
+			case 2: cambiarColorFilaInverso(azul,6);break;
+			case 1: cambiarColorFilaInverso(verde,7);break;
+			case 0: cambiarColorFilaInverso(rojo,8);break;
+			case 9: desactivar();break;	
+			}break;
+			
+		case 4:
+			
+			switch(i){
+			case 8: cambiarColorSeccion(azul,0,0);break;
+			case 7: cambiarColorSeccion(verde,0,3);break;
+			case 6: cambiarColorSeccion(rojo,0,6);break;
+			case 5: cambiarColorSeccion(rojo,3,0);break;
+			case 4: cambiarColorSeccion(azul,3,3);break;
+			case 3: cambiarColorSeccion(verde,3,6);break;
+			case 2: cambiarColorSeccion(verde,6,0);break;
+			case 1: cambiarColorSeccion(rojo,6,3);break;
+			case 0: cambiarColorSeccion(azul,6,6);break;
+			case 9: desactivar();break;	
+			}break;
+			
+		case 5:
+			switch(i){
+			case 1: cambiarColorParaDentro(azul,0);break;
+			case 3: cambiarColorParaDentro(verde,1);break;
+			case 5: cambiarColorParaDentro(rojo,2);break;
+			case 7: cambiarColorParaDentro(azul,3);break;
+			case 9: cambiarColorParaDentro(verde,4);break;
+			}break;
+		
+		case 6:
+			
+			switch(i){
+			case 0: cambiarColorParaFuera(4);break;
+			case 2: cambiarColorParaFuera(3);break;
+			case 4: cambiarColorParaFuera(2);break;
+			case 6: cambiarColorParaFuera(1);break;
+			case 8: cambiarColorParaFuera(0);break;
+			case 9: desactivar();break;	
+			}break;
+	}
+		
+				
+		
+		
+	}
+	
+	private void cambiarColorFila(Color pColor, int pFila){
+		
+		for(int j = 0; j < MAX; j++){
+			cajas[pFila][j].setBackground(pColor);
+			cajas[pFila][j].setOpaque(true);
+			cajas[pFila][j].updateUI();
+			
+			if(pFila > 0){
+				cajas[pFila-1][j].setOpaque(false);
+				cajas[pFila-1][j].updateUI();
+			}
+			
+		}	
+	}
+	
+	private void cambiarColorColumna(Color pColor, int pColumna){
+		
+		for(int i = 0; i < MAX; i++){
+			cajas[i][pColumna].setBackground(pColor);
+			cajas[i][pColumna].setOpaque(true);
+			cajas[i][pColumna].updateUI();
+			
+			if(pColumna > 0){
+				cajas[i][pColumna-1].setOpaque(false);
+				cajas[i][pColumna-1].updateUI();
+			}
+			
+		}	
+	}
+	private void cambiarColorColumnaInverso(Color pColor, int pColumna){
+		
+		for(int i = 0; i < MAX; i++){
+			cajas[i][pColumna].setBackground(pColor);
+			cajas[i][pColumna].setOpaque(true);
+			cajas[i][pColumna].updateUI();
+		}	
+	}
+	
+	private void cambiarColorFilaInverso(Color pColor, int pFila){
+		
+		for(int j = 0; j < MAX; j++){
+			cajas[pFila][j].setBackground(pColor);
+			cajas[pFila][j].setOpaque(true);
+			cajas[pFila][j].updateUI();
+		}	
+	}
+	private void cambiarColorSeccion(Color pColor, int pFila, int pColumna){
+		
+		for(int i = pFila; i<pFila+3; i++){
+			for(int j = 0; j < pColumna+3; j++){
+				cajas[i][j].setBackground(pColor);
+				cajas[i][j].setOpaque(true);
+				cajas[i][j].updateUI();
+			}
+		}	
+			
+	}
+	private void cambiarColorParaDentro(Color pColor, int pNivel){
+		
+		for(int i = pNivel; i<MAX-pNivel; i++){
+			cajas[i][pNivel].setBackground(pColor);
+			cajas[i][pNivel].setOpaque(true);
+			cajas[i][pNivel].updateUI();
+		}
+		for(int i = pNivel; i < MAX-pNivel; i++){
+			cajas[i][MAX-pNivel-1].setBackground(pColor);
+			cajas[i][MAX-pNivel-1].setOpaque(true);
+			cajas[i][MAX-pNivel-1].updateUI();			
+		}
+		for(int j = pNivel; j < MAX-pNivel; j++){
+			cajas[pNivel][j].setBackground(pColor);
+			cajas[pNivel][j].setOpaque(true);
+			cajas[pNivel][j].updateUI();			
+		}
+		for(int j = pNivel; j < MAX-pNivel; j++){
+			cajas[MAX-pNivel-1][j].setBackground(pColor);
+			cajas[MAX-pNivel-1][j].setOpaque(true);
+			cajas[MAX-pNivel-1][j].updateUI();			
+		}
+	}
+	private void cambiarColorParaFuera(int pNivel){
+		
+		for(int i = pNivel; i<MAX-pNivel; i++){
+			for(int j = pNivel; j < MAX-pNivel; j++){
+				cajas[i][j].setOpaque(false);
+				cajas[i][j].updateUI();			
+			}
+		}			
+	}
+	
+	private void crearTiempo(){
+		tiempo.setFont(new Font("Monospaced", Font.BOLD, 20));
+		tiempo.setText(formaTiempo());
+	}
+	
+	private String formaTiempo(){
+		int minutos = tab.obtTiempo()/60;
+		int segundos = tab.obtTiempo()-minutos*60;
+		String min;
+		String seg;
+		if(minutos < 10){
+			min = '0'+String.valueOf(minutos);
+		}else{
+			min = String.valueOf(minutos);
+		}
+		if(segundos < 10){
+			seg = '0'+String.valueOf(segundos);
+		}else{
+			seg = String.valueOf(segundos);
+		}
+		return min + ':' + seg;
+	}
+	
+	private void crearPaneles(){
+		for(int i = 0; i < 3; i++){
+			for(int j = 0; j < 3;j++){
+				paneles[i][j] = new JPanel();
+				paneles[i][j].setLayout(new GridLayout(3,3,0,0));
+				centro.add(paneles[i][j]);
+				setColorPanel(i,j);
+			}
+		}
+	}
+	
+	private void setColorPanel(int pI,int pJ){
+		Color gris = Color.decode("0xE0E0E0");
+		Color blanco = Color.decode("0xFAFAFA");
+		if(((pI == 0 || pI == 2) && (pJ == 0 || pJ ==2)) || ((pI == 1 || pI == 3) && (pJ == 1 || pJ ==3))){
+			paneles[pI][pJ].setBackground(blanco);
+		}
+		else{
+			paneles[pI][pJ].setBackground(gris);
+
 		}
 		
-	    }
+	}
+		
+	private void crearCajas(){
+		int f,c;
+		String num;
+		for(int i = 0; i < MAX; i++){
+			for (int j = 0; j < MAX; j++){
+				if(tab.obtValorCasilla(i, j) == 0){
+					num = " ";
+				}else{
+					num = String.valueOf(tab.obtValorCasilla(i, j));
+				}
+				//SOLUCION COMPLETA
+				//num = String.valueOf(gS.obtenerSolucion(i, j));
+				cajas[i][j] = crearJLabel(i, j, num);
+							
+				f = (i+1)/3;
+				if((i+1)%3 > 0) f++;
+				c = (j+1)/3;
+				if((j+1) % 3 > 0) c++;
 
-	    private class Controlador implements ActionListener, PopupMenuListener, MouseListener{
-
-		/* (non-Javadoc)
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
-		@Override
-		public void actionPerformed(ActionEvent pE)
-		{
-		    if (pE.getActionCommand().equalsIgnoreCase("botonTerminar"))
-			setVisible(false);
-		    else
-			mostrarErroresInconsistencias();
+				paneles[f-1][c-1].add(cajas[i][j]);
+				
+			}
 		}
+	}
+	
+	private void crearListener(){
+		keyListener = new KeyListener(){
 
-		/* (non-Javadoc)
-		 * @see javax.swing.event.PopupMenuListener#popupMenuCanceled(javax.swing.event.PopupMenuEvent)
-		 */
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent pE)
-		{
-		}
-
-		/* (non-Javadoc)
-		 * @see javax.swing.event.PopupMenuListener#popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent)
-		 */
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent pE)
-		{
-	    
-		}
-
-		/* (non-Javadoc)
-		 * @see javax.swing.event.PopupMenuListener#popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent)
-		 */
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent pE)
-		{
-		    JTextField casilla = (JTextField) miMenu.getInvoker();
-	            int posicion = listaCasillas.indexOf(casilla);
-	            System.out.println("Posicion en la que pincha con el derecho: " +
-	                               posicion);
-	            int filaInicial = (int) (posicion / NUMCOLUMNAS);
-	            int columnaInicial = posicion % NUMCOLUMNAS;
-	            Component comp[] = miMenu.getComponents();
-	            JMenuItem menuItem = (JMenuItem) comp[comp.length - 1];
-
-	            if (Tablero.obtTablero().estaLibre(filaInicial + 1,
-	                    columnaInicial + 1)) {
-
-	                menuItem.setEnabled(false);
-
-	            } else {
-	                menuItem.setEnabled(true);
-	            }
-		}
-
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-		 */
-		@Override
-		public void mouseClicked(MouseEvent pE)
-		{
-		}
-
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-		 */
-		@Override
-		public void mouseEntered(MouseEvent pE)
-		{
-		    
-		}
-
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-		 */
-		@Override
-		public void mouseExited(MouseEvent pE)
-		{
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
 			}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-		 */
-		@Override
-		public void mousePressed(MouseEvent pE)
-		{
-		    JMenuItem menuItem = (JMenuItem) pE.getSource();
-		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor"))
-		    {
-			asignarValorCasilla(pE);
-		    }
-		    else
-		    {
-			quitarValorCasilla(pE);
-		    }
-		}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 
-		/* (non-Javadoc)
-		 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-		 */
-		@Override
-		public void mouseReleased(MouseEvent pE)
-		{
-		     
+			@Override
+			public void keyReleased(KeyEvent e) {
+				char num = e.getKeyChar();
+				if(Character.isDigit(num)&& num != '0'){
+					todosLosNumeros(e.getKeyChar());
+					if(activado[0]>=0){
+						tab.asgValor(activado[0], activado[1],(int)(num-'0'));
+					}
+				}
+				
+			}
+			
+		};
+	}
+	
+	private void todosLosNumeros(int k){
+		boolean[][] casillaNum = tab.todosLosNumeros(k);
+		if(Character.isDigit(k)){
+			for(int i=0; i<MAX; i++){
+				for(int j=0; j<MAX; j++){
+					if(activado[0]!=i || activado[1]!=j){
+						if(casillaNum[i][j]){
+							cajas[i][j].setBackground(Color.yellow);
+							cajas[i][j].setOpaque(true);
+							cajas[i][j].updateUI();
+						}else{
+							if(cajas[i][j].getBackground() == Color.yellow){
+								cajas[i][j].setOpaque(false);
+								cajas[i][j].updateUI();
+							}
+						}
+					}
+				}
+			}
 		}
+				
+	}
+	
+	private JLabel crearJLabel(final int pI,final int pJ, String pNum){
+		Font fuente;
 		
-	    }
+		fuente = new Font("Monospaced",Font.BOLD,20);
+		
+		final JLabel j = new JLabel();
+		j.setText(pNum+"");
+		j.setFont(fuente);
+		j.setBackground(Color.green);
+		j.setHorizontalAlignment(WIDTH/2);
+		j.setBorder(LineBorder.createBlackLineBorder());
+		j.setFocusable(true);
+		if(tab.esValorInicial(pI, pJ)){
+			j.setForeground(Color.red);
+		}else{
+
+			j.addKeyListener(keyListener);
+		}
+		MouseListener mouseListener1 = new MouseListener(){
+
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(!tab.esValorInicial(pI, pJ)){
+					if(j.getBackground() != Color.green){
+						desactivar();
+						j.setBackground(Color.green);
+						j.setOpaque(true);
+						activado[0] = pI;
+						activado[1] = pJ;
+					}else{
+						if(!j.isOpaque()){
+							desactivar();
+							j.setBackground(Color.green);
+							j.setOpaque(true);
+							activado[0] = pI;
+							activado[1] = pJ;
+						}else{
+							j.setOpaque(false);
+							activado[0] = -1;
+							activado[1] = -1;
+						}
+					}
+				}else{
+					activado[0] = -1;
+					activado[1] = -1;
+					desactivar();
+				}
+				todosLosNumeros(tab.obtValorCasilla(pI, pJ));
+				j.updateUI();					
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		};
+		
+		j.addMouseListener(mouseListener1);
+		return j;
+
+	}
+	
+	private void desactivar(){
+		for(int i = 0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				cajas[i][j].setOpaque(false);
+				cajas[i][j].updateUI();
+			}
+		}
+	}	
+	
+	
+	private void modificar(int pI, int pJ){
+		String texto="";
+
+		if(tab.obtListaNotas(pI, pJ).length != 0){
+			texto = "<html>";
+			for(int k=0; k<MAX; k++){
+				if(Character.isDigit(tab.obtListaNotas(pI, pJ)[k])){
+					texto += tab.obtListaNotas(pI, pJ)[k];
+				}else{
+					texto += "&nbsp;";
+				}
+				if(k!=2 && k!= 5 && k!= 8){
+					texto += "&nbsp;"; 
+				}else if(k!=8){
+					texto += "<br/>";
+				}else{
+					texto += "</html>";
+				}
+			}
+			cajas[pI][pJ].setText(texto);
+			cajas[pI][pJ].setFont(new Font("Arial",Font.ITALIC,8));
+			cajas[pI][pJ].setVerticalAlignment(HEIGHT/2);
+		}else{
+			if(tab.obtValorCasilla(pI, pJ) == 0){
+				texto = " ";
+			}else{
+				texto = tab.obtValorCasilla(pI, pJ) + "";				
+			}
+			cajas[pI][pJ].setText(texto);
+			cajas[pI][pJ].setFont(new Font("Monospaced",Font.BOLD,20));
+
+			cajas[pI][pJ].setVerticalAlignment(HEIGHT/4);
+		}
+	}
+	
+	private void getBotones(){
+		getBtnSound();
+		getBtnGuide();
+		getBtn1();
+		for(int k=0; k<MAX; k++){			
+			final String numero = Integer.toString(k+1);
+			
+			
+			if(k == 3){
+				getBtn2();
+			}else if(k == 6){
+				getBtn3();
+			}
+			
+			if(listBotones[k] == null){
+				listBotones[k] = new JButton(numero);
+				sur.add(listBotones[k]);
+				listBotones[k].addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						todosLosNumeros(numero.charAt(0));
+						if(activado[0]>=0){
+							tab.asgValor(activado[0], activado[1],(int)(numero.charAt(0)-'0'));
+						}
+					}
+					
+				});
+			}
+		}
+	}
+	
+	private JButton getBtn1() {
+		if(btn1 == null){
+			btn1 = new JButton("Correcto");
+			sur.add(btn1);
+			btn1.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					desactivar();
+					boolean[][] casillasFallo =	tab.comprobarCorrecto();
+					if(casillasFallo.length == 0){
+						hiloCelebracion();
+						getDialogFinal();
+						tab.terminar();
+						try{			
+							if(sonido.isRunning()){
+								sonido.stop();
+								sonido2.start();
+							}
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+					}else{
+						mostrarErrores(casillasFallo);
+						activado[0]=-1;
+						activado[1]=-1;
+					}
+				}
+			});
+		}
+		return btn1;
+	}
+		
+	private void mostrarErrores(boolean[][] pCasillasFallo){
+		for(int i=0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				if(pCasillasFallo[i][j]){
+					cajas[i][j].setBackground(Color.red);
+					cajas[i][j].setOpaque(true);
+					cajas[i][j].updateUI();
+				}
+				else if(!cajas[i][j].getText().trim().isEmpty() && cajas[i][j].getForeground()!=Color.red && cajas[i][j].getText().length()<2){
+					cajas[i][j].setBackground(Color.blue);
+					cajas[i][j].setOpaque(true);
+					cajas[i][j].updateUI();
+				}
+			}
+		}
+	}
+		
+	private JButton getBtn2() {
+		if(btn2 == null){
+			btn2 = new JButton("C");
+			sur.add(btn2);
+		}
+		btn2.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for(int i = 0; i < MAX; i++){
+					for(int j = 0; j<MAX;j++){
+						if(activado[0]>=0 && cajas[i][j].getBackground()!=Color.blue){
+							tab.borrarNumero(activado[0], activado[1]);
+							
+						}
+					}
+				}
+			}
+		});
+		return btn2;
+		
+	}
+	private JButton getBtn3() {
+		if(btn3 == null){
+			btn3 = new JButton("Elimin Values");
+			sur.add(btn3);
+		}
+		btn3.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				tab.eliminateValues();
+			}
+		});
+		return btn3;
+		
+	}
+	
+	private void getDialogFinal(){
+		
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel texto = new JLabel("Has conseguido: "+tab.puntuacionConPenalizacion()+" puntos.");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dialogFinal.dispose();
+				dispose();
+				dispose = true;
+				sonido2.stop();
+				tab.lanzarRanking();
+			}
+			
+			
+		});
+		
+		dialogFinal = new JDialog();
+		dialogFinal.setSize(300,125);
+		dialogFinal.setModal(false);
+		dialogFinal.setVisible(true);
+		dialogFinal.setTitle("Felicidades!");
+		try{
+		dialogFinal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		dialogFinal.addWindowListener(new WindowAdapter(){
+				public void windowClosing(WindowEvent e){
+					getSeguro();
+				}
+			});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		dialogFinal.setLocationRelativeTo(ventana);		
+		dialogFinal.setLayout(new GridBagLayout());
+		dialogFinal.getContentPane().setBackground(new Color(0xFFFFFF));
+	
+
+		dialogFinal.add(texto,csTexto);
+		dialogFinal.add(boton,csBoton);
+	}
+
+	private JButton getBtnSound(){
+		final JLabel label = new JLabel();
+		if(btnSound == null){
+			btnSound = new JButton();
+		}
+	//	label.setIcon(new ImageIcon(this.getClass().getResource("soundOff.png")));
+		btnSound.add(label);
+		btnSound.setOpaque(false);
+		btnSound.setBorder(null);
+		btnSound.setContentAreaFilled(false);
+		label.setOpaque(true);
+		btnSound.addActionListener(new ActionListener(){
+	
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(sonido.isRunning()){
+					sonido.stop();
+					label.setIcon(new ImageIcon(this.getClass().getResource("sound.png")));
+					
+				}else{
+					sonido.start();
+					label.setIcon(new ImageIcon(this.getClass().getResource("soundOff.png")));
+					
+				}
+			}
+		});
+		return btnSound;	
+	}
+	
+	
+	private JButton getBtnGuide(){
+		if(btnGuide == null){
+			btnGuide = new JButton("?");
+		}
+		btnGuide.setBorder(null);
+		btnGuide.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				getDialog();
+			}
+		});
+		return btnGuide;	
+	}
+	
+	private void getDialog(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 5;
+		
+		JLabel correcto = new JLabel("Casillas correctas");
+		correcto.setForeground(new Color(0x0095FF));
+		JLabel error = new JLabel("Casillas erróneas");
+		error.setForeground(Color.red);
+		JLabel seleccion = new JLabel("Casilla seleccionada");
+		seleccion.setForeground(Color.green);
+		JLabel amarillo = new JLabel("Casillas con número seleccionado");
+		amarillo.setForeground(Color.yellow);
+		JButton boton = new JButton("Cerrar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dialogGuide.dispose();
+			}
+			
+		});
+		
+		dialogGuide = new JDialog();
+		dialogGuide.setSize(300,200);
+		dialogGuide.setModal(false);
+		dialogGuide.setVisible(true);
+		dialogGuide.setLocationRelativeTo(this);
+		dialogGuide.setTitle("GUIDE");
+		
+		dialogGuide.setLayout(new GridBagLayout());
+		dialogGuide.getContentPane().setBackground(new Color(0x585858));
+	
+		dialogGuide.add(seleccion,csTexto);
+		csTexto.gridy = 1;
+		dialogGuide.add(amarillo,csTexto);
+		csTexto.gridy = 2;
+		dialogGuide.add(correcto,csTexto);
+		csTexto.gridy = 3;
+		dialogGuide.add(error,csTexto);
+		csTexto.gridy = 4;
+		dialogGuide.add(boton,csBoton);
+	}
+
+	
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		for(int j = 0; j<MAX; j++){
+			for(int i=0; i<MAX; i++){
+			//Comentar el modificar(i,j) para la solución directamente
+				modificar(i,j);
+			}
+		}
+		tiempo.setText(formaTiempo());
+	}
+	
+	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
+		Tablero tb = Tablero.obtTablero();
+		Sudoku sud;
+		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
+		sud = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(1).next();		
+		tb.inicializar(sud);
+		VentanaTablero vnt = new VentanaTablero();
+		vnt.setVisible(true);
+	}
 
 }

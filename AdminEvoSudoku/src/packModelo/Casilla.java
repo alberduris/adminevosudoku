@@ -11,6 +11,12 @@ public class Casilla{
     // Estado de ocupaci�n de la casilla
     private boolean ocupada;
 
+    // Lista de las casillas posibles
+    private char[] listaPosibles;
+   
+    //Lista de notas.
+	private char[] listaNotas;
+    
     /**
      * Casilla
      * <p> POST: crea una casilla que est� libre y no contiene un valor inicial.<p>
@@ -18,6 +24,15 @@ public class Casilla{
     public Casilla() {
        valorInicial = false;
        ocupada = false;
+       valor = 0;
+       this.listaNotas = new char[9];
+       this.listaPosibles = new char[9];
+       for(int i=0; i<9; i++){
+			listaPosibles[i] = ' ';
+		}
+       for(int i=0; i<9; i++){
+			listaNotas[i] = ' ';
+		}
     }
 
     /**
@@ -42,9 +57,38 @@ public class Casilla{
      * @param pValor int
      */
     public void asgValor(int pValor) {
-       valor = pValor;
-       ocupada = true;
-       valorInicial = false;
+     //  ocupada = true;
+       if(!valorInicial){
+			char num = String.valueOf(pValor).charAt(0);
+			if(valor != 0){
+				if(valor == pValor){
+					valor = 0;
+				}else{
+					int aux = valor;
+					listaNotas[aux-1] = String.valueOf(valor).charAt(0);
+					listaNotas[pValor-1] = num;
+					valor = 0;
+				}
+			}else{
+				if(cantidadDeNumeros(listaNotas) == 0){
+					valor = pValor;
+				}else if(cantidadDeNumeros(listaNotas) == 2){
+					if(Character.isDigit(listaNotas[pValor-1])){
+						listaNotas[pValor-1] = ' ';
+						valor = (int)(listaNotas[Character.getNumericValue(cogerNumeroUnico(listaNotas))-1]-'0');
+						listaNotas[Character.getNumericValue(cogerNumeroUnico(listaNotas)-1)] = ' ';
+					}else{
+						listaNotas[pValor-1] = num;
+					}
+				}else{
+					if(Character.isDigit(listaNotas[pValor-1])){
+						listaNotas[pValor-1] = ' ';
+					}else{
+						listaNotas[pValor-1] = num;
+					}
+				}
+			}
+		} 
     }
 
     /**
@@ -53,6 +97,10 @@ public class Casilla{
      */
     public void quitarValor() {
        ocupada = false;
+       valor = 0;
+       for(int i=0; i<listaNotas.length; i++){
+    	   listaNotas[i] = ' ';
+       }
     }
 
     /**
@@ -112,95 +160,18 @@ public class Casilla{
         return this.obtValor() == pCasilla.obtValor();
      }
      
-     /*
-      * private char numero, solucion;
-	private char[] listaPosibles;
-	private char[] listaNotas;
-	private boolean fija;
-	
-	Casilla( char pNumero, char pSolucion){
-		this.numero = pNumero;
-		if(!Character.isDigit(numero)){
-			this.fija = false;
-		}else{ 
-			this.fija = true;
-		}
-		this.solucion = pSolucion;
-		this.listaNotas = new char[9];
-		this.listaPosibles = new char[9];
-		if(!fija){
-			for(int i=0; i<9; i++){
-				listaNotas[i] = ' ';
-			}
-		}
-		for(int i=0; i<9; i++){
-			listaPosibles[i] = ' ';
-		}
-	}
-
-	public char getNumero() {
-		return numero;
-	}
-	
-	public char getSolucion(){
-		return solucion;
-	}
-	
-	public boolean obtenerFija(){
-		return fija;
-	}
-	
-	public char[] getListaNotas(){
-		if(cantidadDeNumeros(listaNotas)>1){
-			return listaNotas;
-		}
-		return null;
-	}
+     public char[] getListaNotas(){
+ 		char[] lista = new char[0];
+    	 if(cantidadDeNumeros(listaNotas)>1){
+ 			lista = listaNotas;
+ 		}
+ 		return lista;
+ 	}
+     
 	public char[] getListaPosibles(){
 		return listaPosibles;
 	}
 	
-	public void anadirNumero(char pNum){
-		if(!fija){
-			int i = Character.getNumericValue(pNum);
-			if(Character.isDigit(numero)){
-				if(numero == pNum){
-					numero = ' ';
-				}else{
-					int aux = Character.getNumericValue(numero);
-					listaNotas[aux-1] = numero;
-					listaNotas[i-1] = pNum;
-					numero = ' ';
-				}
-			}else{
-				if(cantidadDeNumeros(listaNotas) == 0){
-					numero = pNum;
-				}else if(cantidadDeNumeros(listaNotas) == 2){
-					if(Character.isDigit(listaNotas[i-1])){
-						listaNotas[i-1] = ' ';
-						numero = listaNotas[Character.getNumericValue(cogerNumeroUnico(listaNotas)-1)];
-						listaNotas[Character.getNumericValue(cogerNumeroUnico(listaNotas)-1)] = ' ';
-					}else{
-						listaNotas[i-1] = pNum;
-					}
-				}else{
-					if(Character.isDigit(listaNotas[i-1])){
-						listaNotas[i-1] = ' ';
-					}else{
-						listaNotas[i-1] = pNum;
-					}
-				}
-			}
-		}
-	}
-
-	public void borrarNumero() {
-		numero = ' ';
-		for(int i = 0; i < listaNotas.length ; i++){
-			listaNotas[i]=' ';
-		}
-	}
-
 	private int cantidadDeNumeros(char[] pLista){
 		int cont = 0;
 		for(int i = 0; i<9; i++){
@@ -214,27 +185,19 @@ public class Casilla{
 	private char cogerNumeroUnico(char[] pLista){
 		char aux = ' ';
 		for(int i = 0; i<9 && aux == ' '; i++){
-			if(pLista[i] != ' '){
+			if(Character.isDigit(pLista[i])){
 				aux = pLista[i];
 			}
 		}
 		return aux;
 	}
 	
-	public boolean comprobarCompleto(){
-		boolean completo = false;
-		if(numero == solucion){
-			completo = true;
-		}
-		return completo;
-	}
-	
 	public boolean comprobarCorrecto(){
 		boolean correcto = true;
-		if(!fija){
+		if(!valorInicial){
 			if(cantidadDeNumeros(listaPosibles) > 0){
-				if(Character.isDigit(numero)){
-					if(!Character.isDigit(listaPosibles[Character.getNumericValue(numero)-1])){
+				if(valor != 0){
+					if(!Character.isDigit(listaPosibles[valor-1])){
 						correcto = false;;
 					}
 				}	
@@ -251,9 +214,9 @@ public class Casilla{
 	
 	public boolean eliminateValues(){
 		boolean modificado=false;
-		if(!Character.isDigit(numero)){
+		if(valor == 0){
 			if(cantidadDeNumeros(listaPosibles) == 1){
-				numero = cogerNumeroUnico(listaPosibles);
+				valor = (int)(cogerNumeroUnico(listaPosibles)-'0');
 				modificado = true;
 				for(int i=0; i<9; i++) listaNotas[i]=' ';
 			}else if(cantidadDeNumeros(listaPosibles) > 1){
@@ -267,8 +230,13 @@ public class Casilla{
 		}
 		return modificado;
 	}
-	*/
-      
-
+	
+	private void imprimirLista(){
+		for(int i=0; i<9; i++){
+			System.out.print(listaNotas[i]+ ", ");
+		}
+		System.out.println();
+	}
+	
 }
 

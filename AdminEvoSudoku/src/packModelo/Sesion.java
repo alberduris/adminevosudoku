@@ -52,7 +52,7 @@ public class Sesion extends Observable implements Observer {
 	
 	public void ponNivel(int pNivel)
 	{
-		iter = ListaSudokus.obtListaSudokus().obtIterador(pNivel);
+		iter = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(pNivel);
 	}
 	
 	public void ponNombreUsuario(String pNombre)

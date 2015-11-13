@@ -1,9 +1,11 @@
 package packModelo;
 
+import java.io.Serializable;
+
 import packAdminSudoku.ListaPuntuaciones;
 import packModelo.Casilla;
 
-public class Sudoku {
+public class Sudoku implements Serializable{
 
     // Identificador del sudoku
     private int identificador;

@@ -7,6 +7,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import packExcepciones.ExcepcionListaLlena;
+import packExcepciones.NoHaySudokuCargadoException;
 import packInterfazGrafica.VentanaInicial;
 import packInterfazGrafica.VentanaPuntuaciones;
 import packInterfazGrafica.VentanaSiNo;
@@ -23,8 +24,9 @@ public class ProgPrincipal {
 	     * @throws UnsupportedAudioFileException 
 	     * @throws IOException 
 	     * @throws LineUnavailableException 
+	     * @throws NoHaySudokuCargadoException 
 	     */
-	    public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException
+	    public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException, NoHaySudokuCargadoException
 	    {
 		System.out.println("Iniciando Sesión");
 		
@@ -38,20 +40,21 @@ public class ProgPrincipal {
 		{
 		
 		}
-		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokuak.txt");
+		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
 		VentanaInicial.obtVentanaInicial().mostrar();
 		boolean seguir = true;
-		while (seguir) {
+	//	while (seguir) {
 			sesion.iniciarJuego();
 			VentanaTablero vnt = new VentanaTablero();
 			vnt.setVisible(true);
+			
 			// Interfaz: Desea Seguir
-			seguir =VentanaSiNo.obtVentanaSiNo().preguntar("Desea Seguir?");
-		}
-		sesion.actualizarPuntuaciones();
-		VentanaPuntuaciones.obtVentanaPuntuaciones().mostrar();
-		ListaJugadores.obtListaJugadores().guardar("jugadores.txt");
-		System.out.println("Final");
+			//seguir =VentanaSiNo.obtVentanaSiNo().preguntar("Desea Seguir?");
+	//	}
+		//sesion.actualizarPuntuaciones();
+		//VentanaPuntuaciones.obtVentanaPuntuaciones().mostrar();
+		//ListaJugadores.obtListaJugadores().guardar("jugadores.txt");
+		//System.out.println("Final");
 
 	    }
 

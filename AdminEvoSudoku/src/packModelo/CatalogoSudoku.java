@@ -247,4 +247,8 @@ public class CatalogoSudoku {
 	public void resetear(){
 		lista.resetear();
 	}
+	
+	public Sudoku buscarSudokuPorId(int pIdSudoku){
+		return lista.buscarSudokuPorId(pIdSudoku);
+	}
 }

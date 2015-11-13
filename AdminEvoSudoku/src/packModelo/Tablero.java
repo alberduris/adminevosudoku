@@ -1,22 +1,27 @@
 package packModelo;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import packAdminSudoku.CatalogoJugadores;
 import packAdminSudoku.Puntuacion;
+import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
 import packVistaAdminSudoku.VentanaRanking;
 
-public class Tablero extends Observable {
+public class Tablero extends Observable implements Serializable{
 	private static Tablero miTablero = new Tablero();
 	private Sudoku sudoku;
 	private Matriz matrizJuego;
 	private boolean terminado = false;
 	
 	private int tiempo;
-	private Timer time;
+	private static Timer time;
 
 	private Tablero() {
             matrizJuego = new Matriz();
@@ -55,17 +60,21 @@ public class Tablero extends Observable {
      * @param pSudoku Sudoku
      * @todo Implement this packSudoku.ITablero method
      */
-    public void inicializar(Sudoku pSudoku) {
+    public void inicializar(Sudoku pSudoku, Matriz pMatriz) {
     	sudoku=pSudoku;
-        Matriz matrizSolucion = sudoku.obtMatriz();
-    	int valor;
-       for (int fila=0; fila<9; fila++)
-            for (int columna=0; columna<9; columna++){
-            	if (matrizSolucion.esInicial(fila,columna)){
-                    valor = matrizSolucion.obtValor(fila,columna);
-                    matrizJuego.asgValorInicial(fila,columna,valor);
-            	}
-            }
+    	if(pMatriz == null){
+	        Matriz matrizSolucion = sudoku.obtMatriz();
+	    	int valor;
+	       for (int fila=0; fila<9; fila++)
+	            for (int columna=0; columna<9; columna++){
+	            	if (matrizSolucion.esInicial(fila,columna)){
+	                    valor = matrizSolucion.obtValor(fila,columna);
+	                    matrizJuego.asgValorInicial(fila,columna,valor);
+	            	}
+	            }
+    	}else{
+    		matrizJuego = pMatriz;
+    	}
        setChanged();
        notifyObservers();
     }
@@ -229,6 +238,31 @@ public class Tablero extends Observable {
     
     public void reiniciar(){
     	tiempo = 0;
+    }
+    
+    public Sudoku getSudoku(){return sudoku;}
+    public Matriz getMatriz(){return matrizJuego;}
+    
+    public void establecerTablero(Tablero pTablero){
+    	tiempo = pTablero.obtTiempo();
+    	sudoku = pTablero.getSudoku();
+    	matrizJuego = pTablero.getMatriz();
+    }
+    
+    public void pruebaIntroducir(){
+    	GestorBD bd = GestorBD.getGestorBD();
+    	bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) values ('Aitor', 'aa', 'aaa')");
+    	ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+    	ObjectOutputStream oos = null;
+    	try {
+			oos = new ObjectOutputStream(byteArray);
+	    	oos.writeObject(this);
+	    	String st = "INSERT INTO Jugadores (Tablero) values (null, ?) WHERE NombreUsuario == 'Aitor'";
+	    	bd.InsertarTablero(st, byteArray);
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
 }

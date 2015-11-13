@@ -1,6 +1,8 @@
 package packModelo;
 
-public class Matriz {
+import java.io.Serializable;
+
+public class Matriz implements Serializable{
 
     // ATRIBUTOS DE LA CLASE
     // Dimensi�n del Sudoko

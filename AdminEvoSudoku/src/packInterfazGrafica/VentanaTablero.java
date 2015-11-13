@@ -32,10 +32,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import packAdminSudoku.ListaPuntuaciones;
 import packExcepciones.NoHaySudokuCargadoException;
 import packModelo.CatalogoSudoku;
-import packModelo.ListaSudokus;
+import packModelo.Sesion;
 import packModelo.Sudoku;
 import packModelo.Tablero;
 
@@ -128,7 +127,12 @@ public class VentanaTablero extends JDialog implements Observer {
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			addWindowListener(new WindowAdapter(){
 				public void windowClosing(WindowEvent e){
-					getSeguro();
+					try {
+						getSeguro();
+					} catch (NoHaySudokuCargadoException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			setVisible(true);
@@ -139,9 +143,13 @@ public class VentanaTablero extends JDialog implements Observer {
 	}
 	
 	
-	private void getSeguro(){
+	private void getSeguro() throws NoHaySudokuCargadoException{
 		int valor = JOptionPane.showConfirmDialog(this, "Â¿Estas seguro de que quieres cerrar?", "CERRAR", JOptionPane.YES_NO_OPTION);
 		if(valor==JOptionPane.YES_OPTION){
+			valor = JOptionPane.showConfirmDialog(this, "¿Quieres guardar la partida?", "CERRAR", JOptionPane.YES_NO_OPTION);
+			if(valor==JOptionPane.YES_OPTION){
+				Sesion.obtSesion().anadirSudokuEnJuego(tab);
+			}
 			JOptionPane.showMessageDialog(null, "Gracias por jugar", "Gracias", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);
 		}
@@ -707,14 +715,15 @@ public class VentanaTablero extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				for(int i = 0; i < MAX; i++){
+				/*for(int i = 0; i < MAX; i++){
 					for(int j = 0; j<MAX;j++){
 						if(activado[0]>=0 && cajas[i][j].getBackground()!=Color.blue){
 							tab.borrarNumero(activado[0], activado[1]);
 							
 						}
 					}
-				}
+				}*/
+				tab.pruebaIntroducir();
 			}
 		});
 		return btn2;
@@ -776,7 +785,12 @@ public class VentanaTablero extends JDialog implements Observer {
 		dialogFinal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		dialogFinal.addWindowListener(new WindowAdapter(){
 				public void windowClosing(WindowEvent e){
-					getSeguro();
+					try {
+						getSeguro();
+					} catch (NoHaySudokuCargadoException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 		}catch(Exception e){
@@ -906,7 +920,7 @@ public class VentanaTablero extends JDialog implements Observer {
 		Sudoku sud;
 		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
 		sud = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(1).next();		
-		tb.inicializar(sud);
+		tb.inicializar(sud, null);
 		VentanaTablero vnt = new VentanaTablero();
 		vnt.setVisible(true);
 	}

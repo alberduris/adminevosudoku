@@ -46,4 +46,20 @@ public class ListaSudokus {
 	public void resetear(){
 		lista.clear();
 	}
+	
+	public Sudoku buscarSudokuPorId(int pIdSudoku){
+		boolean enc = false;
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sd = new Sudoku(0, 0);
+		while(itr.hasNext() && !enc){
+			sd = itr.next();
+			if(sd.obtIdentificador() == pIdSudoku){
+				enc = true;
+			}
+		}
+		if(!enc){
+			sd = null;
+		}
+		return sd;
+	}
 }

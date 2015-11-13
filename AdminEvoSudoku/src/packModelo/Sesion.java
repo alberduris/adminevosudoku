@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.table.DefaultTableModel;
+
+import packBD.GestorBD;
 import packExcepciones.ExcepcionListaLlena;
 import packExcepciones.NoHaySudokuCargadoException;
 
@@ -13,6 +16,7 @@ public class Sesion extends Observable implements Observer {
     private static Sesion mSesion;
 	private String nombreUsuario;
 	private Iterator<Sudoku> iter;
+	private Tablero tablero;
 	private Date horaInicio;
 	private int puntos;
 
@@ -31,11 +35,15 @@ public class Sesion extends Observable implements Observer {
 		return mSesion;
 	}
 	
-	public void iniciarJuego()
+	public void iniciarJuego() throws NoHaySudokuCargadoException
 	{
 		try
 		{
-		    Tablero.obtTablero().inicializar(iter.next());
+			if(tablero == null || CatalogoSudoku.getCatalogoSudoku().buscarSudokuPorId(tablero.obtIdSudoku()) == null){
+			    Tablero.obtTablero().inicializar(iter.next(), null);
+			}else{
+				Tablero.obtTablero().establecerTablero(tablero);
+			}
 		    horaInicio = new Date();
 		} catch (RuntimeException e)
 		{
@@ -112,5 +120,14 @@ public class Sesion extends Observable implements Observer {
 
 	   }
     }
+	
+	public void trabajarEnBD(){
+		GestorBD gBD = GestorBD.getGestorBD();
+		DefaultTableModel TABLA = gBD.Select("SELECT * FROM Principal");
+	}
+	
+	public void anadirSudokuEnJuego(Tablero pTablero){
+		tablero = pTablero;
+	}
 }
 

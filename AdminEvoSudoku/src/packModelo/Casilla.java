@@ -1,6 +1,8 @@
 package packModelo;
 
-public class Casilla{
+import java.io.Serializable;
+
+public class Casilla implements Serializable{
 
     // Indica si es un valor inicial
     private boolean valorInicial;

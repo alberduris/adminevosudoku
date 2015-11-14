@@ -249,20 +249,5 @@ public class Tablero extends Observable implements Serializable{
     	matrizJuego = pTablero.getMatriz();
     }
     
-    public void pruebaIntroducir(){
-    	GestorBD bd = GestorBD.getGestorBD();
-    	bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) values ('Aitor', 'aa', 'aaa')");
-    	ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-    	ObjectOutputStream oos = null;
-    	try {
-			oos = new ObjectOutputStream(byteArray);
-	    	oos.writeObject(this);
-	    	String st = "INSERT INTO Jugadores (Tablero) values (null, ?) WHERE NombreUsuario == 'Aitor'";
-	    	bd.InsertarTablero(st, byteArray);
-    	} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
     
 }

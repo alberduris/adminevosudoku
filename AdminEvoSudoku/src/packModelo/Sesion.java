@@ -1,5 +1,12 @@
 package packModelo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Observable;
@@ -39,6 +46,7 @@ public class Sesion extends Observable implements Observer {
 	{
 		try
 		{
+			obtEnJuego();
 			if(tablero == null || CatalogoSudoku.getCatalogoSudoku().buscarSudokuPorId(tablero.obtIdSudoku()) == null){
 			    Tablero.obtTablero().inicializar(iter.next(), null);
 			}else{
@@ -51,6 +59,28 @@ public class Sesion extends Observable implements Observer {
 		}
 	}
 	
+	
+	public void obtEnJuego(){
+		GestorBD gBD = GestorBD.getGestorBD();
+		ResultSet resultado = gBD.Select("SELECT Tablero FROM Jugadores WHERE NombreUsuario='"+nombreUsuario+"'");
+		try {
+			if(resultado.next()){
+				byte[] b = resultado.getBytes("Tablero");
+				ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+				ObjectInputStream oos = new ObjectInputStream(byteArray);
+				tablero = (Tablero) oos.readObject();
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	public String obtNombreUsuario()
@@ -121,9 +151,17 @@ public class Sesion extends Observable implements Observer {
 	   }
     }
 	
-	public void trabajarEnBD(){
-		GestorBD gBD = GestorBD.getGestorBD();
-		DefaultTableModel TABLA = gBD.Select("SELECT * FROM Principal");
+	public void finSesion(){
+		GestorBD bd = GestorBD.getGestorBD();
+    	try {
+    		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+        	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
+	    	oos.writeObject(Tablero.obtTablero());
+	    	bd.InsertarTablero("INSERT INTO Jugadores values ('"+nombreUsuario+"', 'aa', 'aaa', ?)", byteArray);
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){

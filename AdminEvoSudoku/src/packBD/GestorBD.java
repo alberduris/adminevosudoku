@@ -50,10 +50,10 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			PreparedStatement ps = CanalBD.prepareStatement(SentenciaSQL);
-			ps.setBytes(1, byteArray.toByteArray());
-			ps.execute();
-			
-		//	this.Instruccion.executeUpdate(this.SentenciaSQL);
+			byte[] bt = byteArray.toByteArray();
+			ps.setBytes(1, bt);
+			System.out.println(bt);
+			ps.executeUpdate();
 			JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al insertar Tablero\nERROR : "+e.getMessage());			
@@ -80,32 +80,32 @@ public class GestorBD {
 		}
 	}
 	
-	public DefaultTableModel Select(String SentenciaSQL){
+	public ResultSet Select(String SentenciaSQL){
 		this.SentenciaSQL = SentenciaSQL;
 		
 		String[] TITULOS = {"Nombre Usuario", "Correo Electrónico", "Contraseña", "Tablero"};
-		String[] REGISTRO = new String[5];
+		String[] REGISTRO = new String[3];
+		byte[] REGISTROB;
 		
-		DefaultTableModel TABLA = new DefaultTableModel(null, TITULOS);
+		//DefaultTableModel TABLA = new DefaultTableModel(null, TITULOS);
 		
 		try{
 			this.Resultado = Instruccion.executeQuery(this.SentenciaSQL);
-			while(Resultado.next()){
-				REGISTRO[0] = String.valueOf(Resultado.getInt("Identificador"));
-				REGISTRO[1] = Resultado.getString("Nombre Usuario");
-				REGISTRO[2] = Resultado.getString("Corre Electronico");
-				REGISTRO[3] = Resultado.getString("Contraseña");
-				REGISTRO[4] = Resultado.getString("Tablero");
+			/*while(Resultado.next()){
+				REGISTRO[0] = Resultado.getString("NombreUsuario");
+				REGISTRO[1] = Resultado.getString("CorreoElectrónico");
+				REGISTRO[2] = Resultado.getString("Contraseña");
+				REGISTROB = Resultado.getString("Tablero").getBytes();
 				
 				TABLA.addRow(REGISTRO);
-			};
+			};*/
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error al cargar los datos\nERROR : "+e.getMessage());			
 		}
-		return TABLA;
+		return Resultado;
 	}
 	
-	public static void main(String[] arg){
+	/*public static void main(String[] arg){
 		GestorBD gBD = GestorBD.getGestorBD();
 		DefaultTableModel TABLA = gBD.Select("SELECT * FROM Jugadores");
 		for(int i= 0; i < TABLA.getRowCount(); i++){
@@ -114,6 +114,6 @@ public class GestorBD {
 			}
 			System.out.println(" ");
 		}
-	}
+	}*/
 	
 }

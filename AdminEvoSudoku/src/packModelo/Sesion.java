@@ -26,6 +26,7 @@ public class Sesion extends Observable implements Observer {
 	private Tablero tablero;
 	private Date horaInicio;
 	private int puntos;
+	private GestorBD bd = GestorBD.getGestorBD();
 
 	private Sesion()
 	{
@@ -67,8 +68,10 @@ public class Sesion extends Observable implements Observer {
 			if(resultado.next()){
 				byte[] b = resultado.getBytes("Tablero");
 				ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
-				ObjectInputStream oos = new ObjectInputStream(byteArray);
-				tablero = (Tablero) oos.readObject();
+				if(byteArray.available() > 0){
+					ObjectInputStream oos = new ObjectInputStream(byteArray);
+					tablero = (Tablero) oos.readObject();
+				}
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -96,6 +99,37 @@ public class Sesion extends Observable implements Observer {
 	public void ponNombreUsuario(String pNombre)
 	{
 		nombreUsuario = pNombre;
+	}
+	
+	public boolean[] registrarse(String pNombreUsuario, String pCorreoElectronico, String pContrasena){
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrónico FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pCorreoElectronico+"'");
+		boolean[] resultado = new boolean[2];
+		resultado[0] = true;
+		resultado[1] = true;
+		try {
+			while(res.next()){
+				String correo = res.getString("CorreoElectrónico");
+				String nombre = res.getString("NombreUsuario");
+				System.out.println(pNombreUsuario+ " , " + nombre.trim());
+				System.out.println(pCorreoElectronico+ " , " + correo.trim() );
+				if(correo.trim().equals(pCorreoElectronico.trim())){
+					resultado[1] = false;
+					if(nombre.trim().equals(pNombreUsuario.trim())){
+						resultado[0] = false;
+					}
+				}else if(pNombreUsuario.trim().equals(nombre.trim())){
+					resultado[0] = false;
+				}
+			}
+			if(resultado[0] && resultado[1]){
+				String contrasena = SHA1.getStringMensageDigest(pContrasena);
+				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) values ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 	
 	public void update(Observable pObservador, Object pObjeto) {
@@ -152,16 +186,21 @@ public class Sesion extends Observable implements Observer {
     }
 	
 	public void finSesion(){
-		GestorBD bd = GestorBD.getGestorBD();
     	try {
     		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
         	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
 	    	oos.writeObject(Tablero.obtTablero());
-	    	bd.InsertarTablero("INSERT INTO Jugadores values ('"+nombreUsuario+"', 'aa', 'aaa', ?)", byteArray);
+	    	bd.updateTablero("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+//	    	bd.InsertarTablero("INSERT INTO Jugadores values ('"+nombreUsuario+"', 'aa', 'aaa', ?)", byteArray);
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void borrarTablero(){
+		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+		bd.updateTablero("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){

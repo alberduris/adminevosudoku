@@ -149,6 +149,8 @@ public class VentanaTablero extends JDialog implements Observer {
 			valor = JOptionPane.showConfirmDialog(this, "¿Quieres guardar la partida?", "CERRAR", JOptionPane.YES_NO_OPTION);
 			if(valor==JOptionPane.YES_OPTION){
 				Sesion.obtSesion().finSesion();
+			}else{
+				Sesion.obtSesion().borrarTablero();
 			}
 			JOptionPane.showMessageDialog(null, "Gracias por jugar", "Gracias", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(0);

@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 public class GestorBD {
 	
 	private static GestorBD miGestorBD;
 	private String ConexionBD = "jdbc:ucanaccess://" + System.getProperty("user.dir")+"/BDJugadores.accdb";
+	//private String ConexionBD = "jdbc:mysql://"+ruta;
 	private String SentenciaSQL;
 	private Connection CanalBD;
 	private Statement Instruccion;
@@ -22,7 +22,7 @@ public class GestorBD {
 	
 	private GestorBD(){
 		try{
-			this.CanalBD = DriverManager.getConnection(this.ConexionBD);
+			this.CanalBD = DriverManager.getConnection(this.ConexionBD);//,"root", "030191");
 			this.Instruccion = this.CanalBD.createStatement();
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error en la conexion con BD\nERROR : "+e.getMessage());
@@ -46,17 +46,16 @@ public class GestorBD {
 		}
 	}
 	
-	public void InsertarTablero(String SentenciaSQL, ByteArrayOutputStream byteArray){
+	public void updateTablero(String SentenciaSQL, ByteArrayOutputStream byteArray){
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			PreparedStatement ps = CanalBD.prepareStatement(SentenciaSQL);
 			byte[] bt = byteArray.toByteArray();
 			ps.setBytes(1, bt);
-			System.out.println(bt);
 			ps.executeUpdate();
 			JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
-			JOptionPane.showMessageDialog(null, "Error Al insertar Tablero\nERROR : "+e.getMessage());			
+			JOptionPane.showMessageDialog(null, "Error Al actualizar Tablero\nERROR : "+e.getMessage());			
 		}
 	}
 	

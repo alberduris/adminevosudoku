@@ -102,5 +102,8 @@ public class VentanaStart extends JFrame {
 			});			
 		}
 		return btnOk;
+	
 	}
+	
 }
+

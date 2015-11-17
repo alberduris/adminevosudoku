@@ -131,7 +131,27 @@ public class Sesion extends Observable implements Observer {
 		}
 		return resultado;
 	}
-	
+
+	public boolean[] identificarse(String pNombreUsuario, String pContrasena){
+		ResultSet res =bd.Select("SELECT Contraseña FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pNombreUsuario+"'");
+		boolean[] resultado = new boolean[2];
+		resultado[0] = true;
+		resultado[1] = true;
+		try {
+			if(res.next()){
+				if(!SHA1.getStringMensageDigest(pContrasena).equals(res.getString("Contraseña"))){
+					resultado[1] = false;
+				}
+			}else{
+				resultado[0] = false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;		
+	}
+
 	public void update(Observable pObservador, Object pObjeto) {
 		Tablero tablero = Tablero.obtTablero();
 		if (tablero.finalDeJuego())
@@ -206,5 +226,7 @@ public class Sesion extends Observable implements Observer {
 	public void anadirSudokuEnJuego(Tablero pTablero){
 		tablero = pTablero;
 	}
+
+
 }
 

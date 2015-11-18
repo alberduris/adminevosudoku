@@ -15,11 +15,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+
+import packModelo.FiltroTexto;
+import packModelo.Sesion;
 
 
 public class VentanaRegistro extends JFrame {
@@ -187,6 +191,28 @@ public class VentanaRegistro extends JFrame {
 		btnRegistro.setPreferredSize(dimBoton);
 		btnRegistro.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		
+		btnRegistro.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(!FiltroTexto.esEmail(txtEmail.getText())){//Si no es un mail valido
+					JOptionPane.showMessageDialog(contentPane, "No es un mail valido");
+				}
+				else if(!FiltroTexto.caracterAdmitido(txtUsuario.getText())){//Si el usuario tiene carac no admitidos
+					JOptionPane.showMessageDialog(contentPane, "El usuario tiene carácteres no válidos");
+				}
+				else if(txtPass.getPassword().length <= 4){
+					JOptionPane.showMessageDialog(contentPane, "La contraseña es demasiado corta");
+				}
+				else{
+					
+					JOptionPane.showMessageDialog(contentPane, "Registro realizado con éxito");
+					Sesion.obtSesion().registrarse(txtUsuario.getText(), txtEmail.getText(), FiltroTexto.getContraseña(txtPass.getPassword()));
+				}
+			}
+		});
+		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnRegistro);
 	}
@@ -202,8 +228,8 @@ public class VentanaRegistro extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					//TODO
-					//frame.setVisible(true);
+					VentanaStart frame = new VentanaStart();
+					frame.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

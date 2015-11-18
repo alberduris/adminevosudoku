@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 
-public class VentanaLogin extends JFrame {
+public class VentanaRecuperacion extends JFrame {
 
 	/**
 	 * 
@@ -40,20 +40,16 @@ public class VentanaLogin extends JFrame {
 	private JLabel lblUsuario;
 	private JTextField txtUsuario;
 	
-	private JLabel lblPass;
-	private JPasswordField txtPass;
-	
-	private JButton btnLogin;
+	private JButton btnRecuperar;
 	
 	private JButton btnAtras;
-	
-	private JLabel lblOlvido;
+
 	
 	
 
 
 	
-	private Dimension dimVentana = new Dimension(250, 330);
+	private Dimension dimVentana = new Dimension(350, 265);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
 
@@ -64,7 +60,7 @@ public class VentanaLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaLogin frame = new VentanaLogin();
+					VentanaRecuperacion frame = new VentanaRecuperacion();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -76,7 +72,7 @@ public class VentanaLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaLogin() {
+	public VentanaRecuperacion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(dimVentana);
 		setLocationRelativeTo(null);
@@ -94,23 +90,19 @@ public class VentanaLogin extends JFrame {
 		contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
-		getTituloLogin();
+		getTituloRecuperar();
 		
 		getLblUsuario();
 		getTxtUsuario();
 		
-		getLblPass();
-		getTxtPass();
-		
-		getBtnLogin();
+		getBtnRecuperar();
 	
-		getLblOlvido();
 		getBtnAtras();
 	}
 
-	private void getTituloLogin() {
+	private void getTituloRecuperar() {
 	
-		lblTitulo = new JLabel("Login - Beta");
+		lblTitulo = new JLabel("Recuperar contraseña");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -126,7 +118,7 @@ public class VentanaLogin extends JFrame {
 
 
 	private void getLblUsuario() {
-		lblUsuario = new JLabel("Usuario");
+		lblUsuario = new JLabel("Usuario o email");
 		lblUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -142,70 +134,19 @@ public class VentanaLogin extends JFrame {
 		panelConBoxLayout.add(txtUsuario);
 	}
 	
-	private void getLblPass() {
-		lblPass = new JLabel("Contraseña");
-		lblPass.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(lblPass);
-	}
-
-	private void getTxtPass(){
-		
-		txtPass = new JPasswordField(10);
-		txtPass.setPreferredSize(dimAreaTexto);
 	
-		
-		panelConBoxLayout.add(txtPass);
-		
-		
-	}
-	
-	private void getBtnLogin(){
-		btnLogin = new JButton("Login");
-		btnLogin.setAlignmentX(CENTER_ALIGNMENT);
-		btnLogin.setMinimumSize(dimBoton);
-		btnLogin.setPreferredSize(dimBoton);
-		btnLogin.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+	private void getBtnRecuperar(){
+		btnRecuperar = new JButton("Recuperar");
+		btnRecuperar.setAlignmentX(CENTER_ALIGNMENT);
+		btnRecuperar.setMinimumSize(dimBoton);
+		btnRecuperar.setPreferredSize(dimBoton);
+		btnRecuperar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
-		panelConBoxLayout.add(btnLogin);
+		panelConBoxLayout.add(btnRecuperar);
 	}
 	
-	private void getLblOlvido(){
-		lblOlvido = new JLabel("¿Olvidó su contraseña?");
-		lblOlvido.setAlignmentX(CENTER_ALIGNMENT);
-		
-		lblOlvido.addMouseListener(new MouseListener() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				VentanaRecuperacion vntRec = new VentanaRecuperacion();
-				vntRec.setVisible(true);
-				dispose();
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {		
-				// TODO NADA
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO NADA	
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO NADA	
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO NADA
-				
-			}
-		});
-		
-		panelConBoxLayout.add(lblOlvido);
-		
-		
-	}
+	
 	
 	
 	private void getBtnAtras() {
@@ -219,7 +160,7 @@ public class VentanaLogin extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaStart frame = new VentanaStart();
+					VentanaLogin frame = new VentanaLogin();
 					frame.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();

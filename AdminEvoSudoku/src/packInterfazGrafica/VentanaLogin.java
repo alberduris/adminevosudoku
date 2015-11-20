@@ -24,6 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import packModelo.FiltroTexto;
+import packModelo.Sesion;
+
 
 public class VentanaLogin extends JFrame {
 
@@ -167,6 +170,29 @@ public class VentanaLogin extends JFrame {
 		btnLogin.setMinimumSize(dimBoton);
 		btnLogin.setPreferredSize(dimBoton);
 		btnLogin.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		
+		btnLogin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				boolean[] resultIdent = Sesion.obtSesion().identificarse(txtUsuario.getText(), FiltroTexto.getContraseña(txtPass.getPassword()));
+				if(!resultIdent[0] || !resultIdent[1]){
+					JOptionPane.showMessageDialog(contentPane, "Datos incorrectos");
+				}
+				else{
+					try {
+						VentanaMenuPpalUsuario frame = new VentanaMenuPpalUsuario();
+						frame.setVisible(true);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					
+					dispose();
+				}
+				
+			}
+		});
 		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnLogin);

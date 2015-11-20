@@ -40,7 +40,7 @@ public class ProgPrincipal {
 		{
 		
 		}
-		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
+		CatalogoSudoku.getCatalogoSudoku().leerBD();
 		VentanaInicial.obtVentanaInicial().mostrar();
 		boolean seguir = true;
 	//	while (seguir) {

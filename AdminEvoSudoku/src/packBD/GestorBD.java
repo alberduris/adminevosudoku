@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 public class GestorBD {
 	
 	private static GestorBD miGestorBD;
-	private String ConexionBD = "jdbc:ucanaccess://" + System.getProperty("user.dir")+"/BDJugadores.accdb";
+	private String ConexionBD = "jdbc:ucanaccess://" + System.getProperty("user.dir")+"/BDAdminEvoSudoku.accdb";
 	//private String ConexionBD = "jdbc:mysql://"+ruta;
 	private String SentenciaSQL;
 	private Connection CanalBD;
@@ -40,7 +40,7 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			this.Instruccion.executeUpdate(this.SentenciaSQL);
-			JOptionPane.showMessageDialog(null, "CORRECTO");
+			//JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al insertar\nERROR : "+e.getMessage());			
 		}
@@ -53,7 +53,7 @@ public class GestorBD {
 			byte[] bt = byteArray.toByteArray();
 			ps.setBytes(1, bt);
 			ps.executeUpdate();
-			JOptionPane.showMessageDialog(null, "CORRECTO");
+			//JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al actualizar Tablero\nERROR : "+e.getMessage());			
 		}
@@ -63,7 +63,7 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			this.Instruccion.executeUpdate(this.SentenciaSQL);
-			JOptionPane.showMessageDialog(null, "CORRECTO MODIFICAR");
+			//JOptionPane.showMessageDialog(null, "CORRECTO MODIFICAR");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al modificar\nERROR : "+e.getMessage());			
 		}
@@ -104,15 +104,15 @@ public class GestorBD {
 		return Resultado;
 	}
 	
-	/*public static void main(String[] arg){
+	public static void main(String[] arg){
 		GestorBD gBD = GestorBD.getGestorBD();
-		DefaultTableModel TABLA = gBD.Select("SELECT * FROM Jugadores");
-		for(int i= 0; i < TABLA.getRowCount(); i++){
+		ResultSet TABLA = gBD.Select("SELECT * FROM Jugadores");
+		/*for(int i= 0; i < TABLA.getRowCount(); i++){
 			for(int j = 0; j < TABLA.getColumnCount(); j++){
 				System.out.print(TABLA.getValueAt(i, j) + " | ");
 			}
 			System.out.println(" ");
-		}
-	}*/
+		}*/
+	}
 	
 }

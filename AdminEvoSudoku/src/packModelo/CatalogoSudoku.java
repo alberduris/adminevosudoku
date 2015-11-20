@@ -1,12 +1,17 @@
 package packModelo;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import packAdminSudoku.ListaPuntuaciones;
+import packModelo.CogerSudokus;
+import packBD.GestorBD;
 
 public class CatalogoSudoku {
 	static CatalogoSudoku miListaSudoku;
@@ -29,6 +34,47 @@ public class CatalogoSudoku {
 	
 	public void anadirSudoku(Sudoku sud){
 		lista.anadirSudoku(sud);
+	}
+	
+	public boolean leerBD(){
+		boolean lanzar = true;
+		GestorBD gBD = GestorBD.getGestorBD();
+		ResultSet resultado = gBD.Select("SELECT * FROM Sudokus");
+		try {
+			if(!resultado.next()){
+				try {
+					CogerSudokus.cogerSudoku();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				resultado = gBD.Select("SELECT * FROM Sudokus");
+				if(lista.tamano() ==0){
+					Sudoku sudo;
+					if(lanzar){
+						try {
+							while(resultado.next()){
+								byte[] b = resultado.getBytes("Sudoku");
+								ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+								ObjectInputStream oos = new ObjectInputStream(byteArray);
+								sudo = (Sudoku) oos.readObject();
+								CatalogoSudoku.getCatalogoSudoku().anadirSudoku(sudo);
+							}
+						} catch (ClassNotFoundException | SQLException | IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+				
+		return lanzar;
 	}
 	
 	public boolean leerFichero(String fich){

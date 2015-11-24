@@ -11,8 +11,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
 
-import javax.swing.table.DefaultTableModel;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import packBD.GestorBD;
 import packExcepciones.ExcepcionListaLlena;
@@ -125,6 +130,7 @@ public class Sesion extends Observable implements Observer {
 			if(resultado[0] && resultado[1]){
 				String contrasena = SHA1.getStringMensageDigest(pContrasena);
 				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) values ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
+				enviarCorreo(pCorreoElectronico);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -226,6 +232,48 @@ public class Sesion extends Observable implements Observer {
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){
 		tablero = pTablero;
+	}
+	
+	private void enviarCorreo(String pCorreoElectronico){
+		Properties props = new Properties();
+
+		// Nombre del host de correo, es smtp.gmail.com
+		props.setProperty("mail.smtp.host", "smtp.gmail.com");
+
+		// TLS si está disponible
+		props.setProperty("mail.smtp.starttls.enable", "true");
+
+		// Puerto de gmail para envio de correos
+		props.setProperty("mail.smtp.port","587");
+
+		// Nombre del usuario
+		props.setProperty("mail.smtp.user", "ejemplo@gmail.com");
+
+		// Si requiere o no usuario y password para conectarse.
+		props.setProperty("mail.smtp.auth", "true");
+		
+		//Iniciamos sesión
+		Session session = Session.getDefaultInstance(props);
+		
+		//Creamos el mensaje
+		MimeMessage message = new MimeMessage(session);
+				
+		try {
+			// Quien envia el correo
+			message.setFrom(new InternetAddress("ejemplo@gmail.com"));
+			// A quien va dirigido
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(pCorreoElectronico));
+			//Asunto
+			message.setSubject("Hola");
+			//Texto
+			message.setText("Mensajito con Java Mail" +
+			"de los buenos." +
+			"poque si");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//http://www.chuidiang.com/java/herramientas/javamail/enviar-correo-javamail.php		
 	}
 
 

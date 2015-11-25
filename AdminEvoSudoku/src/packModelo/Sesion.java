@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -232,6 +233,26 @@ public class Sesion extends Observable implements Observer {
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){
 		tablero = pTablero;
+	}
+	
+	public void recuperarCotrasena(String pCorreoElectronico){
+		String contrasena = crearContrasena();
+	}
+	
+	private String crearContrasena(){
+		String cont ="";
+		char [] caracter;
+		int valor = 0;
+		Random rnd = new Random();
+		for(int i = 0; i<8; i++){
+			valor = rnd.nextInt(63);
+			if(valor < 10){
+			//	caracter = String.valueOf(valor).charAt(0);
+				
+			}
+		}
+		return cont;
+		
 	}
 	
 	private void enviarCorreo(String pCorreoElectronico){

@@ -105,9 +105,10 @@ public class GestorBD {
 		return Resultado;
 	}
 	
-	public static void main(String[] arg){
+	public static void main(String[] arg) throws SQLException{
 		GestorBD gBD = GestorBD.getGestorBD();
 		ResultSet TABLA = gBD.Select("SELECT * FROM Jugadores");
+		System.out.println(TABLA.next());
 		/*for(int i= 0; i < TABLA.getRowCount(); i++){
 			for(int j = 0; j < TABLA.getColumnCount(); j++){
 				System.out.print(TABLA.getValueAt(i, j) + " | ");

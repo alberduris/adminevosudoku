@@ -14,8 +14,8 @@ public class GestorBD {
 	
 	private static GestorBD miGestorBD;
 	//private String ConexionBD = "jdbc:ucanaccess://" + System.getProperty("user.dir")+"/BDAdminEvoSudoku.accdb";
-	private String ConexionBD = "jdbc:mysql://galan.ehu.es:3306/Xavelez012_AdminEvoSudoku";
-	//private String ConexionBD = "jdbc:mysql://158.227.106.21:3306/Xavelez012_AdminEvoSudoku";
+	//private String ConexionBD = "jdbc:mysql://galan.ehu.es:3306/Xavelez012_AdminEvoSudoku";
+	private String ConexionBD = "jdbc:mysql://158.227.106.21:3306/Xavelez012_AdminEvoSudoku";
 	private String SentenciaSQL;
 	private Connection CanalBD;
 	private Statement Instruccion;

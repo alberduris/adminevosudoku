@@ -1,5 +1,3 @@
-//Forzar commit 2
-
 package packInterfazGrafica;
 
 import java.awt.BorderLayout;
@@ -21,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class VentanaAdministrarSudokus extends JFrame {
+public class VentanaOpcionesAdministrador extends JFrame {
 
 	/**
 	 * 
@@ -34,15 +32,15 @@ public class VentanaAdministrarSudokus extends JFrame {
 	private JLabel lblTitulo;
 	
 
-	private JButton btnAnadir;
-	private JButton btnBorrar;
-	private JButton btnModificar;
-	private JButton btnActivar;
-	private JButton btnDesactivar;
+	private JButton btnAdministrarSudokus;
+	private JButton btnAdministrarPremios;
+	private JButton btnAdministrarRetos;
+	private JButton btnAdministrarEstadisticas;
+	
 	private JButton btnAtras;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(350, 380);
+	private Dimension dimVentana = new Dimension(420, 350);
 
 	/**
 	 * Launch the application.
@@ -51,7 +49,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaAdministrarSudokus frame = new VentanaAdministrarSudokus();
+					VentanaOpcionesAdministrador frame = new VentanaOpcionesAdministrador();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,7 +61,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaAdministrarSudokus() {
+	public VentanaOpcionesAdministrador() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(dimVentana);
 		setLocationRelativeTo(null);
@@ -81,22 +79,22 @@ public class VentanaAdministrarSudokus extends JFrame {
 		contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
-		getTituloMenuPpalUsuario();
+		getTituloVentanaOpcionesAdmin();
 		
 
-		getbtnAnadir();
-		getbtnBorrar();
-		getbtnModificar();
-		getbtnActivar();
-		getbtnDesactivar();
+		getbtnAdministrarSudokus();
+		getbtnAdministrarPremios();
+		getbtnAdministrarRetos();
+		getbtnAdministrarEstadisticas();
+		
 		getBtnAtras();
 		
 
 	}
 
-	private void getTituloMenuPpalUsuario() {
+	private void getTituloVentanaOpcionesAdmin() {
 	
-		lblTitulo = new JLabel("Administrar Sudokus");
+		lblTitulo = new JLabel("Opciones de administrador");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -115,39 +113,44 @@ public class VentanaAdministrarSudokus extends JFrame {
 
 	
 
-	private void getbtnAnadir() {
-		btnAnadir = new JButton("Añadir");
-		btnAnadir.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnAnadir.setMinimumSize(dimBtn);
-		btnAnadir.setPreferredSize(dimBtn);
-		btnAnadir.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+	private void getbtnAdministrarSudokus() {
+		btnAdministrarSudokus = new JButton("Administrar Sudokus");
+		btnAdministrarSudokus.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarSudokus.setMinimumSize(dimBtn);
+		btnAdministrarSudokus.setPreferredSize(dimBtn);
+		btnAdministrarSudokus.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		
-		btnAnadir.addActionListener(new ActionListener() {
+		btnAdministrarSudokus.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					VentanaAdministrarSudokus frame = new VentanaAdministrarSudokus();
+					frame.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Jugar");
-				
+				dispose();
 			}
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnAnadir);
+		panelConBoxLayout.add(btnAdministrarSudokus);
 	}
 
-	private void getbtnBorrar() {
-		btnBorrar = new JButton("Borrar");
-		btnBorrar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnBorrar.setMinimumSize(dimBtn);
-		btnBorrar.setPreferredSize(dimBtn);
-		btnBorrar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+	private void getbtnAdministrarPremios() {
+		btnAdministrarPremios = new JButton("Administrar premios");
+		btnAdministrarPremios.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarPremios.setMinimumSize(dimBtn);
+		btnAdministrarPremios.setPreferredSize(dimBtn);
+		btnAdministrarPremios.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		
-		btnBorrar.addActionListener(new ActionListener() {
+		btnAdministrarPremios.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Premios");
+				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar premios");
 				
 			}
 			
@@ -156,75 +159,55 @@ public class VentanaAdministrarSudokus extends JFrame {
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnBorrar);
+		panelConBoxLayout.add(btnAdministrarPremios);
 	}
 
 	
-	private void getbtnModificar() {
-		btnModificar = new JButton("Modificar");
-		btnModificar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnModificar.setMinimumSize(dimBtn);
-		btnModificar.setPreferredSize(dimBtn);
-		btnModificar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+	private void getbtnAdministrarRetos() {
+		btnAdministrarRetos = new JButton("Administrar retos");
+		btnAdministrarRetos.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarRetos.setMinimumSize(dimBtn);
+		btnAdministrarRetos.setPreferredSize(dimBtn);
+		btnAdministrarRetos.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 
-		btnModificar.setEnabled(true);
+		btnAdministrarRetos.setEnabled(true);
 		
-		btnModificar.addActionListener(new ActionListener() {
+		btnAdministrarRetos.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Estadisticas");
+				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar retos");
 				
 			}
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnModificar);
+		panelConBoxLayout.add(btnAdministrarRetos);
 	}
 	
-	private void getbtnActivar() {
-		btnActivar = new JButton("Activar");
-		btnActivar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnActivar.setMinimumSize(dimBtn);
-		btnActivar.setPreferredSize(dimBtn);
-		btnActivar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+	private void getbtnAdministrarEstadisticas() {
+		btnAdministrarEstadisticas = new JButton("Administrar estadisticas");
+		btnAdministrarEstadisticas.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarEstadisticas.setMinimumSize(dimBtn);
+		btnAdministrarEstadisticas.setPreferredSize(dimBtn);
+		btnAdministrarEstadisticas.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 
-		btnActivar.setEnabled(true);
+		btnAdministrarEstadisticas.setEnabled(true);
 		
-		btnActivar.addActionListener(new ActionListener() {
+		btnAdministrarEstadisticas.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Ranking");
+				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar estadisticas");
 				
 			}
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnActivar);
+		panelConBoxLayout.add(btnAdministrarEstadisticas);
 	}
 	
-	private void getbtnDesactivar() {
-		btnDesactivar = new JButton("Desactivar");
-		btnDesactivar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnDesactivar.setMinimumSize(dimBtn);
-		btnDesactivar.setPreferredSize(dimBtn);
-		btnDesactivar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-
-		btnDesactivar.setEnabled(true);
-		
-		btnDesactivar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Opciones");
-				
-			}
-		});
-
-		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnDesactivar);
-	}
+	
 	
 	private void getBtnAtras() {
 		btnAtras = new JButton("<");
@@ -237,7 +220,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaOpcionesAdministrador frame = new VentanaOpcionesAdministrador();
+					VentanaMenuPpalAdministrador frame = new VentanaMenuPpalAdministrador();
 					frame.setVisible(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();

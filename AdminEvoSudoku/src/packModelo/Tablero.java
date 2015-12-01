@@ -1,18 +1,11 @@
 package packModelo;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import packAdminSudoku.CatalogoJugadores;
-import packAdminSudoku.Puntuacion;
-import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
-import packVistaAdminSudoku.VentanaRanking;
 
 public class Tablero extends Observable implements Serializable{
 	private static Tablero miTablero = new Tablero();

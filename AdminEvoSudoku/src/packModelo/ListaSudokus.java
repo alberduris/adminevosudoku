@@ -62,4 +62,18 @@ public class ListaSudokus {
 		}
 		return sd;
 	}
+	
+	public int buscarPrimerIdDisp(){
+		int id = 0;
+		boolean enc = false;
+		Iterator<Sudoku> itr = obtIterador();
+		while(itr.hasNext() && !enc){
+			if(itr.next().obtIdentificador() > id+1){
+				enc = false;
+			}else{
+				id ++;
+			}
+		}
+		return id;			
+	}
 }

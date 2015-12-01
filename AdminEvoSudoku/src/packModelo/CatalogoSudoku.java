@@ -39,9 +39,10 @@ public class CatalogoSudoku {
 	public boolean leerBD(){
 		boolean lanzar = true;
 		GestorBD gBD = GestorBD.getGestorBD();
-		ResultSet resultado = gBD.Select("SELECT * FROM Sudokus");
+		ResultSet res = gBD.Select("SELECT * FROM Sudokus");
+		ResultSet resultado = res;
 		try {
-			if(!resultado.next()){
+			if(!res.next()){
 				try {
 					CogerSudokus.cogerSudoku();
 				} catch (IOException e) {
@@ -49,7 +50,6 @@ public class CatalogoSudoku {
 					e.printStackTrace();
 				}
 			}else{
-				resultado = gBD.Select("SELECT * FROM Sudokus");
 				if(lista.tamano() ==0){
 					Sudoku sudo;
 					if(lanzar){
@@ -296,5 +296,9 @@ public class CatalogoSudoku {
 	
 	public Sudoku buscarSudokuPorId(int pIdSudoku){
 		return lista.buscarSudokuPorId(pIdSudoku);
+	}
+	
+	public int buscarPrimerIdDisp(){
+		return lista.buscarPrimerIdDisp();
 	}
 }

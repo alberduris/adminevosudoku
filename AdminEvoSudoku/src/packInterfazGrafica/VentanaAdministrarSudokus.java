@@ -10,7 +10,10 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import packModelo.GestorAdministrador;
 
 public class VentanaAdministrarSudokus extends JFrame {
 
@@ -126,9 +131,15 @@ public class VentanaAdministrarSudokus extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Jugar");
-				
+				VentanaAnadirSudoku vnt;
+				try {
+					vnt = new VentanaAnadirSudoku();
+					vnt.setVisible(true);		
+					dispose();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}		
 			}
 		});
 

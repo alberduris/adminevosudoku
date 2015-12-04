@@ -19,8 +19,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import packModelo.CatalogoJugadores;
 import packModelo.Jugador;
-import packModelo.ListaJugadores;
 
 public class VentanaPuntuaciones extends JFrame implements Observer {
 
@@ -28,7 +28,7 @@ public class VentanaPuntuaciones extends JFrame implements Observer {
 	private JButton botonOK = new JButton();
 	private Vector lista = new Vector();
  	private JList jListUsuarios = new JList();
- 	private ListaJugadores listaJugadores = ListaJugadores.obtListaJugadores();
+ 	private CatalogoJugadores listaJugadores = CatalogoJugadores.obtListaJugadores();
  	private Controlador  controlador = new Controlador();
 
  	private static VentanaPuntuaciones miVentana;

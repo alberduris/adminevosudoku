@@ -115,7 +115,7 @@ public class Sudoku implements Serializable{
     
     public boolean[][] comprobarCorrecto(Matriz pMatriz){
     	boolean[][] casillasFallo;
-    	if(!comprobarCompleto(pMatriz)){
+    	if(comprobarCompleto(pMatriz)){
     		casillasFallo = new boolean[9][9];
     		for(int i=0; i<9; i++){
     			for(int j=0; j<9; j++){

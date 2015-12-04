@@ -24,6 +24,7 @@ public class GestorAdministrador extends Observable{
 	}
 	
 	public boolean[][] crearSudoku(int pDif, int[][] pSud, boolean[][] pFijas){
+		System.out.println(pDif);
 		int id = CatalogoSudoku.getCatalogoSudoku().buscarPrimerIdDisp();
 		sud = new Sudoku(id, pDif);
 		boolean[][] result;

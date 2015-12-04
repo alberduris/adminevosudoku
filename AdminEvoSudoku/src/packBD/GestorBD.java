@@ -13,8 +13,6 @@ import javax.swing.JOptionPane;
 public class GestorBD {
 	
 	private static GestorBD miGestorBD;
-	//private String ConexionBD = "jdbc:ucanaccess://" + System.getProperty("user.dir")+"/BDAdminEvoSudoku.accdb";
-	//private String ConexionBD = "jdbc:mysql://galan.ehu.es:3306/Xavelez012_AdminEvoSudoku";
 	private String ConexionBD = "jdbc:mysql://158.227.106.21:3306/Xavelez012_AdminEvoSudoku";
 	private String SentenciaSQL;
 	private Connection CanalBD;
@@ -41,7 +39,6 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			this.Instruccion.executeUpdate(this.SentenciaSQL);
-			//JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al insertar\nERROR : "+e.getMessage());			
 		}
@@ -54,7 +51,6 @@ public class GestorBD {
 			byte[] bt = byteArray.toByteArray();
 			ps.setBytes(1, bt);
 			ps.executeUpdate();
-			//JOptionPane.showMessageDialog(null, "CORRECTO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al actualizar Tablero\nERROR : "+e.getMessage());			
 		}
@@ -64,7 +60,6 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			this.Instruccion.executeUpdate(this.SentenciaSQL);
-			//JOptionPane.showMessageDialog(null, "CORRECTO MODIFICAR");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al modificar\nERROR : "+e.getMessage());			
 		}
@@ -74,7 +69,6 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			this.Instruccion.executeUpdate(this.SentenciaSQL);
-			//JOptionPane.showMessageDialog(null, "CORRECTO ELIMINADO");
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al eliminar\nERROR : "+e.getMessage());			
 		}

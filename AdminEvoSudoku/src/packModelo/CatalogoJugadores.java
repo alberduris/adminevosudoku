@@ -11,20 +11,20 @@ import java.util.Scanner;
 
 import packExcepciones.ExcepcionListaLlena;
 
-public class ListaJugadores extends Observable{
-    private static ListaJugadores miListaJugadores;
+public class CatalogoJugadores extends Observable{
+    private static CatalogoJugadores miListaJugadores;
     private ListaOrdenadaGenerica<Jugador> listaJugadores;
 
 
-    private ListaJugadores() {
+    private CatalogoJugadores() {
         listaJugadores = new ListaOrdenadaGenerica<Jugador>(new ComparadorJugadores());
     }
 
-    public static ListaJugadores obtListaJugadores()
+    public static CatalogoJugadores obtListaJugadores()
     {
         if (miListaJugadores == null)
         {
-            miListaJugadores = new ListaJugadores();
+            miListaJugadores = new CatalogoJugadores();
         }
         return miListaJugadores;
     }
@@ -114,4 +114,12 @@ public class ListaJugadores extends Observable{
     {
 	return listaJugadores.obtIterador();
     }
+    
+   /* public ListaOrdenadaGenerica<Jugador> getListaJugadores(){
+    	String[] lista = new String[listaJugadores.length()];
+    	while(listaJugadores.hasNext()){
+    		
+    	}
+    	return listaJugadores;
+    }*/
 }

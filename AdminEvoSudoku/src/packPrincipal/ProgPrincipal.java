@@ -12,8 +12,8 @@ import packInterfazGrafica.VentanaInicial;
 import packInterfazGrafica.VentanaPuntuaciones;
 import packInterfazGrafica.VentanaSiNo;
 import packInterfazGrafica.VentanaTablero;
+import packModelo.CatalogoJugadores;
 import packModelo.CatalogoSudoku;
-import packModelo.ListaJugadores;
 import packModelo.ListaSudokus;
 import packModelo.Sesion;
 
@@ -35,7 +35,7 @@ public class ProgPrincipal {
 		Sesion sesion = Sesion.obtSesion();
 		try
 		{
-		    ListaJugadores.obtListaJugadores().cargar("jugadores.txt");
+		    CatalogoJugadores.obtListaJugadores().cargar("jugadores.txt");
 		} catch (ExcepcionListaLlena e)
 		{
 		

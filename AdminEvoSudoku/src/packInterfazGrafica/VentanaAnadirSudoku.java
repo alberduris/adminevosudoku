@@ -14,10 +14,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -29,12 +32,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 
+import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
 import packModelo.CatalogoSudoku;
 import packModelo.Sesion;
 import packModelo.Sudoku;
+import packModelo.Tablero;
 import packModelo.GestorAdministrador;
 
 public class VentanaAnadirSudoku extends JDialog implements Observer {
@@ -49,7 +57,8 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	JLabel tiempo;
 	JPanel centro, sur;
 	JPanel norte;
-	JButton btn1,btn2,btn3, btnGuide, btnSound;
+	JButton btn1,btn2,btn3, btnGuide;
+	JSpinner dif;
 	JButton[] listBotones;
 	KeyListener keyListener;
 	JDialog dialogFinal;
@@ -59,7 +68,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	int filaColumna = 0;
 	
 	//boolean flag;
-	private boolean dispose = false;
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
@@ -102,6 +110,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		add(sur,"South");
 		
 		getBotones();
+		getDificultad();
 		
 		norte.setLayout(new GridLayout(1, 8));
 		norte.add(new JLabel(" "));
@@ -276,6 +285,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 					cajas[i][j].updateUI();
 				}else{
 					cajas[i][j].setBackground(Color.BLACK);
+					cajas[i][j].setOpaque(true);
 					cajas[i][j].updateUI();
 				}
 			}
@@ -283,7 +293,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	}	
 	
 	private void getBotones(){
-		getBtnGuide();
 		getBtn1();
 		for(int k=0; k<MAX; k++){			
 			final String numero = Integer.toString(k+1);
@@ -316,6 +325,21 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		}
 	}
 	
+	private void getDificultad(){
+		final JLabel label = new JLabel();
+		if(dif == null){
+			SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 4, 1);
+			dif = new JSpinner(model);
+		}
+		dif.add(label);
+		dif.setOpaque(false);
+		dif.setBorder(null);
+		label.setOpaque(true);
+		label.setText("Dificultad: ");
+	//	norte.add(label);
+		norte.add(dif);	
+	}
+	
 	private JButton getBtn1() {
 		if(btn1 == null){
 			btn1 = new JButton("Añadir");
@@ -327,8 +351,8 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 					boolean[][] error = finalizar();
 					if(error == null){
 						System.out.println("NO COMPLETO");
-					}else if(error.length == 0){
-						
+					}else if(error.length != 0){
+						mostrarErrores(error);
 					}
 				}
 			});
@@ -362,15 +386,14 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				for(int i = 0; i < MAX; i++){
-					for(int j = 0; j<MAX;j++){
-						if(activado[0]>=0 && cajas[i][j].getBackground()!=Color.blue){
-							cajas[activado[0]][ activado[1]].setBackground(Color.BLACK);
-							cajas[activado[0]][ activado[1]].setForeground(Color.WHITE);	
-							
-						}
+					if(activado[0]>=0 && cajas[activado[0]][activado[1]].getForeground()!=Color.WHITE){
+						cajas[activado[0]][ activado[1]].setBackground(Color.BLACK);
+						cajas[activado[0]][ activado[1]].setForeground(Color.WHITE);	
+					}else{
+						cajas[activado[0]][ activado[1]].setBackground(Color.WHITE);
+						cajas[activado[0]][ activado[1]].setForeground(Color.BLACK);
+						desactivar();
 					}
-				}
 			}
 		});
 		return btn2;
@@ -385,85 +408,13 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//VentanaAdministrador vnt = new VentanaAdministrador();
-				//vnt.setVisible(true);
+				VentanaAdministrarSudokus vnt = new VentanaAdministrarSudokus();
+				vnt.setVisible(true);
 				dispose();
 			}
 		});
 		return btn3;
 		
-	}
-	
-	private void getDialogFinal(){
-		
-		GridBagConstraints csTexto = new GridBagConstraints();
-		GridBagConstraints csBoton = new GridBagConstraints();
-		
-		csTexto.weighty = 1;
-		csTexto.gridx = 0;
-		csTexto.gridy = 0;
-		
-		csBoton.weighty = 1;
-		csBoton.gridx = 0;
-		csBoton.gridy = 1;
-		
-		JButton boton = new JButton("Continuar");
-		
-		boton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				dialogFinal.dispose();
-				dispose();
-				dispose = true;
-				finalizar();
-			}
-			
-			
-		});
-		
-		dialogFinal = new JDialog();
-		dialogFinal.setSize(300,125);
-		dialogFinal.setModal(false);
-		dialogFinal.setVisible(true);
-		dialogFinal.setTitle("Felicidades!");
-		try{
-		dialogFinal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		dialogFinal.addWindowListener(new WindowAdapter(){
-				public void windowClosing(WindowEvent e){
-					try {
-						getSeguro();
-					} catch (NoHaySudokuCargadoException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			});
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		dialogFinal.setLocationRelativeTo(ventana);		
-		dialogFinal.setLayout(new GridBagLayout());
-		dialogFinal.getContentPane().setBackground(new Color(0xFFFFFF));
-	
-
-		//dialogFinal.add(texto,csTexto);
-		dialogFinal.add(boton,csBoton);
-	}
-
-	private JButton getBtnGuide(){
-		if(btnGuide == null){
-			btnGuide = new JButton("?");
-		}
-		btnGuide.setBorder(null);
-		btnGuide.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				getDialog();
-			}
-		});
-		return btnGuide;	
 	}
 	
 	private void getDialog(){
@@ -543,11 +494,55 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 					}
 				}
 			}
-			result = gA.crearSudoku(dificultad, casillas, fijas); 
+			result = gA.crearSudoku((int) dif.getValue(), casillas, fijas); 
+			if(result.length == 0){
+				getDialogFinal();
+			}
 		}else{
 			result = null;
 		}
 		return result;
+	}
+	
+	private void getDialogFinal(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("El Sudoku se ha añadido correctamente");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				VentanaAdministrarSudokus vnt = new VentanaAdministrarSudokus();
+				vnt.setVisible(true);
+				dialogFinal.dispose();
+				dispose();
+			}
+			
+		});
+		
+		dialogFinal = new JDialog();
+		dialogFinal.setSize(300,125);
+		dialogFinal.setModal(false);
+		dialogFinal.setVisible(true);
+		dialogFinal.setLocationRelativeTo(this);
+		dialogFinal.setTitle("CORRECTO");
+		
+		dialogFinal.setLayout(new GridBagLayout());
+	
+		dialogFinal.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogFinal.add(boton,csBoton);
 	}
 	
 	private boolean completo(){
@@ -566,6 +561,23 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		GestorAdministrador tb = GestorAdministrador.getGestorAdministrador();
 		VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();
 		vnt.setVisible(true);
+		vnt.completar();
+	}
+	
+	public void completar(){
+		Random rnd = new Random();
+		int num;
+		for(int i = 0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				num = rnd.nextInt(9) + 1;
+				cajas[i][j].setText(String.valueOf(num));
+				if(rnd.nextBoolean()){
+					cajas[i][j].setBackground(Color.BLACK);
+					cajas[i][j].setForeground(Color.WHITE);
+					desactivar();
+				}
+			}
+		}
 	}
 
 }

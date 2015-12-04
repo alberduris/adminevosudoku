@@ -124,4 +124,8 @@ public class ListaOrdenadaGenerica<E>
 	}
 
     }
+    
+    public int length(){
+    	return listaElementos.size();
+    }
 }

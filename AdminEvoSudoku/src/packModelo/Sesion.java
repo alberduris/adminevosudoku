@@ -205,7 +205,7 @@ public class Sesion extends Observable implements Observer {
 	   jugador.actualizarPuntos(puntos);
 	   try
 	   {
-	      ListaJugadores.obtListaJugadores().anadirJugador(jugador);
+	      CatalogoJugadores.obtListaJugadores().anadirJugador(jugador);
 	   }
 	   catch (ExcepcionListaLlena e)
 	   {
@@ -296,7 +296,5 @@ public class Sesion extends Observable implements Observer {
 		}
 		//http://www.chuidiang.com/java/herramientas/javamail/enviar-correo-javamail.php		
 	}
-
-
 }
 

@@ -44,13 +44,15 @@ public class GestorBD {
 		}
 	}
 	
-	public void updateTablero(String SentenciaSQL, ByteArrayOutputStream byteArray){
+	public void Update(String SentenciaSQL, ByteArrayOutputStream byteArray){
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			PreparedStatement ps = CanalBD.prepareStatement(SentenciaSQL);
-			byte[] bt = byteArray.toByteArray();
-			ps.setBytes(1, bt);
-			ps.executeUpdate();
+			if(byteArray == null){
+				byte[] bt = byteArray.toByteArray();
+				ps.setBytes(1, bt);
+			}
+				ps.executeUpdate();
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error Al actualizar Tablero\nERROR : "+e.getMessage());			
 		}
@@ -101,7 +103,7 @@ public class GestorBD {
 	
 	public static void main(String[] arg) throws SQLException{
 		GestorBD gBD = GestorBD.getGestorBD();
-		ResultSet TABLA = gBD.Select("SELECT * FROM Jugadores");
+		ResultSet TABLA = gBD.Select("SELECT * FROM Sudokus WHERE identificador=1");
 		System.out.println(TABLA.next());
 		/*for(int i= 0; i < TABLA.getRowCount(); i++){
 			for(int j = 0; j < TABLA.getColumnCount(); j++){

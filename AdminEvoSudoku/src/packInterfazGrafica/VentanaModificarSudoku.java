@@ -42,7 +42,7 @@ import packModelo.Sudoku;
 import packModelo.Tablero;
 import packModelo.GestorAdministrador;
 
-public class VentanaAnadirSudoku extends JDialog implements Observer {
+public class VentanaModificarSudoku extends JDialog implements Observer {
 
 	/**
 	 * 
@@ -76,7 +76,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	 * @throws UnsupportedAudioFileException 
 	 * @throws IOException 
 	 */
-	public VentanaAnadirSudoku() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public VentanaModificarSudoku() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		gA = GestorAdministrador.getGestorAdministrador();
 		gA.addObserver(this);
 		setSize(500,500);
@@ -549,7 +549,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		GestorAdministrador tb = GestorAdministrador.getGestorAdministrador();
-		VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();
+		VentanaModificarSudoku vnt = new VentanaModificarSudoku();
 		vnt.setVisible(true);
 		vnt.completar();
 	}

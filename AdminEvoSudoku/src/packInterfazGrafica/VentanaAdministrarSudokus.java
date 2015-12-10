@@ -114,12 +114,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
 	
-	
-
-	
-
 	private void getbtnAnadir() {
 		btnAnadir = new JButton("Añadir");
 		btnAnadir.setAlignmentX(Component.CENTER_ALIGNMENT);

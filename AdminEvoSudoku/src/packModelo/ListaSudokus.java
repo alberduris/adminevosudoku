@@ -3,9 +3,6 @@ package packModelo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
-
-import packAdminSudoku.ListaPuntuaciones;
 
 public class ListaSudokus {	
 	ArrayList<Sudoku> lista;
@@ -64,15 +61,19 @@ public class ListaSudokus {
 	}
 	
 	public int buscarPrimerIdDisp(){
-		int id = 0;
+		int id = 1;
 		boolean enc = false;
 		Iterator<Sudoku> itr = obtIterador();
-		while(itr.hasNext() && !enc){
-			if(itr.next().obtIdentificador() > id+1){
-				enc = false;
-			}else{
-				id ++;
-			}
+		boolean siguiente = itr.hasNext();
+		while(siguiente && !enc){
+			if(itr.next().obtIdentificador() == id){
+				itr = obtIterador();
+				id++;
+			}					
+			siguiente = itr.hasNext();
+		}
+		if(!enc){
+			id++;
 		}
 		return id;			
 	}

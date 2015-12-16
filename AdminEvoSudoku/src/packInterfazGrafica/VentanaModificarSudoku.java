@@ -61,14 +61,13 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 	JDialog dialogFinal;
 	private JDialog dialogGuide;
 	
-	int dificultad = 0;
 	int filaColumna = 0;
 	
 	//boolean flag;
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
-	
+	int dificultad = gA.obtSud().obtDificultad();
 
 	/**
 	 * Create the frame.
@@ -171,15 +170,16 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 		String num;
 		for(int i = 0; i < MAX; i++){
 			for (int j = 0; j < MAX; j++){
-				/*if(tab.obtValorCasilla(i, j) == 0){
+				if(gA.obtValorCasilla(i, j) == 0){
 					num = " ";
 				}else{
-					num = String.valueOf(tab.obtValorCasilla(i, j));
-				}*/
-				//SOLUCION COMPLETA
-				//num = String.valueOf(gS.obtenerSolucion(i, j));
-				cajas[i][j] = crearJLabel(i, j, " ");
-							
+					num = String.valueOf(gA.obtValorCasilla(i, j));
+				}
+				cajas[i][j] = crearJLabel(i, j, num);
+				if(gA.obtFijas(i, j)){
+					cajas[i][j].setBackground(Color.BLACK);
+					cajas[i][j].setForeground(Color.WHITE);
+				}		
 				f = (i+1)/3;
 				if((i+1)%3 > 0) f++;
 				c = (j+1)/3;
@@ -189,6 +189,7 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 				
 			}
 		}
+		desactivar();
 	}
 	
 	private void crearListener(){
@@ -323,7 +324,7 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 	
 	private void getDificultad(){
 		if(dif == null){
-			SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 4, 1);
+			SpinnerNumberModel model = new SpinnerNumberModel(dificultad, 1, 4, 1);
 			dif = new JSpinner(model);
 		}
 		dif.setOpaque(false);
@@ -332,7 +333,7 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 	
 	private JButton getBtn1() {
 		if(btn1 == null){
-			btn1 = new JButton("Añadir");
+			btn1 = new JButton("Modificar");
 			sur.add(btn1);
 			btn1.addActionListener(new ActionListener(){
 
@@ -548,10 +549,10 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 	}
 	
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		GestorAdministrador tb = GestorAdministrador.getGestorAdministrador();
+		GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
+		gA.introducirSudoku(1002);
 		VentanaModificarSudoku vnt = new VentanaModificarSudoku();
 		vnt.setVisible(true);
-		vnt.completar();
 	}
 	
 	public void completar(){

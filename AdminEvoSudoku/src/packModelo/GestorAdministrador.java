@@ -13,6 +13,7 @@ public class GestorAdministrador extends Observable{
 	private Sudoku sud;
 	
 	private GestorAdministrador(){
+		sud = null;
 	}
 	
 	public static GestorAdministrador getGestorAdministrador(){
@@ -21,9 +22,8 @@ public class GestorAdministrador extends Observable{
 		}
 		return miGestor;
 	}
-	
+		
 	public boolean[][] crearSudoku(int pDif, int[][] pSud, boolean[][] pFijas){
-		System.out.println(pDif);
 		int id = CatalogoSudoku.getCatalogoSudoku().buscarPrimerIdDisp();
 		sud = new Sudoku(id, pDif);
 		boolean[][] result;
@@ -48,7 +48,7 @@ public class GestorAdministrador extends Observable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			GestorBD.getGestorBD().updateTablero("INSERT INTO Sudokus values ("+id+","+pDif+",?)",byteArray);
+			GestorBD.getGestorBD().Update("INSERT INTO Sudokus values ("+id+","+pDif+",?)",byteArray);
 			
 		}
 		return result;
@@ -56,26 +56,15 @@ public class GestorAdministrador extends Observable{
 	
 	public void introducirSudoku(int pIdSudoku){
 		sud = CatalogoSudoku.getCatalogoSudoku().buscarSudokuPorId(pIdSudoku);
+		System.out.println(CatalogoSudoku.getCatalogoSudoku().getTamano());
 	}
 	
-	public int[][] obtValoresAModificar(){
-		int[][] numero = new int[9][9];
-		for(int i = 0; i<9; i++){
-			for(int j =0 ; j<9; j++){
-				numero[i][j] = sud.obtMatriz().obtValor(i, j);
-			}
-		}
-		return numero;
+	public int obtValorCasilla(int pI, int pJ){
+		return sud.obtMatriz().obtValor(pI, pJ);
 	}
 	
-	public boolean[][] obtFijas(){
-		boolean[][] fijas = new boolean[9][9];
-		for(int i = 0; i<9; i++){
-			for(int j =0 ; j<9; j++){
-				fijas[i][j] = sud.obtMatriz().obtCasilla(i, j).esInicial();
-			}
-		}
-		return fijas;
+	public boolean obtFijas(int pI, int pJ){
+		return sud.obtMatriz().obtCasilla(pI, pJ).esInicial();
 	}
 	
 	public boolean[][] modificarSudoku(int pDif, int[][] pSud, boolean[][] pFijas){
@@ -103,10 +92,20 @@ public class GestorAdministrador extends Observable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			GestorBD.getGestorBD().Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+			GestorBD.getGestorBD().Update("UPDATE Sudokus SET Sudoku=? WHERE id='"+id+"'", byteArray);
 			
 		}
 		return result;
+	}
+
+	public Sudoku obtSud(){
+		return sud;
+	}
+	
+	public void eliminarSudoku(){
+		System.out.println("IDD: "+ sud.obtIdentificador());
+		//GestorBD.getGestorBD().Eliminar("DELETE FROM Sudokus WHERE Identificador="+sud.obtIdentificador()+"");
+		CatalogoSudoku.getCatalogoSudoku().eliminarSudoku(sud.obtIdentificador());
 	}
 	
 }

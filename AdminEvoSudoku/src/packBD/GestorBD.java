@@ -1,5 +1,6 @@
 package packBD;
 
+import java.beans.PropertyVetoException;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,20 +9,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.sql.PooledConnection;
 import javax.swing.JOptionPane;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class GestorBD {
 	
 	private static GestorBD miGestorBD;
 	private String ConexionBD = "jdbc:mysql://158.227.106.21:3306/Xavelez012_AdminEvoSudoku";
 	private String SentenciaSQL;
+	private String user = "Xavelez012";
+	private String password = "3BjAdMgd";
 	private Connection CanalBD;
 	private Statement Instruccion;
 	private ResultSet Resultado;
 	
 	private GestorBD(){
 		try{
-			this.CanalBD = DriverManager.getConnection(this.ConexionBD, "Xavelez012", "3BjAdMgd");
+			
+			this.CanalBD = DriverManager.getConnection(this.ConexionBD, user, password);
 			this.Instruccion = this.CanalBD.createStatement();
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error en la conexion con BD\nERROR : "+e.getMessage());
@@ -48,7 +55,7 @@ public class GestorBD {
 		this.SentenciaSQL = SentenciaSQL;
 		try{
 			PreparedStatement ps = CanalBD.prepareStatement(SentenciaSQL);
-			if(byteArray == null){
+			if(byteArray != null){
 				byte[] bt = byteArray.toByteArray();
 				ps.setBytes(1, bt);
 			}
@@ -79,31 +86,49 @@ public class GestorBD {
 	public ResultSet Select(String SentenciaSQL){
 		this.SentenciaSQL = SentenciaSQL;
 		
-		String[] TITULOS = {"Nombre Usuario", "Correo Electrónico", "Contraseña", "Tablero"};
-		String[] REGISTRO = new String[3];
-		byte[] REGISTROB;
-		
-		//DefaultTableModel TABLA = new DefaultTableModel(null, TITULOS);
-		
 		try{
 			this.Resultado = Instruccion.executeQuery(this.SentenciaSQL);
-			/*while(Resultado.next()){
-				REGISTRO[0] = Resultado.getString("NombreUsuario");
-				REGISTRO[1] = Resultado.getString("CorreoElectrónico");
-				REGISTRO[2] = Resultado.getString("Contraseña");
-				REGISTROB = Resultado.getString("Tablero").getBytes();
-				
-				TABLA.addRow(REGISTRO);
-			};*/
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(null, "Error al cargar los datos\nERROR : "+e.getMessage());			
+		}
+		return Resultado;
+	}
+
+	public ResultSet SelectMultiThread(String SentenciaSQL){
+	
+		try{
+			ComboPooledDataSource pool = new ComboPooledDataSource();
+			pool.setDriverClass("com.mysql.jdbc.Driver");
+			pool.setJdbcUrl(ConexionBD);
+			pool.setUser(user);
+			pool.setPassword(password);
+			pool.setMaxPoolSize(100);
+			pool.setMinPoolSize(10);
+			
+			this.SentenciaSQL = SentenciaSQL;
+			CanalBD = pool.getConnection();
+			Instruccion = CanalBD.createStatement();
+			Resultado = Instruccion.executeQuery(this.SentenciaSQL);
+		}catch(SQLException e){
+			JOptionPane.showMessageDialog(null, "Error al cargar los datos\nERROR : "+e.getMessage());			
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				CanalBD.close();
+				Instruccion.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return Resultado;
 	}
 	
 	public static void main(String[] arg) throws SQLException{
 		GestorBD gBD = GestorBD.getGestorBD();
-		ResultSet TABLA = gBD.Select("SELECT * FROM Sudokus WHERE identificador=1");
+		ResultSet TABLA = gBD.Select("SELECT * FROM Jugadores");
 		System.out.println(TABLA.next());
 		/*for(int i= 0; i < TABLA.getRowCount(); i++){
 			for(int j = 0; j < TABLA.getColumnCount(); j++){

@@ -448,7 +448,7 @@ public class VentanaTablero extends JDialog implements Observer {
 				if(tab.obtValorCasilla(i, j) == 0){
 					num = " ";
 				}else{
-					num = String.valueOf(tab.obtValorCasilla(i, j));
+					num = String.valueOf(tab.obtValorCasilla(i, j)-'0');
 				}
 				//SOLUCION COMPLETA
 				//num = String.valueOf(gS.obtenerSolucion(i, j));
@@ -617,7 +617,7 @@ public class VentanaTablero extends JDialog implements Observer {
 			if(tab.obtValorCasilla(pI, pJ) == 0){
 				texto = " ";
 			}else{
-				texto = tab.obtValorCasilla(pI, pJ) + "";				
+				texto = String.valueOf(tab.obtValorCasilla(pI, pJ)-'0') ;				
 			}
 			cajas[pI][pJ].setText(texto);
 			cajas[pI][pJ].setFont(new Font("Monospaced",Font.BOLD,20));

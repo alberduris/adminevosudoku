@@ -218,7 +218,7 @@ public class Sesion extends Observable implements Observer {
     		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
         	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
 	    	oos.writeObject(Tablero.obtTablero());
-	    	bd.updateTablero("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+	    	bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
 //	    	bd.InsertarTablero("INSERT INTO Jugadores values ('"+nombreUsuario+"', 'aa', 'aaa', ?)", byteArray);
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -228,7 +228,7 @@ public class Sesion extends Observable implements Observer {
 	
 	public void borrarTablero(){
 		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-		bd.updateTablero("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+		bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){

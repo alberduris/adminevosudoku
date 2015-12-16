@@ -14,7 +14,6 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
-	<classpathentry kind="lib" path="lib/jackcess-2.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/ucanaccess-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.22-bin.jar"/>
 	<classpathentry kind="lib" path="lib/dsn.jar"/>
@@ -24,5 +23,7 @@
 	<classpathentry kind="lib" path="lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/jackcess-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/c3p0-0.9.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

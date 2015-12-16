@@ -47,7 +47,7 @@ public class ListaSudokus {
 	public Sudoku buscarSudokuPorId(int pIdSudoku){
 		boolean enc = false;
 		Iterator<Sudoku> itr = obtIterador();
-		Sudoku sd = new Sudoku(0, 0);
+		Sudoku sd = null;
 		while(itr.hasNext() && !enc){
 			sd = itr.next();
 			if(sd.obtIdentificador() == pIdSudoku){
@@ -76,5 +76,50 @@ public class ListaSudokus {
 			id++;
 		}
 		return id;			
+	}
+	
+	public int getTamano(){
+		return lista.size();
+	}
+	
+	public String[] obtListaIdent() {
+		String[] list = new String[lista.size()];
+		Iterator<Sudoku> itr = obtIterador();
+		int i = 0;
+		while(itr.hasNext()){
+			list[i] = String.valueOf(itr.next().obtIdentificador());
+			i++;
+		}
+		return list;
+	}
+
+	public String[] obtListaIdent(int pNivel) {
+		ListaSudokus listAux = new ListaSudokus();
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sud = null;
+		while(itr.hasNext()){
+			sud = itr.next();
+			if(sud.obtDificultad() == pNivel){
+				listAux.anadirSudoku(sud);
+			}
+		}
+		return listAux.obtListaIdent();
+	}
+		
+	public void eliminarSudoku(int pId){
+		boolean eliminado = false;
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sud;
+		int i = 0;
+		while(i < lista.size() && !eliminado){
+		//	sud = itr.next();
+			if(lista.get(i).obtIdentificador() == pId){
+				eliminado = true;
+				System.out.println(pId);
+				System.out.println(lista.get(i).obtIdentificador());
+				lista.remove(i);
+			}
+			i++;
+		}
 	}
 }

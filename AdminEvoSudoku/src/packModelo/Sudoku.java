@@ -2,15 +2,14 @@ package packModelo;
 
 import java.io.Serializable;
 
-import packAdminSudoku.ListaPuntuaciones;
-import packModelo.Casilla;
-
 public class Sudoku implements Serializable{
 
     // Identificador del sudoku
     private int identificador;
     // Nivel de dificultad
     private int dificultad;
+    //Estado de Matriz
+    private boolean activado;
     // Matriz de casillas
     private Matriz matriz;
 
@@ -24,6 +23,7 @@ public class Sudoku implements Serializable{
     public Sudoku(int pIdentificador, int pDificultad) {
         identificador = pIdentificador;
         dificultad = pDificultad;
+        activado = true;
         matriz = new Matriz();
     }
 
@@ -56,6 +56,20 @@ public class Sudoku implements Serializable{
     }
 
     /**
+     * obtActivado
+     *
+     * <p> POST: devuelve si el sudoku está activado.
+     *
+     * <p>
+     *
+     * @return boolean
+     * @todo Implement this packsudoku.ISudoku method
+     */
+    public boolean obtActivado() {
+        return activado;
+    }
+    
+    /**
      * obtMatriz
      *
      * <p> POST: devuelve la matriz de casillas del sudoku.
@@ -65,6 +79,7 @@ public class Sudoku implements Serializable{
      * @return Matriz
      * @todo Implement this packsudoku.ISudoku method
      */
+  
     public Matriz obtMatriz() {
         return matriz;
     }

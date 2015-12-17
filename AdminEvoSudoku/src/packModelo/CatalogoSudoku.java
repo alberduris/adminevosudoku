@@ -43,94 +43,51 @@ public class CatalogoSudoku {
 		lista.anadirSudoku(sud);
 	}
 	
-	public void leerBD(){
-		final GestorBD gBD = GestorBD.getGestorBD();
-		ResultSet res = gBD.Select("SELECT COUNT(*) FROM Sudokus");
-
-		if(lista.tamano() ==0){
-			try {
-				res.next();
-				int tamano = res.getInt(1);getClass();
-				int cantRes = tamano/100;
-				int resto = tamano%100;
-				if(resto != 0){
-					cantRes++;
+	public boolean leerBD(){
+		boolean lanzar = true;
+		GestorBD gBD = GestorBD.getGestorBD();
+		ResultSet res = gBD.Select("SELECT Identificador, Nivel, Activo FROM Sudokus");
+		try {
+			if(!res.next()){
+				try {
+					CogerSudokus.cogerSudoku();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				GestorMultiBD.getGestorMultiBD().setTamano(cantRes);
-				class Hilo implements Runnable{
-					ResultSet res;
-					String sentencia;
-					
-					public Hilo(String pSentencia){
-						sentencia = pSentencia;
-					}
-					
-					public ResultSet obtResultado(){
-						return res;
-					}
-					
-					
-					public void run(){
-						try{
-							System.out.println(sentencia);
-							res = GestorMultiBD.getGestorMultiBD().Select(sentencia);
-						} catch (PropertyVetoException e) {
+			}else{
+				if(lista.tamano() ==0){
+					Sudoku sudo;					
+					if(lanzar){
+						try {
+							sudo = new Sudoku(res.getInt("Identificador"), res.getInt("Nivel"));
+							if(res.getBoolean("Activo")){
+								sudo.setActive(true);	
+							}else{
+								sudo.setActive(false);
+							}
+							
+							while(res.next()){
+								byte[] b = res.getBytes("Sudoku");
+								ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+								ObjectInputStream oos = new ObjectInputStream(byteArray);
+								sudo = (Sudoku) oos.readObject();
+								CatalogoSudoku.getCatalogoSudoku().anadirSudoku(sudo);
+							}
+						} catch (ClassNotFoundException | SQLException | IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}finally{
-						//	CatalogoJugadores.obtListaJugadores().notify();
-						}						
-						System.out.println(sentencia);
-						System.out.println(obtResultado());
-					}
-				}
-				ResultSet[] result = new ResultSet[cantRes];
-				Hilo[] multihilo = new Hilo[cantRes];
-				Thread[] mh = new Thread[cantRes];
-				synchronized(this){
-					for(int i = 0, j = 0; i<tamano+1; i+=100, j++){
-						if(j+1 == cantRes && resto != 0){
-
-							multihilo[j] = new Hilo("SELECT Sudoku FROM Sudokus LIMIT "+i+","+resto+"");
-						}else{
-
-							multihilo[j] = new Hilo("SELECT Sudoku FROM Sudokus LIMIT "+i+",100");
 						}
-						
-					}
-					for(int i = 0; i<cantRes; i++){
-						mh[i] = new Thread(multihilo[i]);
-						mh[i].start();
-					}
-					for(int i = 0; i<cantRes; i++){
-						while(mh[i].isAlive()){
-						}
-						System.out.println(i);
 					}
 				}
-				
-				System.out.println("ENRA");
-				if(tamano==0){
-					CogerSudokus.cogerSudoku();
-				}
-				System.out.println("");
-				Sudoku sudo;
-				for(int i=0; i<cantRes-1; i++){
-					while(result[i].next()){
-						byte[] b = result[i].getBytes("Sudoku");
-						ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
-						ObjectInputStream oos = new ObjectInputStream(byteArray);
-						sudo = (Sudoku) oos.readObject();
-						anadirSudoku(sudo);
-						System.out.println(sudo.obtIdentificador());
-					}	
-				}	
-			} catch (ClassNotFoundException | SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		return lanzar;
 	}
+
 	
 	public static void main(String[] arg){
 		String[] lis = CatalogoSudoku.getCatalogoSudoku().obtListaIdent(1);

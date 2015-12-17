@@ -62,9 +62,9 @@ public class CatalogoSudoku {
 						try {
 							sudo = new Sudoku(res.getInt("Identificador"), res.getInt("Nivel"));
 							if(res.getBoolean("Activo")){
-								sudo.setActive(true);	
+								sudo.setActivado(true);	
 							}else{
-								sudo.setActive(false);
+								sudo.setActivado(false);
 							}
 							
 							while(res.next()){

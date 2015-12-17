@@ -70,6 +70,20 @@ public class Sudoku implements Serializable{
     }
     
     /**
+     * obtActivado
+     *
+     * <p> POST: devuelve si el sudoku está activado.
+     *
+     * <p>
+     *
+     * @return boolean
+     * @todo Implement this packsudoku.ISudoku method
+     */
+    public void setActivado(boolean pAct) {
+        activado = pAct;
+    }
+    
+    /**
      * obtMatriz
      *
      * <p> POST: devuelve la matriz de casillas del sudoku.

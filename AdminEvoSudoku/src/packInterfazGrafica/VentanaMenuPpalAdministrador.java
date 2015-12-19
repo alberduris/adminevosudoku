@@ -52,8 +52,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaMenuPpalAdministrador frame = new VentanaMenuPpalAdministrador();
-					frame.setVisible(true);
+					new VentanaMenuPpalAdministrador();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -92,6 +91,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		getbtnOpciones();
 		getbtnOpcionesAdministrador();
 		getbtnCerrarSesion();
+		setVisible(true);
 
 	}
 
@@ -241,8 +241,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaOpcionesAdministrador frame = new VentanaOpcionesAdministrador();
-					frame.setVisible(true);
+					new VentanaOpcionesAdministrador();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -270,8 +269,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaStart frame = new VentanaStart();
-					frame.setVisible(true);
+					new VentanaStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

@@ -442,6 +442,6 @@ public class VentanaEliminarSudoku extends JDialog implements Observer {
 	}
 		
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		VentanaEliminarSudoku vnt = new VentanaEliminarSudoku();
+		new VentanaEliminarSudoku();
 	}	
 }

@@ -65,6 +65,7 @@ public class VentanaStart extends JFrame {
 		getBtnLogin();
 		getBtnRegistro();
 		
+		setVisible(true);
 	}
 	
 
@@ -97,8 +98,7 @@ public class VentanaStart extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent arg0){
 					
-					VentanaLogin frame = new VentanaLogin();
-					frame.setVisible(true);
+					new VentanaLogin();
 					dispose();	
 				}
 			});			
@@ -117,8 +117,7 @@ public class VentanaStart extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent arg0){
 					
-					VentanaRegistro frame = new VentanaRegistro();
-					frame.setVisible(true);
+					new VentanaRegistro();
 					dispose();	
 				}
 			});			

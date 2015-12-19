@@ -65,8 +65,7 @@ public class VentanaTablero extends JDialog implements Observer {
 	private boolean dispose = false;
 	static final int MAX = 9;
 	int[] activado;
-	Tablero tab = Tablero.obtTablero();
-	
+	Tablero tab = Tablero.obtTablero();	
 
 	/**
 	 * Create the frame.
@@ -139,6 +138,8 @@ public class VentanaTablero extends JDialog implements Observer {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		setVisible(true);
 		
 	}
 	
@@ -922,8 +923,7 @@ public class VentanaTablero extends JDialog implements Observer {
 		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
 		sud = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(1).next();		
 		tb.inicializar(sud, null);
-		VentanaTablero vnt = new VentanaTablero();
-		vnt.setVisible(true);
+		new VentanaTablero();
 	}
 
 }

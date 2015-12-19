@@ -69,8 +69,7 @@ public class VentanaRegistro extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaRegistro frame = new VentanaRegistro();
-					frame.setVisible(true);
+					new VentanaRegistro();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -113,6 +112,8 @@ public class VentanaRegistro extends JFrame {
 		getBtnRegistro();
 		
 		getBtnAtras();
+		
+		setVisible(true);
 	}
 
 	private void getTituloRegistro() {
@@ -228,8 +229,7 @@ public class VentanaRegistro extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaStart frame = new VentanaStart();
-					frame.setVisible(true);
+					new VentanaStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

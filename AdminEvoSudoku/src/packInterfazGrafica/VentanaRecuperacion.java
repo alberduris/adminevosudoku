@@ -60,8 +60,7 @@ public class VentanaRecuperacion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaRecuperacion frame = new VentanaRecuperacion();
-					frame.setVisible(true);
+					new VentanaRecuperacion();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -98,6 +97,8 @@ public class VentanaRecuperacion extends JFrame {
 		getBtnRecuperar();
 	
 		getBtnAtras();
+		
+		setVisible(true);
 	}
 
 	private void getTituloRecuperar() {
@@ -160,8 +161,7 @@ public class VentanaRecuperacion extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaLogin frame = new VentanaLogin();
-					frame.setVisible(true);
+					new VentanaLogin();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

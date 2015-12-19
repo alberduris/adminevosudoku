@@ -15,8 +15,7 @@ public class PrincipalVistaSudoku {
 	 */
 	public static void main(String[] args) throws IOException, LineUnavailableException, UnsupportedAudioFileException {
 		
-		VentanaStart vnt = new VentanaStart();
-		vnt.setVisible(true);
+		new VentanaStart();
 
 	}
 

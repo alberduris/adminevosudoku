@@ -55,8 +55,7 @@ public class VentanaRetar extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaRetar frame = new VentanaRetar();
-					frame.setVisible(true);
+					new VentanaRetar();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -89,7 +88,7 @@ public class VentanaRetar extends JFrame {
 		getComboBoxJugadores();
 		getBtnRetar();
 		
-		
+		setVisible(true);
 
 	}
 

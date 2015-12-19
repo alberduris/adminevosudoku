@@ -67,8 +67,7 @@ public class VentanaLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaLogin frame = new VentanaLogin();
-					frame.setVisible(true);
+					new VentanaLogin();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -109,6 +108,8 @@ public class VentanaLogin extends JFrame {
 	
 		getLblOlvido();
 		getBtnAtras();
+		
+		setVisible(true);
 	}
 
 	private void getTituloLogin() {
@@ -182,8 +183,11 @@ public class VentanaLogin extends JFrame {
 				}
 				else{
 					try {
-						VentanaMenuPpalUsuario frame = new VentanaMenuPpalUsuario();
-						frame.setVisible(true);
+						if(Sesion.obtSesion().obtNombreUsuario() == "Admin"){
+							new VentanaMenuPpalAdministrador();
+						}else{
+							new VentanaMenuPpalUsuario();
+						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -205,8 +209,7 @@ public class VentanaLogin extends JFrame {
 		lblOlvido.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				VentanaRecuperacion vntRec = new VentanaRecuperacion();
-				vntRec.setVisible(true);
+				new VentanaRecuperacion();
 				dispose();
 			}
 			@Override
@@ -245,8 +248,7 @@ public class VentanaLogin extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaStart frame = new VentanaStart();
-					frame.setVisible(true);
+					new VentanaStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

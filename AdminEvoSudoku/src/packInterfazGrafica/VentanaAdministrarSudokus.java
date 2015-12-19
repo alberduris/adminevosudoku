@@ -56,8 +56,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaAdministrarSudokus frame = new VentanaAdministrarSudokus();
-					frame.setVisible(true);
+					new VentanaAdministrarSudokus();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -544,8 +544,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	}
 	
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		GestorAdministrador tb = GestorAdministrador.getGestorAdministrador();
-		VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();
+		new VentanaAnadirSudoku();
 	}
 	
 	public void completar(){

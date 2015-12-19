@@ -23,6 +23,7 @@ import java.util.Random;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	JPanel centro, sur;
 	JPanel norte;
 	JButton btn1,btn2,btn3;
-	JSpinner dif;
+	JComboBox dif;
 	JButton[] listBotones;
 	KeyListener keyListener;
 	JDialog dialogFinal;
@@ -68,7 +69,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
-	
+	CatalogoSudoku cS = CatalogoSudoku.getCatalogoSudoku();
 
 	/**
 	 * Create the frame.
@@ -78,6 +79,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	 */
 	public VentanaAnadirSudoku() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		gA = GestorAdministrador.getGestorAdministrador();
+		cS = CatalogoSudoku.getCatalogoSudoku();
 		gA.addObserver(this);
 		setSize(500,500);
 		setLocationRelativeTo(null);
@@ -109,10 +111,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		getBotones();
 
 		norte.setLayout(new GridLayout(1, 4));
-		norte.add(new JLabel(" "));
-		norte.add(new JLabel("Dificultad: "));
-		getDificultad();
-		norte.add(new JLabel(" "));
+		crearNorte(String.valueOf(cS.buscarPrimerIdDisp()));
 		
 		try{
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -129,8 +128,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 			setVisible(true);
 		}catch(Exception e){
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 	
 	
@@ -171,13 +169,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		String num;
 		for(int i = 0; i < MAX; i++){
 			for (int j = 0; j < MAX; j++){
-				/*if(tab.obtValorCasilla(i, j) == 0){
-					num = " ";
-				}else{
-					num = String.valueOf(tab.obtValorCasilla(i, j));
-				}*/
-				//SOLUCION COMPLETA
-				//num = String.valueOf(gS.obtenerSolucion(i, j));
 				cajas[i][j] = crearJLabel(i, j, " ");
 							
 				f = (i+1)/3;
@@ -321,13 +312,18 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		}
 	}
 	
-	private void getDificultad(){
-		if(dif == null){
-			SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 4, 1);
-			dif = new JSpinner(model);
-		}
-		dif.setOpaque(false);
-		norte.add(dif);		
+	private void crearNorte(String pIdent){	
+		dif = null;
+		String[] valNivel = { "Muy Fácil", "Fácil", "Normal", "Difícil", "Muy Difícil"};
+		dif = new JComboBox<String>(valNivel);
+		dif.setSelectedIndex(0);	
+		norte.add(new JLabel());
+		norte.add(new JLabel("Sudoku Nº: "));
+		norte.add(new JLabel(pIdent));
+		norte.add(new JLabel());
+		norte.add(new JLabel("Dificultad: "));
+		norte.add(dif);
+		norte.add(new JLabel());
 	}
 	
 	private JButton getBtn1() {
@@ -484,7 +480,7 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 					}
 				}
 			}
-			result = gA.crearSudoku((int) dif.getValue(), casillas, fijas); 
+			result = gA.crearSudoku(dif.getSelectedIndex()+1, casillas, fijas); 
 			if(result.length == 0){
 				getDialogFinal();
 			}
@@ -550,8 +546,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		GestorAdministrador tb = GestorAdministrador.getGestorAdministrador();
 		VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();
-		vnt.setVisible(true);
-		vnt.completar();
 	}
 	
 	public void completar(){

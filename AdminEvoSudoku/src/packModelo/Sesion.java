@@ -55,7 +55,7 @@ public class Sesion extends Observable implements Observer {
 		{
 			CatalogoSudoku.getCatalogoSudoku().leerBD();
 			obtEnJuego();
-			if(tablero == null || CatalogoSudoku.getCatalogoSudoku().buscarSudokuPorId(tablero.obtIdSudoku()) == null){
+			if(tablero == null || CatalogoSudoku.getCatalogoSudoku().buscarDificultadPorId(tablero.obtIdSudoku()) == 0){
 			    Tablero.obtTablero().inicializar(iter.next(), null);
 			}else{
 				Tablero.obtTablero().establecerTablero(tablero);

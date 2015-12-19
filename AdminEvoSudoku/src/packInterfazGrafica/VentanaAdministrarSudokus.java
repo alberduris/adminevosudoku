@@ -95,7 +95,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 		getbtnActivar();
 		getbtnDesactivar();
 		getBtnAtras();
-		
+		setVisible(true);
 
 	}
 
@@ -126,10 +126,8 @@ public class VentanaAdministrarSudokus extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaAnadirSudoku vnt;
 				try {
-					vnt = new VentanaAnadirSudoku();
-					vnt.setVisible(true);		
+					VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
@@ -153,8 +151,13 @@ public class VentanaAdministrarSudokus extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Premios");
-				
+				try {
+					VentanaEliminarSudoku vnt = new VentanaEliminarSudoku();	
+					dispose();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}				
 			}
 			
 			
@@ -179,8 +182,13 @@ public class VentanaAdministrarSudokus extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Estadisticas");
-				
+				try {
+					VentanaModificarSudoku vnt = new VentanaModificarSudoku();	
+					dispose();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}				
 			}
 		});
 
@@ -201,8 +209,13 @@ public class VentanaAdministrarSudokus extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Ranking");
-				
+				try {
+					VentanaActivarSudoku vnt = new VentanaActivarSudoku();	
+					dispose();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}				
 			}
 		});
 
@@ -223,8 +236,13 @@ public class VentanaAdministrarSudokus extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Opciones");
-				
+				try {
+					VentanaDesactivarSudoku vnt = new VentanaDesactivarSudoku();	
+					dispose();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}					
 			}
 		});
 

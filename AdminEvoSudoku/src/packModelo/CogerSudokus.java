@@ -86,11 +86,11 @@ public class CogerSudokus {
 				
 			}
 		}
-		/*System.out.println("EMPIEZA");
+		System.out.println("EMPIEZA");
 		escribirEnBD(System.getenv("APPDATA") + "\\Sudoku/sudokus.save");
 		System.out.println("FIN");
 		File fi = new File(System.getenv("APPDATA") + "\\Sudoku/sudokus.save");
-		fi.delete();*/
+		fi.delete();
 		return completadoConExito;
 	}
 	
@@ -169,7 +169,7 @@ public class CogerSudokus {
 				byteArray = new ByteArrayOutputStream();
 				oos = new ObjectOutputStream(byteArray);
 				oos.writeObject(sudo);
-				gBD.Update("INSERT INTO Sudokus values ("+idSudoku+","+dificultad+",?)",byteArray);
+				gBD.Update("INSERT INTO Sudokus values ("+idSudoku+","+dificultad+",1,?)",byteArray);
 				dificultad = configurarDificultad(idSudoku);
 				contador = saltar(entradaNumero);
 				contador = saltar(entradaSolucion);

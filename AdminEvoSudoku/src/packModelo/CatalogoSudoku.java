@@ -16,7 +16,6 @@ import packAdminSudoku.NoHayFicheroSudokusException;
 import packModelo.Sudoku;
 import packModelo.CogerSudokus;
 import packBD.GestorBD;
-import packBD.GestorMultiBD;
 
 public class CatalogoSudoku {
 	private ListaSudokus lista;
@@ -24,8 +23,8 @@ public class CatalogoSudoku {
 	
 	private CatalogoSudoku(){
 		lista = new ListaSudokus();
-		//leerBD();
-		leerFichero(getClass().getResource("sudokus.save").getPath());
+		leerBD();
+		//leerFichero(getClass().getResource("sudokus.save").getPath());
 	}
 	
 	public static CatalogoSudoku getCatalogoSudoku(){
@@ -66,20 +65,19 @@ public class CatalogoSudoku {
 							}else{
 								sudo.setActivado(false);
 							}
-							
-							while(res.next()){
-								byte[] b = res.getBytes("Sudoku");
-								ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
-								ObjectInputStream oos = new ObjectInputStream(byteArray);
-								sudo = (Sudoku) oos.readObject();
-								CatalogoSudoku.getCatalogoSudoku().anadirSudoku(sudo);
-							}
-						} catch (ClassNotFoundException | SQLException | IOException e) {
+							anadirSudoku(sudo);
+						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
+			}
+			Sudoku sudo;
+			while(res.next()){
+				sudo = new Sudoku(res.getInt("Identificador"), res.getInt("Nivel"));
+				sudo.setActivado(res.getBoolean("Activo"));
+				anadirSudoku(sudo);
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -90,10 +88,16 @@ public class CatalogoSudoku {
 
 	
 	public static void main(String[] arg){
-		String[] lis = CatalogoSudoku.getCatalogoSudoku().obtListaIdent(1);
-		for(int i = 0; i< lis.length; i++){
-			System.out.print(lis[i] +" , ");
-		}
+		CatalogoSudoku gS = CatalogoSudoku.getCatalogoSudoku();
+		gS.imprimir();
+		String[] lis = gS.obtListaIdent();
+		/*for(int i = 0; i<lis.length; i++){
+			System.out.print(lis[i] + ", ");
+			if(i == 999 | i == 1999 | i == 2999 | i == 3999 | i == 4999){
+				System.out.println("");
+				
+			}
+		}*/
 	}
 	
 	public boolean leerFichero(String fich){
@@ -305,8 +309,8 @@ public class CatalogoSudoku {
 		lista.resetear();
 	}
 	
-	public Sudoku buscarSudokuPorId(int pIdSudoku){
-		return lista.buscarSudokuPorId(pIdSudoku);
+	public int buscarDificultadPorId(int pIdSudoku){
+		return lista.buscarDificultadPorId(pIdSudoku);
 	}
 	
 	public int buscarPrimerIdDisp(){
@@ -321,8 +325,27 @@ public class CatalogoSudoku {
 		return lista.obtListaIdent(pNivel);
 	}
 	
+	public String[] obtListaIdent(){
+		return lista.obtListaIdent();
+	}
+	
 	public void eliminarSudoku(int pId){
 		lista.eliminarSudoku(pId);	
 	}
 	
+	public String[] obtListaEstado(boolean pEstado){
+		return lista.obtListaEstado(pEstado);
+	}
+	
+	public String[] obtListaEstado(int pNivel, boolean pEstado){
+		return lista.obtListaEstado(pNivel, pEstado);
+	}
+	
+	public void modificarEstadoSudoku(int pIdSudoku, boolean pEstado){
+		lista.modificarEstadoSudoku(pIdSudoku, pEstado);
+	}
+	
+	public void imprimir(){
+		lista.imprimir();
+	}
 }

@@ -1,8 +1,12 @@
 package packModelo;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Observable;
 
 import packBD.GestorBD;
@@ -55,8 +59,19 @@ public class GestorAdministrador extends Observable{
 	}
 	
 	public void introducirSudoku(int pIdSudoku){
-		sud = CatalogoSudoku.getCatalogoSudoku().buscarSudokuPorId(pIdSudoku);
-		System.out.println(CatalogoSudoku.getCatalogoSudoku().getTamano());
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Identificador="+pIdSudoku+"");
+		try {
+			if(res.next()){
+				byte[] b = res.getBytes("Sudoku");
+				ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+				ObjectInputStream oos = new ObjectInputStream(byteArray);
+				sud = (Sudoku) oos.readObject();
+
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public int obtValorCasilla(int pI, int pJ){
@@ -103,9 +118,13 @@ public class GestorAdministrador extends Observable{
 	}
 	
 	public void eliminarSudoku(){
-		System.out.println("IDD: "+ sud.obtIdentificador());
-		//GestorBD.getGestorBD().Eliminar("DELETE FROM Sudokus WHERE Identificador="+sud.obtIdentificador()+"");
+		GestorBD.getGestorBD().Eliminar("DELETE FROM Sudokus WHERE Identificador="+sud.obtIdentificador()+"");
 		CatalogoSudoku.getCatalogoSudoku().eliminarSudoku(sud.obtIdentificador());
+	}
+	
+	public void modificarEstadoSudoku(boolean pEstado){
+		GestorBD.getGestorBD().Eliminar("UPDATE Sudokus SET Activo="+pEstado+" WHERE Identificador="+sud.obtIdentificador()+"");
+		CatalogoSudoku.getCatalogoSudoku().modificarEstadoSudoku(sud.obtIdentificador(), pEstado);
 	}
 	
 }

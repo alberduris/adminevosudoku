@@ -44,7 +44,7 @@ public class ListaSudokus {
 		lista.clear();
 	}
 	
-	public Sudoku buscarSudokuPorId(int pIdSudoku){
+	public int buscarDificultadPorId(int pIdSudoku){
 		boolean enc = false;
 		Iterator<Sudoku> itr = obtIterador();
 		Sudoku sd = null;
@@ -55,9 +55,9 @@ public class ListaSudokus {
 			}
 		}
 		if(!enc){
-			sd = null;
+			return 0;
 		}
-		return sd;
+		return sd.obtDificultad();
 	}
 	
 	public int buscarPrimerIdDisp(){
@@ -106,20 +106,71 @@ public class ListaSudokus {
 		return listAux.obtListaIdent();
 	}
 		
-	public void eliminarSudoku(int pId){
-		boolean eliminado = false;
+	public String[] obtListaEstado(int pNivel, boolean pEstado){
+		ListaSudokus listAux = new ListaSudokus();
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sud = null;
+		while(itr.hasNext()){
+			sud = itr.next();
+			if(sud.obtDificultad() == pNivel){
+				listAux.anadirSudoku(sud);
+			}
+		}
+		return listAux.obtListaEstado(pEstado);
+	}
+	
+	public String[] obtListaEstado(boolean pEstado){
+		ArrayList<String> list = new ArrayList<String>();
 		Iterator<Sudoku> itr = obtIterador();
 		Sudoku sud;
+		while(itr.hasNext()){
+			sud = itr.next();
+			if(sud.obtActivado() == pEstado){
+				list.add(String.valueOf(sud.obtIdentificador()));
+			}
+		}
+		String[] lis = new String[list.size()];
+		for(int i = 0; i<list.size(); i++){
+			lis[i] = list.get(i);
+		}
+		
+		return lis;
+	}
+	
+	public void modificarEstadoSudoku(int pIdSudoku, boolean pEstado){
+		boolean modificado = false;
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sud;
+		while(itr.hasNext() && !modificado){
+			sud = itr.next();
+			if(sud.obtIdentificador() == pIdSudoku){
+				modificado = true;
+				sud.setActivado(pEstado);
+			}
+		}
+	}
+	
+	public void eliminarSudoku(int pId){
+		boolean eliminado = false;
 		int i = 0;
 		while(i < lista.size() && !eliminado){
-		//	sud = itr.next();
 			if(lista.get(i).obtIdentificador() == pId){
 				eliminado = true;
-				System.out.println(pId);
-				System.out.println(lista.get(i).obtIdentificador());
 				lista.remove(i);
 			}
 			i++;
 		}
 	}
+	
+	public void imprimir(){
+		Iterator<Sudoku> itr = obtIterador();
+		Sudoku sud;
+		while(itr.hasNext()){
+			sud = itr.next();
+			if(sud.obtIdentificador() == 999 | sud.obtIdentificador() == 1999 | sud.obtIdentificador() == 2999 | sud.obtIdentificador() == 3999 | sud.obtIdentificador() == 4999){
+				System.out.println("");
+			}
+		}
+	}
+	
 }

@@ -12,20 +12,24 @@ public class Tablero extends Observable implements Serializable{
 	private Sudoku sudoku;
 	private Matriz matrizJuego;
 	private boolean terminado = false;
+	private boolean pausado = false;
+	private boolean tiempoAjustado = false;
 	
 	private int tiempo;
 	private static Timer time;
 
 	private Tablero() {
             matrizJuego = new Matriz();
-            tiempo = -1;
             terminado = false;
+            pausado = true;
+            tiempo = -1;
             time = new Timer();
+            tiempoAjustado = false;
             TimerTask timerTask = new TimerTask(){
             	@Override
             	public void run(){
-            		if(!terminado){
-            			aumentarTiempo();
+            		if(!terminado && !pausado){
+            			cambiarTiempo();
             		}
             	}
             };
@@ -37,10 +41,31 @@ public class Tablero extends Observable implements Serializable{
         return miTablero;
     }
     
-    private void aumentarTiempo(){
-    	tiempo++;
+    public void configTiempo(int pTiempo){
+    	tiempoAjustado = true;
+    	tiempo = pTiempo;
+    }
+    
+    public void pausado (boolean pEstado){
+    	pausado = pEstado;
+    }
+    
+    private void cambiarTiempo(){
+    	if(tiempoAjustado){
+    		if(tiempo == 0){
+    			noCompletado();
+    		}else{
+        		tiempo--;    			
+    		}
+    	}else{
+        	tiempo++;
+    	}
     	notifyObservers();
     	setChanged();
+    }
+    
+    public boolean obtTiempoAjustado(){
+    	return tiempoAjustado;
     }
 
     public int obtTiempo(){
@@ -176,6 +201,10 @@ public class Tablero extends Observable implements Serializable{
 		notifyObservers();
 	}
     
+    public boolean obtPausado(){
+    	return pausado;
+    }
+    
 
     /**
      * @return
@@ -240,7 +269,12 @@ public class Tablero extends Observable implements Serializable{
     	tiempo = pTablero.obtTiempo();
     	sudoku = pTablero.getSudoku();
     	matrizJuego = pTablero.getMatriz();
+    	tiempoAjustado = pTablero.obtTiempoAjustado();
+    	pausado = true;
     }
     
+    private void noCompletado(){
+    	
+    }
     
 }

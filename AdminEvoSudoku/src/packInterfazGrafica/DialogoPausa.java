@@ -19,6 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import packModelo.Sesion;
+import packModelo.Tablero;
+
 public class DialogoPausa extends JFrame {
 
 	/**
@@ -49,8 +52,7 @@ public class DialogoPausa extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DialogoPausa frame = new DialogoPausa();
-					frame.setVisible(true);
+					new DialogoPausa();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -84,7 +86,7 @@ public class DialogoPausa extends JFrame {
 		getbtnSalirSinGuardar();
 		getbtnSalirYGuardar();
 		
-		
+		setVisible(true);
 
 	}
 
@@ -121,12 +123,10 @@ public class DialogoPausa extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaAdministrarSudokus frame = new VentanaAdministrarSudokus();
-					frame.setVisible(true);
+					Tablero.obtTablero().pausado(false);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				
 				dispose();
 			}
 		});
@@ -146,12 +146,12 @@ public class DialogoPausa extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar premios");
-				
+				JOptionPane.showMessageDialog(contentPane, "El sudoku se continuará la proxima vez que juege");
+				Sesion.obtSesion().borrarTablero();
+				Sesion.obtSesion().finSesion(false);
+				System.exit(EXIT_ON_CLOSE);
 			}
 			
-			
-				
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -172,28 +172,13 @@ public class DialogoPausa extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar retos");
-				
+				JOptionPane.showMessageDialog(contentPane, "El sudoku se continuará la proxima vez que juege");
+				Sesion.obtSesion().finSesion(true);
+				System.exit(EXIT_ON_CLOSE);
 			}
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnSalirYGuardar);
 	}
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

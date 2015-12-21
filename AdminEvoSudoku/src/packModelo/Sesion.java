@@ -23,6 +23,7 @@ import javax.mail.internet.MimeMessage;
 import packBD.GestorBD;
 import packExcepciones.ExcepcionListaLlena;
 import packExcepciones.NoHaySudokuCargadoException;
+import packInterfazGrafica.VentanaTablero;
 
 public class Sesion extends Observable implements Observer {
 
@@ -37,7 +38,6 @@ public class Sesion extends Observable implements Observer {
 	private Sesion()
 	{
 		Tablero.obtTablero().addObserver(this);
-		nombreUsuario = "Anonimo";
 	}
 	
 	public static Sesion obtSesion()
@@ -49,26 +49,7 @@ public class Sesion extends Observable implements Observer {
 		return mSesion;
 	}
 	
-	public void iniciarJuego() throws NoHaySudokuCargadoException
-	{
-		try
-		{
-			CatalogoSudoku.getCatalogoSudoku().leerBD();
-			obtEnJuego();
-			if(tablero == null || CatalogoSudoku.getCatalogoSudoku().buscarDificultadPorId(tablero.obtIdSudoku()) == 0){
-			    Tablero.obtTablero().inicializar(iter.next(), null);
-			}else{
-				Tablero.obtTablero().establecerTablero(tablero);
-			}
-		    horaInicio = new Date();
-		} catch (RuntimeException e)
-		{
-		    horaInicio = null;
-		}
-	}
-	
-	
-	public void obtEnJuego(){
+		public void obtEnJuego(){
 		GestorBD gBD = GestorBD.getGestorBD();
 		ResultSet resultado = gBD.Select("SELECT Tablero FROM Jugadores WHERE NombreUsuario='"+nombreUsuario+"'");
 		try {
@@ -117,8 +98,6 @@ public class Sesion extends Observable implements Observer {
 			while(res.next()){
 				String correo = res.getString("CorreoElectrónico");
 				String nombre = res.getString("NombreUsuario");
-				System.out.println(pNombreUsuario+ " , " + nombre.trim());
-				System.out.println(pCorreoElectronico+ " , " + correo.trim() );
 				if(correo.trim().equals(pCorreoElectronico.trim())){
 					resultado[1] = false;
 					if(nombre.trim().equals(pNombreUsuario.trim())){
@@ -141,7 +120,7 @@ public class Sesion extends Observable implements Observer {
 	}
 
 	public boolean[] identificarse(String pNombreUsuario, String pContrasena){
-		ResultSet res =bd.Select("SELECT Contraseña FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pNombreUsuario+"'");
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrónico, Contraseña FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pNombreUsuario+"'");
 		boolean[] resultado = new boolean[2];
 		resultado[0] = true;
 		resultado[1] = true;
@@ -149,6 +128,8 @@ public class Sesion extends Observable implements Observer {
 			if(res.next()){
 				if(!SHA1.getStringMensageDigest(pContrasena).equals(res.getString("Contraseña"))){
 					resultado[1] = false;
+				}else{
+					nombreUsuario = res.getString("NombreUsuario");
 				}
 			}else{
 				resultado[0] = false;
@@ -213,13 +194,15 @@ public class Sesion extends Observable implements Observer {
 	   }
     }
 	
-	public void finSesion(){
+	public void finSesion(boolean pIniciado){
     	try {
-    		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
-	    	oos.writeObject(Tablero.obtTablero());
-	    	bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
-//	    	bd.InsertarTablero("INSERT INTO Jugadores values ('"+nombreUsuario+"', 'aa', 'aaa', ?)", byteArray);
+    		if(pIniciado){
+    			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+            	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
+    	    	oos.writeObject(Tablero.obtTablero());
+    	    	bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+    		}
+    		nombreUsuario = "";
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,8 +210,7 @@ public class Sesion extends Observable implements Observer {
 	}
 	
 	public void borrarTablero(){
-		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-		bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+		bd.Update("UPDATE Jugadores SET Tablero=NULL WHERE NombreUsuario='"+nombreUsuario+"'");
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){

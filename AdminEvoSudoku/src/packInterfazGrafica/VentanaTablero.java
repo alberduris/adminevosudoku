@@ -14,8 +14,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
 import packModelo.CatalogoSudoku;
 import packModelo.Sesion;
@@ -75,18 +80,9 @@ public class VentanaTablero extends JDialog implements Observer {
 	 */
 	public VentanaTablero() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		tab = Tablero.obtTablero();
-		tab.reiniciar();
 		tab.addObserver(this);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500,500);
 		setLocationRelativeTo(null);
-		setVisible(true);
-		/*sonido = AudioSystem.getClip();
-		sonido.open(AudioSystem.getAudioInputStream(getClass().getResource("tetris.wav")));
-		sonido.start();
-		sonido.loop(MAX);
-		sonido2 = AudioSystem.getClip();
-		sonido2.open(AudioSystem.getAudioInputStream(getClass().getResource("Mario Bros.wav")));*/
 		norte = new JPanel();
 		tiempo = new JLabel();
 		crearTiempo();
@@ -126,38 +122,26 @@ public class VentanaTablero extends JDialog implements Observer {
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			addWindowListener(new WindowAdapter(){
 				public void windowClosing(WindowEvent e){
-					try {
-						getSeguro();
-					} catch (NoHaySudokuCargadoException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					ocultar();
+					tab.pausado(true);
+					new DialogoPausa();
 				}
 			});
-			setVisible(true);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		setVisible(true);
+		if(!tab.obtPausado() && !tab.obtTiempoAjustado()){
+			tab.reiniciar();
+		}else if(tab.obtPausado()){
+			ocultar();
+			new DialogoPausa();
+		}else{
+			
+		}
 		
 	}
-	
-	
-	private void getSeguro() throws NoHaySudokuCargadoException{
-		int valor = JOptionPane.showConfirmDialog(this, "¿Estas seguro de que quieres cerrar?", "CERRAR", JOptionPane.YES_NO_OPTION);
-		if(valor==JOptionPane.YES_OPTION){
-			valor = JOptionPane.showConfirmDialog(this, "�Quieres guardar la partida?", "CERRAR", JOptionPane.YES_NO_OPTION);
-			if(valor==JOptionPane.YES_OPTION){
-				Sesion.obtSesion().finSesion();
-			}else{
-				Sesion.obtSesion().borrarTablero();
-			}
-			JOptionPane.showMessageDialog(null, "Gracias por jugar", "Gracias", JOptionPane.INFORMATION_MESSAGE);
-			System.exit(0);
-		}
-	}
-	
 	
 	private void hiloCelebracion(){
 		new Thread(new Runnable()
@@ -400,8 +384,9 @@ public class VentanaTablero extends JDialog implements Observer {
 	}
 	
 	private String formaTiempo(){
-		int minutos = tab.obtTiempo()/60;
-		int segundos = tab.obtTiempo()-minutos*60;
+		int num = tab.obtTiempo();
+		int minutos = num/60;
+		int segundos = num-minutos*60;
 		String min;
 		String seg;
 		if(minutos < 10){
@@ -449,10 +434,8 @@ public class VentanaTablero extends JDialog implements Observer {
 				if(tab.obtValorCasilla(i, j) == 0){
 					num = " ";
 				}else{
-					num = String.valueOf(tab.obtValorCasilla(i, j)-'0');
+					num = String.valueOf(tab.obtValorCasilla(i, j));
 				}
-				//SOLUCION COMPLETA
-				//num = String.valueOf(gS.obtenerSolucion(i, j));
 				cajas[i][j] = crearJLabel(i, j, num);
 							
 				f = (i+1)/3;
@@ -497,7 +480,7 @@ public class VentanaTablero extends JDialog implements Observer {
 	
 	private void todosLosNumeros(int k){
 		boolean[][] casillaNum = tab.todosLosNumeros(k);
-		if(Character.isDigit(k)){
+		if(k != 0){
 			for(int i=0; i<MAX; i++){
 				for(int j=0; j<MAX; j++){
 					if(activado[0]!=i || activado[1]!=j){
@@ -618,7 +601,7 @@ public class VentanaTablero extends JDialog implements Observer {
 			if(tab.obtValorCasilla(pI, pJ) == 0){
 				texto = " ";
 			}else{
-				texto = String.valueOf(tab.obtValorCasilla(pI, pJ)-'0') ;				
+				texto = String.valueOf(tab.obtValorCasilla(pI, pJ)) ;				
 			}
 			cajas[pI][pJ].setText(texto);
 			cajas[pI][pJ].setFont(new Font("Monospaced",Font.BOLD,20));
@@ -787,12 +770,7 @@ public class VentanaTablero extends JDialog implements Observer {
 		dialogFinal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		dialogFinal.addWindowListener(new WindowAdapter(){
 				public void windowClosing(WindowEvent e){
-					try {
-						getSeguro();
-					} catch (NoHaySudokuCargadoException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					
 				}
 			});
 		}catch(Exception e){
@@ -903,14 +881,19 @@ public class VentanaTablero extends JDialog implements Observer {
 		csTexto.gridy = 4;
 		dialogGuide.add(boton,csBoton);
 	}
-
 	
+	private void ocultar(){
+		for(int i = 0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				cajas[i][j].setText("");
+			}
+		}
+	}
 	
 	@Override
 	public void update(Observable o, Object arg) {
 		for(int j = 0; j<MAX; j++){
 			for(int i=0; i<MAX; i++){
-			//Comentar el modificar(i,j) para la solución directamente
 				modificar(i,j);
 			}
 		}
@@ -920,9 +903,21 @@ public class VentanaTablero extends JDialog implements Observer {
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		Tablero tb = Tablero.obtTablero();
 		Sudoku sud;
-		CatalogoSudoku.getCatalogoSudoku().leerFichero("sudokus.save");
-		sud = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(1).next();		
-		tb.inicializar(sud, null);
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Identificador = 1");
+		try {
+			res.next();
+			byte[] b = res.getBytes("Sudoku");
+			ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+			ObjectInputStream oos = new ObjectInputStream(byteArray);
+			sud = (Sudoku) oos.readObject();
+			tb.inicializar(sud, null);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		new VentanaTablero();
 	}
 

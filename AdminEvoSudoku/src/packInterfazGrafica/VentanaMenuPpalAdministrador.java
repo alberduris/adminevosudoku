@@ -8,18 +8,35 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import packBD.GestorBD;
+import packModelo.Sesion;
+import packModelo.Sudoku;
+import packModelo.Tablero;
 
 public class VentanaMenuPpalAdministrador extends JFrame {
 
@@ -44,6 +61,8 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(350, 430);
+	
+	private Tablero tab;
 
 	/**
 	 * Launch the application.
@@ -127,9 +146,25 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Jugar");
-				
+				String nombreUs = Sesion.obtSesion().obtNombreUsuario();
+				try{
+					ResultSet res = GestorBD.getGestorBD().Select("SELECT Tablero FROM Jugadores WHERE NombreUsuario='"+nombreUs+"'");
+					if(res.next()){
+						byte[] b = res.getBytes("Tablero");
+						if(b==null){
+							new VentanaConfigurarSudoku();
+							dispose();
+						}else{
+							ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+							ObjectInputStream oos = new ObjectInputStream(byteArray);
+							tab = (Tablero) oos.readObject();
+							getDialogContinuar();
+						}
+					}
+				}catch (ClassNotFoundException | SQLException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -269,6 +304,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					Sesion.obtSesion().finSesion(false);
 					new VentanaStart();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -283,6 +319,73 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		panelConBoxLayout.add(btnCerrarSesion);
 	}
 	
-	
+	private void getDialogContinuar(){
+		final JDialog dialogContinuar = new JDialog();
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel texto = new JLabel("¿Quiere continuar el Sudoku guardado?");
+		JButton botonSi = new JButton("Sí");
+		
+		botonSi.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {				
+				Tablero.obtTablero().establecerTablero(tab);
+				try {
+					new VentanaTablero();
+				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dialogContinuar.dispose();
+				dispose();
+			}
+			
+			
+		});
+		
+		JButton botonNo = new JButton("No");
+		
+		botonNo.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				new VentanaConfigurarSudoku();
+				dialogContinuar.dispose();
+				dispose();
+			}
+			
+			
+		});
+		
+		dialogContinuar.setSize(300,125);
+		dialogContinuar.setModal(false);
+		dialogContinuar.setVisible(true);
+		dialogContinuar.setTitle("Continuar");
+		dialogContinuar.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		dialogContinuar.setLocationRelativeTo(this);		
+		dialogContinuar.setLayout(new GridBagLayout());
+		dialogContinuar.getContentPane().setBackground(new Color(0xFFFFFF));
+		
+		botonSi.setAlignmentX(Component.LEFT_ALIGNMENT);
+		botonNo.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+		JPanel respuesta = new JPanel();
+		respuesta.add(botonSi,csBoton);
+		respuesta.add(botonNo,csBoton);
+		
+		dialogContinuar.add(texto,csTexto);
+		dialogContinuar.add(respuesta, csBoton);	
+
+	}
 }

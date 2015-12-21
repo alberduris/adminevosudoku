@@ -183,7 +183,7 @@ public class VentanaLogin extends JFrame {
 				}
 				else{
 					try {
-						if(Sesion.obtSesion().obtNombreUsuario() == "Admin"){
+						if(Sesion.obtSesion().obtNombreUsuario().trim().equalsIgnoreCase("Admin")){
 							new VentanaMenuPpalAdministrador();
 						}else{
 							new VentanaMenuPpalUsuario();
@@ -271,18 +271,4 @@ public class VentanaLogin extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

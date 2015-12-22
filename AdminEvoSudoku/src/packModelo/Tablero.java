@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
 
 public class Tablero extends Observable implements Serializable{
@@ -237,8 +238,11 @@ public class Tablero extends Observable implements Serializable{
     }
 
     public void terminar(){
-    	System.out.println("HA terminado");
-		
+    	String nom = Sesion.obtSesion().obtNombreUsuario();
+    	int id = sudoku.obtIdentificador();
+    	int punt = puntuacionConPenalizacion();
+    	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=0");
+    	GestorBD.getGestorBD().Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nom+"',"+id+","+punt+")");
 	}
     
     public int puntuacionConPenalizacion(){

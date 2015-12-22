@@ -109,7 +109,7 @@ public class Sesion extends Observable implements Observer {
 			}
 			if(resultado[0] && resultado[1]){
 				String contrasena = SHA1.getStringMensageDigest(pContrasena);
-				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) values ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
+				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
 				enviarCorreo(pCorreoElectronico);
 			}
 		} catch (SQLException e) {

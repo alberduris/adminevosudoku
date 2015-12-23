@@ -109,7 +109,7 @@ public class VentanaConfigurarSudoku extends JFrame {
 
 	private void getTituloDialogoConfig() {
 	
-		lblTitulo = new JLabel("<html>Configuración<br>Sudoku</html>");
+		lblTitulo = new JLabel("<html><center>Configuración<br>Sudoku</center></html>");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);

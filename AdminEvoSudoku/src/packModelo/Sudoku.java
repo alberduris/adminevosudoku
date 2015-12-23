@@ -161,7 +161,7 @@ public class Sudoku implements Serializable{
     			}
     		}
     	}else{
-    		casillasFallo = new boolean[0][0];
+    		casillasFallo = new boolean[9][9];
     	}
     	boolean todo = false;
     	for(int i=0; !todo && i<9; i++){

@@ -656,10 +656,12 @@ public class VentanaTablero extends JDialog implements Observer {
 						hiloCelebracion();
 						getDialogFinal();
 						tab.terminar();
-						try{			
-							if(sonido.isRunning()){
-								sonido.stop();
-								sonido2.start();
+						try{	
+							if(sonido != null){
+								if(sonido.isRunning()){
+									sonido.stop();
+									sonido2.start();
+								}
 							}
 						}catch(Exception e){
 							e.printStackTrace();
@@ -754,7 +756,9 @@ public class VentanaTablero extends JDialog implements Observer {
 				dialogFinal.dispose();
 				dispose();
 				dispose = true;
-				sonido2.stop();
+				if(sonido2!=null){
+					sonido2.stop();
+				}
 				tab.lanzarRanking();
 			}
 			

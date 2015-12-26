@@ -233,7 +233,7 @@ public class VentanaConfigurarSudoku extends JFrame {
 						new VentanaTablero();
 						dispose();
 					}
-				}catch (ClassNotFoundException | SQLException | IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+				}catch (ClassNotFoundException | SQLException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

@@ -340,12 +340,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {				
 				Tablero.obtTablero().establecerTablero(tab);
-				try {
-					new VentanaTablero();
-				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				new VentanaTablero();
 				dialogContinuar.dispose();
 				dispose();
 			}

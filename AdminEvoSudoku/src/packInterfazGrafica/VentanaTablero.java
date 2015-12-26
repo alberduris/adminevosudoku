@@ -78,7 +78,7 @@ public class VentanaTablero extends JDialog implements Observer {
 	 * @throws UnsupportedAudioFileException 
 	 * @throws IOException 
 	 */
-	public VentanaTablero() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public VentanaTablero() {
 		tab = Tablero.obtTablero();
 		tab.addObserver(this);
 		setSize(500,500);

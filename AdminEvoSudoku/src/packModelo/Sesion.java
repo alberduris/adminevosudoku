@@ -184,14 +184,10 @@ public class Sesion extends Observable implements Observer {
 	{
 	   Jugador jugador = new Jugador(nombreUsuario);
 	   jugador.actualizarPuntos(puntos);
-	   try
-	   {
-	      CatalogoJugadores.obtListaJugadores().anadirJugador(jugador);
-	   }
-	   catch (ExcepcionListaLlena e)
-	   {
-
-	   }
+	   
+	   //TODO
+	   
+	   
     }
 	
 	public void finSesion(boolean pIniciado){

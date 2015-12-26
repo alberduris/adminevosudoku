@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -15,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import packAdminSudoku.CatalogoSudoku;
 import packModelo.FiltroTexto;
 import packModelo.Sesion;
 
@@ -52,9 +55,7 @@ public class VentanaLogin extends JFrame {
 	
 	private JLabel lblOlvido;
 	
-	
-
-
+	private boolean terminar = false;
 	
 	private Dimension dimVentana = new Dimension(250, 330);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
@@ -64,15 +65,11 @@ public class VentanaLogin extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaLogin();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		new Thread(new Runnable(){
+			public void run(){
+				new VentanaLogin().obtCargando();
 			}
-		});
+		}).start();
 	}
 
 	/**
@@ -182,19 +179,8 @@ public class VentanaLogin extends JFrame {
 					JOptionPane.showMessageDialog(contentPane, "Datos incorrectos");
 				}
 				else{
-					try {
-						if(Sesion.obtSesion().obtNombreUsuario().trim().equalsIgnoreCase("Admin")){
-							new VentanaMenuPpalAdministrador();
-						}else{
-							new VentanaMenuPpalUsuario();
-						}
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					
-					dispose();
-				}
-				
+					ejecutarBoton();
+				}			
 			}
 		});
 		
@@ -263,6 +249,61 @@ public class VentanaLogin extends JFrame {
 		
 	}
 	
+	private void ejecutarBoton(){
+		new Thread(new Runnable()
+		{
+			public void run()
+			{
+				CatalogoSudoku.getCatalogoSudoku();
+				terminar = true;
+			}
+		}).start();
+		setVisible(false);
+		new Thread(new Runnable()
+		{
+			public void run()
+			{
+				obtCargando();
+				if(Sesion.obtSesion().obtNombreUsuario().trim().equalsIgnoreCase("Admin")){
+					new VentanaMenuPpalAdministrador();
+				}else{
+					new VentanaMenuPpalUsuario();
+				}
+			}
+		}).start();		
+	}
+	
+	private void obtCargando(){
+		JDialog cargando = new  JDialog();
+		cargando.setVisible(true);
+		cargando.setTitle("Cargando");
+		cargando.setLocationRelativeTo(this);
+		cargando.setSize(new Dimension(200, 150));
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(new JLabel(), BorderLayout.NORTH);
+		panel.add(new JLabel(), BorderLayout.SOUTH);
+		panel.add(new JLabel(), BorderLayout.EAST);
+		panel.add(new JLabel(), BorderLayout.WEST);
+		JLabel texto = new JLabel();
+		panel.add(texto, BorderLayout.CENTER);
+		cargando.add(panel);
+		texto.setText("Cargando Sudokus...");
+		while(!terminar){
+			try {
+				wait(1000);
+				texto.setText("Cargando Sudokus.");
+				wait(1000);
+				texto.setText("Cargando Sudokus..");
+				wait(1000);
+				texto.setText("Cargando Sudokus...");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		cargando.dispose();
+		dispose();
+	}
 	
 	private Component leftJustify(JButton btn)  {
 	    Box  b = Box.createHorizontalBox();

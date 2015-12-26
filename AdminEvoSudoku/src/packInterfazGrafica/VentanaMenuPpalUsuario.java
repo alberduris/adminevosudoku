@@ -227,8 +227,8 @@ public class VentanaMenuPpalUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Ranking");
-				
+				new VentanaPuntuaciones();
+				dispose();
 			}
 		});
 

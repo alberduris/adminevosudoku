@@ -9,15 +9,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
-import java.io.IOException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,17 +19,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 
-import packBD.GestorBD;
-import packModelo.GestorRetos;
+import packModelo.GestorEstadisticas;
 import packModelo.Sesion;
-import packModelo.Tablero;
 
 public class VentanaAdministrarRetos extends JFrame {
 
@@ -54,7 +43,7 @@ public class VentanaAdministrarRetos extends JFrame {
 	
 	private JButton btnAtras;
 
-	GestorRetos gR = GestorRetos.obtGestorRetos();
+	GestorEstadisticas gE = GestorEstadisticas.obtGestorEstadisticas();
 	
 	private Dimension dimVentana = new Dimension(500, 400);
 
@@ -77,7 +66,7 @@ public class VentanaAdministrarRetos extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaAdministrarRetos() {
-		gR = GestorRetos.obtGestorRetos();
+		gE = GestorEstadisticas.obtGestorEstadisticas();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(dimVentana);
 		setLocationRelativeTo(null);
@@ -127,7 +116,7 @@ public class VentanaAdministrarRetos extends JFrame {
 	}
 	
 	private void getLista() {
-		String[][] com = gR.obtenerRetos();
+		String[][] com = gE.obtenerRetos();
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
 		JButton btnAceptar, btnRechazar;
@@ -254,11 +243,11 @@ public class VentanaAdministrarRetos extends JFrame {
 				p = (JLabel) combinaciones[pNum].getComponent(1); 
 				int id = Integer.parseInt(p.getText());
 				if(pAceptar){
-					gR.aceptarReto(nombre, id);
+					gE.aceptarReto(nombre, id);
 					new VentanaTablero();
 					dispose();
 				}else{
-					gR.rechazarReto(nombre, id);	
+					gE.rechazarReto(nombre, id);	
 					setEnabled(true);
 					centro.removeAll();
 					lista.removeAll();

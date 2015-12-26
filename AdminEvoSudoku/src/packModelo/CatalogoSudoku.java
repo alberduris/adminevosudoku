@@ -24,7 +24,6 @@ public class CatalogoSudoku {
 	private CatalogoSudoku(){
 		lista = new ListaSudokus();
 		leerBD();
-		//leerFichero(getClass().getResource("sudokus.save").getPath());
 	}
 	
 	public static CatalogoSudoku getCatalogoSudoku(){
@@ -83,6 +82,7 @@ public class CatalogoSudoku {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}	
+		System.out.println(lista.tamano());
 		return lanzar;
 	}
 

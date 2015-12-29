@@ -249,7 +249,13 @@ public class VentanaMenuPpalUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Opciones");
+				try {
+					new VentanaOpciones();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+				dispose();
 				
 			}
 		});

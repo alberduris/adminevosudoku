@@ -24,6 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import packModelo.FiltroTexto;
+import packModelo.Sesion;
+
 
 public class VentanaCambiarPassword extends JFrame {
 
@@ -127,8 +130,7 @@ public class VentanaCambiarPassword extends JFrame {
 	}
 
 	private void getTxt(){
-		txt = new JTextField();
-		txt.setFont(new Font("Serif", Font.ITALIC, 16));
+		txt = new JPasswordField(10);
 		txt.setPreferredSize(dimAreaTexto);
 		
 	
@@ -145,6 +147,24 @@ public class VentanaCambiarPassword extends JFrame {
 		btnAccion.setMinimumSize(dimBoton);
 		btnAccion.setPreferredSize(dimBoton);
 		btnAccion.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		
+		btnAccion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String password = txt.getText();
+				
+				if(password.length() <= 4){
+					JOptionPane.showMessageDialog(contentPane, "La contraseña es demasiado corta");				}
+				else{
+					Sesion.obtSesion().actualizarPassword(password);
+					JOptionPane.showMessageDialog(contentPane, "Contraseña cambiada con éxito");
+					txt.setText("");
+				}
+				
+			}
+		});
 		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnAccion);

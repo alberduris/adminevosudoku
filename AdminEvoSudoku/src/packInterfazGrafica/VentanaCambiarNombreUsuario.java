@@ -24,6 +24,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import packModelo.FiltroTexto;
+import packModelo.Sesion;
+
 
 public class VentanaCambiarNombreUsuario extends JFrame {
 
@@ -144,6 +147,25 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 		btnAccion.setMinimumSize(dimBoton);
 		btnAccion.setPreferredSize(dimBoton);
 		btnAccion.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		
+		btnAccion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String nombreUsu = txt.getText();
+				
+				if(!FiltroTexto.caracterAdmitido(nombreUsu)){
+					JOptionPane.showMessageDialog(contentPane, "El usuario tiene carácteres no válidos");
+				}
+				else{
+					Sesion.obtSesion().actualizarNombreDeUsuario(nombreUsu);
+					JOptionPane.showMessageDialog(contentPane, "Nombre de usuario cambiado con éxito");
+					txt.setText("");
+				}
+				
+			}
+		});
 		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnAccion);

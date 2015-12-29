@@ -217,6 +217,34 @@ public class Sesion extends Observable implements Observer {
 		String contrasena = crearContrasena();
 	}
 	
+	public void actualizarNombreDeUsuario(String pNombreUsuario){
+		
+		String pUsuario = obtSesion().nombreUsuario;
+		
+		bd.Update("UPDATE Jugadores SET NombreUsuario ='"+pNombreUsuario+"' "
+				+ "WHERE NombreUsuario = '"+pUsuario+"'");
+		
+	}
+	
+	public void actualizarEmail(String pEmail){
+		
+		String pUsuario = obtSesion().nombreUsuario;
+		
+		bd.Update("UPDATE Jugadores SET CorreoElectrónico ='"+pEmail+"' "
+				+ "WHERE NombreUsuario = '"+pUsuario+"'");
+		
+	}
+	
+	public void actualizarPassword(String pPass){
+		
+		String pUsuario = obtSesion().nombreUsuario;
+		String contrasena = SHA1.getStringMensageDigest(pPass);
+		
+		bd.Update("UPDATE Jugadores SET Contraseña ='"+contrasena+"' "
+				+ "WHERE NombreUsuario = '"+pUsuario+"'");
+		
+	}
+	
 	private String crearContrasena(){
 		String cont ="";
 		char [] caracter;

@@ -144,9 +144,9 @@ public class VentanaPuntuaciones extends JFrame {
 	private void getLista() {
 		String[][] com = new String[0][0];
 		if(tam.getSelectedItem() == "Todos"){
-			com = gE.obtenerRanking(0);
+			com = gE.obtenerRanking(0, 0);
 		}else{
-			com = gE.obtenerRanking(Integer.valueOf((String) tam.getSelectedItem()));
+			com = gE.obtenerRanking(Integer.valueOf((String) tam.getSelectedItem()),0);
 		}
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);

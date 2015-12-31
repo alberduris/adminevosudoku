@@ -82,7 +82,6 @@ public class CatalogoSudoku {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}	
-		System.out.println(lista.tamano());
 		return lanzar;
 	}
 

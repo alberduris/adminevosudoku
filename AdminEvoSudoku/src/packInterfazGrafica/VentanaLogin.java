@@ -26,7 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import packAdminSudoku.CatalogoSudoku;
+import packModelo.CatalogoSudoku;
 import packModelo.FiltroTexto;
 import packModelo.Sesion;
 
@@ -65,11 +65,7 @@ public class VentanaLogin extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		new Thread(new Runnable(){
-			public void run(){
-				new VentanaLogin().obtCargando();
-			}
-		}).start();
+		new VentanaLogin();
 	}
 
 	/**
@@ -278,24 +274,22 @@ public class VentanaLogin extends JFrame {
 		cargando.setVisible(true);
 		cargando.setTitle("Cargando");
 		cargando.setLocationRelativeTo(this);
-		cargando.setSize(new Dimension(200, 150));
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new JLabel(), BorderLayout.NORTH);
-		panel.add(new JLabel(), BorderLayout.SOUTH);
-		panel.add(new JLabel(), BorderLayout.EAST);
-		panel.add(new JLabel(), BorderLayout.WEST);
+		cargando.setSize(new Dimension(200, 125));
 		JLabel texto = new JLabel();
-		panel.add(texto, BorderLayout.CENTER);
-		cargando.add(panel);
+		cargando.add(texto);
+		texto.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
 		texto.setText("Cargando Sudokus...");
 		while(!terminar){
 			try {
-				wait(1000);
+				Thread.sleep(1000);
 				texto.setText("Cargando Sudokus.");
-				wait(1000);
+				cargando.repaint();
+				Thread.sleep(1000);
 				texto.setText("Cargando Sudokus..");
-				wait(1000);
+				cargando.repaint();
+				Thread.sleep(1000);
 				texto.setText("Cargando Sudokus...");
+				cargando.repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

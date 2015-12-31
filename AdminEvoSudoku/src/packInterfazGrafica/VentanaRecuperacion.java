@@ -24,6 +24,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import packModelo.Sesion;
+
 
 public class VentanaRecuperacion extends JFrame {
 
@@ -142,6 +144,13 @@ public class VentanaRecuperacion extends JFrame {
 		btnRecuperar.setMinimumSize(dimBoton);
 		btnRecuperar.setPreferredSize(dimBoton);
 		btnRecuperar.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		btnRecuperar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Sesion.obtSesion().recuperarCotrasena(txtUsuario.getText());			
+			}
+		});
 		
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnRecuperar);

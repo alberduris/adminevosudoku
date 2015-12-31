@@ -17,6 +17,7 @@ import java.util.Random;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -215,6 +216,7 @@ public class Sesion extends Observable implements Observer {
 	
 	public void recuperarCotrasena(String pCorreoElectronico){
 		String contrasena = crearContrasena();
+		enviarCorreo(pCorreoElectronico);
 	}
 	
 	public void actualizarNombreDeUsuario(String pNombreUsuario){
@@ -264,8 +266,11 @@ public class Sesion extends Observable implements Observer {
 	private void enviarCorreo(String pCorreoElectronico){
 		Properties props = new Properties();
 
+
+		props.setProperty("mail.smtp.host", "adminevo@yopmail.com");
+		
 		// Nombre del host de correo, es smtp.gmail.com
-		props.setProperty("mail.smtp.host", "smtp.gmail.com");
+		props.setProperty("mail.smtp.host", "smtp.yopmail.com");
 
 		// TLS si está disponible
 		props.setProperty("mail.smtp.starttls.enable", "true");
@@ -274,10 +279,10 @@ public class Sesion extends Observable implements Observer {
 		props.setProperty("mail.smtp.port","587");
 
 		// Nombre del usuario
-		props.setProperty("mail.smtp.user", "ejemplo@gmail.com");
+		props.setProperty("mail.smtp.user", "aitorvt95@gmail.com");
 
 		// Si requiere o no usuario y password para conectarse.
-		props.setProperty("mail.smtp.auth", "true");
+		props.setProperty("mail.smtp.auth", "false");
 		
 		//Iniciamos sesión
 		Session session = Session.getDefaultInstance(props);
@@ -285,17 +290,22 @@ public class Sesion extends Observable implements Observer {
 		//Creamos el mensaje
 		MimeMessage message = new MimeMessage(session);
 				
+		System.out.println("D");
 		try {
 			// Quien envia el correo
-			message.setFrom(new InternetAddress("ejemplo@gmail.com"));
+			message.setFrom(new InternetAddress("adminevo@yopmail.com"));
 			// A quien va dirigido
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(pCorreoElectronico));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress("aitorvt95@gmail.com"));
 			//Asunto
 			message.setSubject("Hola");
 			//Texto
 			message.setText("Mensajito con Java Mail" +
 			"de los buenos." +
 			"poque si");
+			Transport t = session.getTransport("smtp");
+			t.connect("adminevo@yopmail.com", " ");
+			System.out.println(t.isConnected());
+			t.sendMessage(message,message.getAllRecipients());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -15,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -148,7 +151,11 @@ public class VentanaRecuperacion extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Sesion.obtSesion().recuperarCotrasena(txtUsuario.getText());			
+				if(Sesion.obtSesion().recuperarCotrasena(txtUsuario.getText())){
+					crearDialogCorrecto();
+				}else{
+					crearDialogoNoExisten();
+				}
 			}
 		});
 		
@@ -194,17 +201,84 @@ public class VentanaRecuperacion extends JFrame {
 	    return b;
 	}
 	
+	private void crearDialogoNoExisten(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		final JDialog dialogExiste = new JDialog();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("No existe ningun usuario con ese nombre o correo");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dialogExiste.dispose();
+			}
+			
+		});
+		
+		dialogExiste.setSize(450,125);
+		dialogExiste.setAlwaysOnTop(true);
+		dialogExiste.setModal(false);
+		dialogExiste.setVisible(true);
+		dialogExiste.setLocationRelativeTo(this);
+		dialogExiste.setTitle("ERROR");
+		
+		dialogExiste.setLayout(new GridBagLayout());
 	
+		dialogExiste.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogExiste.add(boton,csBoton);
+	}	
 	
+	private void crearDialogCorrecto(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		final JDialog dialogExiste = new JDialog();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("Se le ha enviado un correo con la nueva contraseña");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dialogExiste.dispose();
+				dispose();
+				new VentanaLogin();				
+			}
+			
+		});
+		
+		dialogExiste.setSize(450,125);
+		dialogExiste.setAlwaysOnTop(true);
+		dialogExiste.setModal(false);
+		dialogExiste.setVisible(true);
+		dialogExiste.setLocationRelativeTo(this);
+		dialogExiste.setTitle("CORRECTO");
+		
+		dialogExiste.setLayout(new GridBagLayout());
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		dialogExiste.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogExiste.add(boton,csBoton);
+	}	
 
 }

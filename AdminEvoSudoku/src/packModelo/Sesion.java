@@ -20,6 +20,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 import packBD.GestorBD;
 import packExcepciones.ExcepcionListaLlena;
@@ -111,7 +112,7 @@ public class Sesion extends Observable implements Observer {
 			if(resultado[0] && resultado[1]){
 				String contrasena = SHA1.getStringMensageDigest(pContrasena);
 				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
-				enviarCorreo(pCorreoElectronico);
+				enviarCorreo(pCorreoElectronico, "Bienvenido", "Bienvenido a AdminEvoSudoku.\nSu nuevos datos de ingreso son:\nNombre de Usuario: "+pNombreUsuario.trim()+"\nContraseña: "+pContrasena);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -214,9 +215,25 @@ public class Sesion extends Observable implements Observer {
 		tablero = pTablero;
 	}
 	
-	public void recuperarCotrasena(String pCorreoElectronico){
-		String contrasena = crearContrasena();
-		enviarCorreo(pCorreoElectronico);
+	public boolean recuperarCotrasena(String pCampo){
+		
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrónico FROM Jugadores WHERE NombreUsuario='"+pCampo+"' OR CorreoElectrónico='"+pCampo+"'");
+		String correo;
+		boolean resultado = true;
+		try {
+			if(res.next()){
+				correo = res.getString("CorreoElectrónico");
+				String contrasena = crearContrasena();
+				enviarCorreo(correo, "Recuperación de contraseña", "Su nueva contraseña es: " + contrasena);
+				bd.Update("UPDATE Jugadores SET Contraseña ='"+SHA1.getStringMensageDigest(contrasena)+"' WHERE CorreoElectrónico = '"+correo+"'");
+			}else{
+				resultado = false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;	
 	}
 	
 	public void actualizarNombreDeUsuario(String pNombreUsuario){
@@ -237,40 +254,53 @@ public class Sesion extends Observable implements Observer {
 		
 	}
 	
-	public void actualizarPassword(String pPass){
-		
-		String pUsuario = obtSesion().nombreUsuario;
-		String contrasena = SHA1.getStringMensageDigest(pPass);
-		
-		bd.Update("UPDATE Jugadores SET Contraseña ='"+contrasena+"' "
-				+ "WHERE NombreUsuario = '"+pUsuario+"'");
+	public boolean actualizarPassword(String pAnteriorPass, String pPass){
+		boolean correcto = false;
+		ResultSet res = bd.Select("SELECT Contraseña FROM Jugadores WHERE NombreUsuario='"+nombreUsuario+"'");
+		try {
+			if(res.next()){
+				if(SHA1.getStringMensageDigest(pAnteriorPass).equals(res.getString("Contraseña"))){
+					String contrasena = SHA1.getStringMensageDigest(pPass);
+					bd.Update("UPDATE Jugadores SET Contraseña ='"+contrasena+"' "
+							+ "WHERE NombreUsuario = '"+nombreUsuario+"'");
+					correcto = true;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return correcto;
 		
 	}
 	
 	private String crearContrasena(){
 		String cont ="";
-		char [] caracter;
+		char [] caracter = new char[8];
 		int valor = 0;
 		Random rnd = new Random();
 		for(int i = 0; i<8; i++){
-			valor = rnd.nextInt(63);
-			if(valor < 10){
-			//	caracter = String.valueOf(valor).charAt(0);
-				
+			valor = rnd.nextInt(51);
+			if(valor < 26){
+				caracter[i] = (char) (valor+65);
+			}else{
+				caracter[i] = (char)(valor+72);
 			}
+		}
+		for(int i = 0; i<8; i++){
+			cont += caracter[i];
 		}
 		return cont;
 		
 	}
 	
-	private void enviarCorreo(String pCorreoElectronico){
-		Properties props = new Properties();
+	private void enviarCorreo(String pCorreoElectronico, String pAsunto, String pMensaje){
+		Properties props = System.getProperties();
 
-
-		props.setProperty("mail.smtp.host", "adminevo@yopmail.com");
+		props.setProperty("mail.smtp.host", "adevosudoku@gmail.com");
 		
 		// Nombre del host de correo, es smtp.gmail.com
-		props.setProperty("mail.smtp.host", "smtp.yopmail.com");
+		props.setProperty("mail.smtp.host", "smtp.gmail.com");
 
 		// TLS si está disponible
 		props.setProperty("mail.smtp.starttls.enable", "true");
@@ -279,10 +309,10 @@ public class Sesion extends Observable implements Observer {
 		props.setProperty("mail.smtp.port","587");
 
 		// Nombre del usuario
-		props.setProperty("mail.smtp.user", "aitorvt95@gmail.com");
+		props.setProperty("mail.smtp.user", "adevosudoku@gmail.com");
 
 		// Si requiere o no usuario y password para conectarse.
-		props.setProperty("mail.smtp.auth", "false");
+		props.setProperty("mail.smtp.auth", "true");
 		
 		//Iniciamos sesión
 		Session session = Session.getDefaultInstance(props);
@@ -290,21 +320,17 @@ public class Sesion extends Observable implements Observer {
 		//Creamos el mensaje
 		MimeMessage message = new MimeMessage(session);
 				
-		System.out.println("D");
 		try {
 			// Quien envia el correo
-			message.setFrom(new InternetAddress("adminevo@yopmail.com"));
+			message.setFrom(new InternetAddress("adevosudoku@gmail.com"));
 			// A quien va dirigido
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress("aitorvt95@gmail.com"));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(pCorreoElectronico));
 			//Asunto
-			message.setSubject("Hola");
+			message.setSubject(pAsunto);
 			//Texto
-			message.setText("Mensajito con Java Mail" +
-			"de los buenos." +
-			"poque si");
+			message.setText(pMensaje);
 			Transport t = session.getTransport("smtp");
-			t.connect("adminevo@yopmail.com", " ");
-			System.out.println(t.isConnected());
+			t.connect("adevosudoku@gmail.com", "adminevosudoku");
 			t.sendMessage(message,message.getAllRecipients());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block

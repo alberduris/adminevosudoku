@@ -32,12 +32,12 @@ public class GestorEstadisticas {
 			if(res.next()){
 				tamano = res.getInt(1);
 				list = new String[tamano][3];
-				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuaci贸n FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
+				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuaci髇 FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
 				int i = 0;
 				while(res.next()){
 					list[i][0]=res.getString("NombreUsuario");
 					list[i][1]=String.valueOf(res.getInt("IdSudoku"));
-					list[i][2]=String.valueOf(res.getInt("Puntuaci贸n"));
+					list[i][2]=String.valueOf(res.getInt("Puntuaci髇"));
 					i++;
 				}
 			}
@@ -83,20 +83,20 @@ public class GestorEstadisticas {
 				}
 				if(pTamano == 0){
 					ranking = new String[tamano][2];
-					consulta = "SELECT NombreUsuario, SUM(Puntuaci贸n) AS Puntuaci贸n FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuaci贸n DESC";
+					consulta = "SELECT NombreUsuario, SUM(Puntuaci髇) AS Puntuaci髇 FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuaci髇 DESC";
 				}else{
 					if(tamano >= pTamano){
 						ranking = new String[pTamano][2];
 					}else{
 						ranking = new String[tamano][2];
 					}
-					consulta = "SELECT NombreUsuario, SUM(Puntuaci贸n) AS Puntuaci贸n FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuaci贸n DESC LIMIT 0,"+pTamano+"";
+					consulta = "SELECT NombreUsuario, SUM(Puntuaci髇) AS Puntuaci髇 FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuaci髇 DESC LIMIT 0,"+pTamano+"";
 				}
 				res = GestorBD.getGestorBD().Select(consulta);
 				int i = 0;
 				while(res.next()){
 					ranking[i][0] = res.getString("NombreUsuario");
-					ranking[i][1] = res.getString("Puntuaci贸n");
+					ranking[i][1] = res.getString("Puntuaci髇");
 					i++;
 				}			
 			} catch (SQLException e) {

@@ -41,6 +41,7 @@ public class VentanaCambiarPassword extends JFrame {
 	private JLabel lblTitulo;
 	
 	private JLabel lbl;
+	private JTextField txtAnterior;
 	private JTextField txt;
 	
 	private JButton btnAccion;
@@ -52,7 +53,7 @@ public class VentanaCambiarPassword extends JFrame {
 
 
 	
-	private Dimension dimVentana = new Dimension(340, 265);
+	private Dimension dimVentana = new Dimension(340, 280);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
 
@@ -130,14 +131,22 @@ public class VentanaCambiarPassword extends JFrame {
 	}
 
 	private void getTxt(){
+		txtAnterior = new JPasswordField(10);
+		txtAnterior.setPreferredSize(dimAreaTexto);
 		txt = new JPasswordField(10);
 		txt.setPreferredSize(dimAreaTexto);
+
+		JPanel panAnterior = new JPanel();
+		panAnterior.setLayout(new BoxLayout(panAnterior, BoxLayout.X_AXIS));
+		panAnterior.add(new JLabel("Contraseña anterior: "));
+		JPanel pan = new JPanel();
+		pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
+		pan.add(new JLabel("Contraseña nueva:     "));
+		pan.add(txt);
+		panAnterior.add(txtAnterior);
 		
-	
-		
-		
-		
-		panelConBoxLayout.add(txt);
+		panelConBoxLayout.add(panAnterior);
+		panelConBoxLayout.add(pan);
 	}
 	
 	
@@ -153,14 +162,21 @@ public class VentanaCambiarPassword extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				String passwordAnterior = txtAnterior.getText();
 				String password = txt.getText();
 				
 				if(password.length() <= 4){
 					JOptionPane.showMessageDialog(contentPane, "La contraseña es demasiado corta");				}
 				else{
-					Sesion.obtSesion().actualizarPassword(password);
-					JOptionPane.showMessageDialog(contentPane, "Contraseña cambiada con éxito");
-					txt.setText("");
+					if(Sesion.obtSesion().actualizarPassword(passwordAnterior, password)){
+						JOptionPane.showMessageDialog(contentPane, "Contraseña cambiada con éxito");
+						txt.setText("");
+						txtAnterior.setText("");
+					}else{
+						JOptionPane.showMessageDialog(contentPane, "Contraseña incorrecta");
+						txt.setText("");
+						txtAnterior.setText("");
+					}
 				}
 				
 			}

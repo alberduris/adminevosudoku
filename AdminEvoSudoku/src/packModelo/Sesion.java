@@ -34,12 +34,14 @@ public class Sesion extends Observable implements Observer {
 	private Iterator<Sudoku> iter;
 	private Tablero tablero;
 	private Date horaInicio;
+	private int pistas;
 	private int puntos;
 	private GestorBD bd = GestorBD.getGestorBD();
 
 	private Sesion()
 	{
 		Tablero.obtTablero().addObserver(this);
+		pistas = 100;
 	}
 	
 	public static Sesion obtSesion()
@@ -122,7 +124,7 @@ public class Sesion extends Observable implements Observer {
 	}
 
 	public boolean[] identificarse(String pNombreUsuario, String pContrasena){
-		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrónico, Contraseña FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pNombreUsuario+"'");
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrónico, Contraseña, Pistas FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrónico='"+pNombreUsuario+"'");
 		boolean[] resultado = new boolean[2];
 		resultado[0] = true;
 		resultado[1] = true;
@@ -132,6 +134,7 @@ public class Sesion extends Observable implements Observer {
 					resultado[1] = false;
 				}else{
 					nombreUsuario = res.getString("NombreUsuario");
+					pistas = res.getInt("Pistas");
 				}
 			}else{
 				resultado[0] = false;
@@ -188,9 +191,15 @@ public class Sesion extends Observable implements Observer {
 	   jugador.actualizarPuntos(puntos);
 	   
 	   //TODO
-	   
-	   
     }
+	
+	public void actualizarPistas(int pCantidad){
+		pistas += pCantidad;
+	}
+	
+	public int obtPistas(){
+		return pistas;
+	}
 	
 	public void finSesion(boolean pIniciado){
     	try {
@@ -198,7 +207,7 @@ public class Sesion extends Observable implements Observer {
     			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             	ObjectOutputStream oos = new ObjectOutputStream(byteArray);
     	    	oos.writeObject(Tablero.obtTablero());
-    	    	bd.Update("UPDATE Jugadores SET Tablero=? WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
+    	    	bd.Update("UPDATE Jugadores SET Tablero=?, Pistas="+pistas+" WHERE NombreUsuario='"+nombreUsuario+"'", byteArray);
     		}
     		nombreUsuario = "";
     	} catch (IOException e) {

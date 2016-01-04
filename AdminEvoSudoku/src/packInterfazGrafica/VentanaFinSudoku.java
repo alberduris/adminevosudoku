@@ -41,11 +41,10 @@ public class VentanaFinSudoku extends JFrame {
 	private JButton btnCompartir;
 	private JButton btnMenu;
 	
-	
-	
-
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(325, 300);
+	
+	private int punt;
 
 	/**
 	 * Launch the application.
@@ -70,6 +69,8 @@ public class VentanaFinSudoku extends JFrame {
 		setSize(dimVentana);
 		setLocationRelativeTo(null);
 
+		Tablero.obtTablero().terminar();
+		
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		panelConBorderLayout = new JPanel();
@@ -83,6 +84,8 @@ public class VentanaFinSudoku extends JFrame {
 		contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
+		punt = Tablero.obtTablero().obtPuntuacion();
+		
 		getTituloFinSudoku();
 		getLblPuntuacion();
 		
@@ -96,7 +99,11 @@ public class VentanaFinSudoku extends JFrame {
 
 	private void getTituloFinSudoku() {
 	
-		lblTitulo = new JLabel("Sudoku finalizado");
+		if(punt == 0){
+			lblTitulo = new JLabel("Sudoku no finalizado");
+		}else{
+			lblTitulo = new JLabel("Sudoku finalizado");
+		}
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -112,10 +119,11 @@ public class VentanaFinSudoku extends JFrame {
 
 	private void getLblPuntuacion() {
 		lblPuntuacion = new JLabel();
-		
-		String puntuacion = "0";//TODO pasar la puntuacion del Sudoku
-		lblPuntuacion.setText("Has conseguido "+puntuacion+" puntos");
-		
+		if(punt == 0){
+			lblPuntuacion.setText("No has conseguido completar el sudoku");
+		}else{
+			lblPuntuacion.setText("Has conseguido "+String.valueOf(punt)+" puntos");	
+		}		
 		lblPuntuacion.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblPuntuacion.setHorizontalAlignment(0);
 		lblPuntuacion.setMinimumSize(dimBtn);
@@ -186,17 +194,12 @@ public class VentanaFinSudoku extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
-					//Pruebas
-					new VentanaMenuPpalUsuario();
-					/*BUENO
 					if(Sesion.obtSesion().obtNombreUsuario().equals("Admin")){
 						new VentanaMenuPpalAdministrador();
 					}
 					else{
 						new VentanaMenuPpalUsuario();
 					}
-					*/
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

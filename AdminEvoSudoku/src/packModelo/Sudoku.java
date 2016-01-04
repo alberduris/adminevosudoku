@@ -154,7 +154,6 @@ public class Sudoku implements Serializable{
     		for(int i=0; i<9; i++){
     			for(int j=0; j<9; j++){
     				pMatriz.obtCasilla(i, j).rellenarListaPosibles(comprobarListaPosibles(i, j, pMatriz));
-    				
     				if(!pMatriz.obtCasilla(i, j).comprobarCorrecto()){
     					casillasFallo[i][j] = true;
     				}
@@ -162,6 +161,24 @@ public class Sudoku implements Serializable{
     		}
     	}else{
     		casillasFallo = new boolean[9][9];
+    		for(int i=0; i<9; i++){
+    			for(int j=0; j<9; j++){
+    				casillasFallo[i][j] = false;
+    			}
+    		}
+    		for(int i=0; i<9; i++){
+    			for(int j=0; j<9; j++){
+    				pMatriz.obtCasilla(i, j).rellenarListaPosibles(comprobarListaPosibles(i, j, pMatriz));
+    				if(pMatriz.obtCasilla(i, j).obtValor() != 0){
+    					if(!pMatriz.obtCasilla(i, j).comprobarCorrecto()){
+        					casillasFallo[i][j] = true;
+        				}
+    				}else{
+    					casillasFallo[i][j] = true;
+    				}
+    				
+    			}
+    		}
     	}
     	boolean todo = false;
     	for(int i=0; !todo && i<9; i++){

@@ -15,11 +15,13 @@ public class Tablero extends Observable implements Serializable{
 	private boolean terminado = false;
 	private boolean pausado = false;
 	private boolean tiempoAjustado = false;
+	private int intentos;
 	
 	private int tiempo;
 	private static Timer time;
 
 	private Tablero() {
+			intentos = 5;
             matrizJuego = new Matriz();
             terminado = false;
             pausado = true;
@@ -36,7 +38,7 @@ public class Tablero extends Observable implements Serializable{
             };
             time.scheduleAtFixedRate(timerTask, 0, 1000);
     }
-
+	
     public static Tablero obtTablero()
     {
         return miTablero;
@@ -68,6 +70,10 @@ public class Tablero extends Observable implements Serializable{
     public boolean obtTiempoAjustado(){
     	return tiempoAjustado;
     }
+    
+    public int obtIntentos(){
+		return intentos;
+	}
 
     public int obtTiempo(){
     	return tiempo;
@@ -136,8 +142,7 @@ public class Tablero extends Observable implements Serializable{
     }
     
 
-   public int obtNumErrores()
-   {
+   public int obtNumErrores(){
       return matrizJuego.comprobarSolucion(sudoku.obtMatriz());
    }
 
@@ -205,8 +210,6 @@ public class Tablero extends Observable implements Serializable{
     public boolean obtPausado(){
     	return pausado;
     }
-    
-
     /**
      * @return
      */
@@ -219,7 +222,7 @@ public class Tablero extends Observable implements Serializable{
     
     public void eliminateValues(){
     	if(matrizJuego.eliminateValues()){
-    		tiempo += 300;
+    		Sesion.obtSesion().actualizarPistas(-1);
     		setChanged();
     		notifyObservers();
     	}
@@ -230,7 +233,11 @@ public class Tablero extends Observable implements Serializable{
     }
     
     public boolean[][] comprobarCorrecto(){
-    	return sudoku.comprobarCorrecto(matrizJuego);
+    	boolean[][] errores = sudoku.comprobarCorrecto(matrizJuego);
+    	if(errores.length != 0){
+    		intentos--;
+    	}
+    	return errores;
     }
     
     public boolean[][] todosLosNumeros(int pValor){
@@ -238,28 +245,24 @@ public class Tablero extends Observable implements Serializable{
     }
 
     public void terminar(){
+    	terminado = true;
     	String nom = Sesion.obtSesion().obtNombreUsuario();
     	int id = sudoku.obtIdentificador();
-    	int punt = puntuacionConPenalizacion();
+    	int punt = obtPuntuacion();  
+    	System.out.println(nom);
+    	GestorBD.getGestorBD().Update("UPDATE Jugadores SET Pistas="+Sesion.obtSesion().obtPistas()+" WHERE NombreUsuario='"+nom+"'");
     	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=0");
     	GestorBD.getGestorBD().Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nom+"',"+id+","+punt+")");
 	}
     
-    public int puntuacionConPenalizacion(){
-		int penalizacion = 1;
-		if(sudoku.obtDificultad()==5){
-			penalizacion = 1;
-		}else if(sudoku.obtDificultad()==4){
-			penalizacion = 2;
-		}else{
-			penalizacion = (int) (Math.pow(2,(5-sudoku.obtDificultad()))-1);
-		}
-		
-		return tiempo*penalizacion;
-	}
-    
-    public void lanzarRanking(){
-    	System.out.println("RANKING LANZADO");
+    public int obtPuntuacion(){
+		int puntuacion = 0;
+		double pen = 0;
+    	if(tiempo != 0){
+    		pen = (double)(tiempo)/(double)(sudoku.obtDificultad()*1000);
+			puntuacion = (int) (1000/pen);
+    	}		
+		return puntuacion;
 	}
     
     public void reiniciar(){
@@ -270,6 +273,7 @@ public class Tablero extends Observable implements Serializable{
     public Matriz getMatriz(){return matrizJuego;}
     
     public void establecerTablero(Tablero pTablero){
+    	intentos = pTablero.obtIntentos();
     	tiempo = pTablero.obtTiempo();
     	sudoku = pTablero.getSudoku();
     	matrizJuego = pTablero.getMatriz();

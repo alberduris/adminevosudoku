@@ -15,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.ResultSet;
@@ -23,22 +22,16 @@ import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import packBD.GestorBD;
-import packExcepciones.NoHaySudokuCargadoException;
-import packModelo.CatalogoSudoku;
 import packModelo.Sesion;
 import packModelo.Sudoku;
 import packModelo.Tablero;
@@ -52,7 +45,7 @@ public class VentanaTablero extends JDialog implements Observer {
 	static VentanaTablero ventana;
 	JLabel[][] cajas;
 	JPanel[][] paneles;
-	JLabel tiempo;
+	JLabel tiempo, intentos, pistas;
 	JPanel centro, sur;
 	JPanel norte;
 	JButton btn1,btn2,btn3, btnGuide, btnSound;
@@ -61,8 +54,6 @@ public class VentanaTablero extends JDialog implements Observer {
 	JDialog dialogFinal;
 	private JDialog dialogGuide;
 	
-	
-	private Clip sonido, sonido2;
 	int pI = 0;
 	int filaColumna = 0;
 	
@@ -71,6 +62,7 @@ public class VentanaTablero extends JDialog implements Observer {
 	static final int MAX = 9;
 	int[] activado;
 	Tablero tab = Tablero.obtTablero();	
+	VentanaFinSudoku vnt;
 
 	/**
 	 * Create the frame.
@@ -85,8 +77,11 @@ public class VentanaTablero extends JDialog implements Observer {
 		setLocationRelativeTo(null);
 		norte = new JPanel();
 		tiempo = new JLabel();
+		intentos = new JLabel();
+		pistas = new JLabel();
 		crearTiempo();
-		
+		getPistas();
+		getIntentos();
 		
 		crearListener();
 		centro = new JPanel();
@@ -110,14 +105,11 @@ public class VentanaTablero extends JDialog implements Observer {
 		
 		getBotones();
 		
-		norte.setLayout(new GridLayout(1, 8));
-		norte.add(new JLabel(" "));
-		norte.add(btnSound);
-		norte.add(new JLabel(" "));
+		norte.setLayout(new GridLayout(1, 4));
+		norte.add(pistas);
+		norte.add(intentos);
 		norte.add(tiempo);
-		norte.add(new JLabel(" "));
-		norte.add(btnGuide);
-		norte.add(new JLabel(" "));	
+		norte.add(btnGuide);	
 		try{
 			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			addWindowListener(new WindowAdapter(){
@@ -175,9 +167,6 @@ public class VentanaTablero extends JDialog implements Observer {
 		
 	}
 
-	
-	
-	
 	private void celebracion(int pI,int pFilaColumna){
 		
 		Color azul = Color.blue;
@@ -574,7 +563,6 @@ public class VentanaTablero extends JDialog implements Observer {
 		}
 	}	
 	
-	
 	private void modificar(int pI, int pJ){
 		String texto="";
 
@@ -611,7 +599,6 @@ public class VentanaTablero extends JDialog implements Observer {
 	}
 	
 	private void getBotones(){
-		getBtnSound();
 		getBtnGuide();
 		getBtn1();
 		for(int k=0; k<MAX; k++){			
@@ -654,20 +641,14 @@ public class VentanaTablero extends JDialog implements Observer {
 					boolean[][] casillasFallo =	tab.comprobarCorrecto();
 					if(casillasFallo.length == 0){
 						hiloCelebracion();
-						getDialogFinal();
-						tab.terminar();
-						try{	
-							if(sonido != null){
-								if(sonido.isRunning()){
-									sonido.stop();
-									sonido2.start();
-								}
-							}
-						}catch(Exception e){
-							e.printStackTrace();
-						}
+						vnt = new VentanaFinSudoku();
+
+						setEnabled(false);
+						
+						//tab.terminar();
 					}else{
 						mostrarErrores(casillasFallo);
+						getIntentos();
 						activado[0]=-1;
 						activado[1]=-1;
 					}
@@ -725,99 +706,24 @@ public class VentanaTablero extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
-				tab.eliminateValues();
+				if(Sesion.obtSesion().obtPistas() > 0){
+					tab.eliminateValues();	
+				}
 			}
 		});
 		return btn3;
 		
 	}
 	
-	private void getDialogFinal(){
-		
-		GridBagConstraints csTexto = new GridBagConstraints();
-		GridBagConstraints csBoton = new GridBagConstraints();
-		
-		csTexto.weighty = 1;
-		csTexto.gridx = 0;
-		csTexto.gridy = 0;
-		
-		csBoton.weighty = 1;
-		csBoton.gridx = 0;
-		csBoton.gridy = 1;
-		
-		JLabel texto = new JLabel("Has conseguido: "+tab.puntuacionConPenalizacion()+" puntos.");
-		JButton boton = new JButton("Continuar");
-		
-		boton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				dialogFinal.dispose();
-				dispose();
-				dispose = true;
-				if(sonido2!=null){
-					sonido2.stop();
-				}
-				tab.lanzarRanking();
-			}
-			
-			
-		});
-		
-		dialogFinal = new JDialog();
-		dialogFinal.setSize(300,125);
-		dialogFinal.setModal(false);
-		dialogFinal.setVisible(true);
-		dialogFinal.setTitle("Felicidades!");
-		try{
-		dialogFinal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		dialogFinal.addWindowListener(new WindowAdapter(){
-				public void windowClosing(WindowEvent e){
-					
-				}
-			});
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		dialogFinal.setLocationRelativeTo(ventana);		
-		dialogFinal.setLayout(new GridBagLayout());
-		dialogFinal.getContentPane().setBackground(new Color(0xFFFFFF));
-	
-
-		dialogFinal.add(texto,csTexto);
-		dialogFinal.add(boton,csBoton);
-	}
-
-	private JButton getBtnSound(){
-		final JLabel label = new JLabel();
-		if(btnSound == null){
-			btnSound = new JButton();
-		}
-	//	label.setIcon(new ImageIcon(this.getClass().getResource("soundOff.png")));
-		btnSound.add(label);
-		btnSound.setOpaque(false);
-		btnSound.setBorder(null);
-		btnSound.setContentAreaFilled(false);
-		label.setOpaque(true);
-		btnSound.addActionListener(new ActionListener(){
-	
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(sonido.isRunning()){
-					sonido.stop();
-					label.setIcon(new ImageIcon(this.getClass().getResource("sound.png")));
-					
-				}else{
-					sonido.start();
-					label.setIcon(new ImageIcon(this.getClass().getResource("soundOff.png")));
-					
-				}
-			}
-		});
-		return btnSound;	
+	private JLabel getIntentos(){
+		intentos.setText(" Nº de Intentos: " + tab.obtIntentos());
+		return intentos;	
 	}
 	
+	private JLabel getPistas(){
+		pistas.setText(" Nº de Pistas: " + Sesion.obtSesion().obtPistas());
+		return pistas;	
+	}
 	
 	private JButton getBtnGuide(){
 		if(btnGuide == null){
@@ -848,11 +754,11 @@ public class VentanaTablero extends JDialog implements Observer {
 		
 		JLabel correcto = new JLabel("Casillas correctas");
 		correcto.setForeground(new Color(0x0095FF));
-		JLabel error = new JLabel("Casillas errÃ³neas");
+		JLabel error = new JLabel("Casillas erróneas");
 		error.setForeground(Color.red);
 		JLabel seleccion = new JLabel("Casilla seleccionada");
 		seleccion.setForeground(Color.green);
-		JLabel amarillo = new JLabel("Casillas con nÃºmero seleccionado");
+		JLabel amarillo = new JLabel("Casillas con número seleccionado");
 		amarillo.setForeground(Color.yellow);
 		JButton boton = new JButton("Cerrar");
 		
@@ -902,12 +808,22 @@ public class VentanaTablero extends JDialog implements Observer {
 			}
 		}
 		tiempo.setText(formaTiempo());
+		getPistas();
+		if(vnt!= null && !vnt.isDisplayable()){
+			dispose = true;
+			dispose();
+		}
+		if(tab.obtIntentos()==0 && vnt==null){
+			setEnabled(false);
+			tab.reiniciar();
+			vnt = new VentanaFinSudoku();
+		}
 	}
 	
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		Tablero tb = Tablero.obtTablero();
 		Sudoku sud;
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Identificador = 1");
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Identificador = 1400");
 		try {
 			res.next();
 			byte[] b = res.getBytes("Sudoku");

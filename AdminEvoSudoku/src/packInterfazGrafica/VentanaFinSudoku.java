@@ -151,7 +151,7 @@ public class VentanaFinSudoku extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado retar");
+				new VentanaRetar();
 			}
 		});
 

@@ -4,7 +4,13 @@ import java.io.Serializable;
 
 public class Casilla implements Serializable{
 
-    // Indica si es un valor inicial
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2652506420341482732L;
+
+	// Indica si es un valor inicial
     private boolean valorInicial;
 
     // Valor contenido en la casilla
@@ -237,14 +243,6 @@ public class Casilla implements Serializable{
 			}
 		}
 		return modificado;
-	}
-	
-	private void imprimirLista(){
-		for(int i=0; i<9; i++){
-			System.out.print(listaNotas[i]+ ", ");
-		}
-		System.out.println();
-	}
-	
+	}	
 }
 

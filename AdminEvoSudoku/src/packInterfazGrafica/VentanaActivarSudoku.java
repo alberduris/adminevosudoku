@@ -23,13 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.synth.SynthScrollBarUI;
 
 import packExcepciones.NoHaySudokuCargadoException;
 import packModelo.CatalogoSudoku;
@@ -400,7 +394,7 @@ public class VentanaActivarSudoku extends JDialog implements Observer {
 			public void actionPerformed(ActionEvent arg0) {
 				dialogExiste.dispose();
 				dispose();
-				VentanaAdministrarSudokus vnt = new VentanaAdministrarSudokus();				
+				new VentanaAdministrarSudokus();				
 			}
 			
 		});

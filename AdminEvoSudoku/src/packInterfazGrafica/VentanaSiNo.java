@@ -19,7 +19,11 @@ import javax.swing.border.EtchedBorder;
 
 public class VentanaSiNo extends JDialog {
 
-		  private boolean respuesta;
+		  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+		private boolean respuesta;
 		  private JPanel panel = new JPanel();
 		  private BorderLayout borderLayout1 = new BorderLayout();
 		  private JPanel panelPregunta = new JPanel();

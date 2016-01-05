@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 public class Matriz implements Serializable{
 
-    // ATRIBUTOS DE LA CLASE
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3583073981134219483L;
+	// ATRIBUTOS DE LA CLASE
     // Dimensi�n del Sudoko
     private final int DIMENSION = 9;
     // Matriz para recoger los valores del Sudoku

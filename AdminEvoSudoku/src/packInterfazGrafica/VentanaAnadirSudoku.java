@@ -2,7 +2,6 @@ package packInterfazGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,18 +28,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 
-import packBD.GestorBD;
 import packExcepciones.NoHaySudokuCargadoException;
 import packModelo.CatalogoSudoku;
-import packModelo.Sesion;
-import packModelo.Sudoku;
-import packModelo.Tablero;
 import packModelo.GestorAdministrador;
 
 public class VentanaAnadirSudoku extends JDialog implements Observer {
@@ -56,11 +47,10 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	JPanel centro, sur;
 	JPanel norte;
 	JButton btn1,btn2,btn3;
-	JComboBox dif;
+	JComboBox<String> dif;
 	JButton[] listBotones;
 	KeyListener keyListener;
 	JDialog dialogFinal;
-	private JDialog dialogGuide;
 	
 	int dificultad = 0;
 	int filaColumna = 0;
@@ -166,7 +156,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		
 	private void crearCajas(){
 		int f,c;
-		String num;
 		for(int i = 0; i < MAX; i++){
 			for (int j = 0; j < MAX; j++){
 				cajas[i][j] = crearJLabel(i, j, " ");
@@ -402,60 +391,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		return btn3;
 		
 	}
-	
-	private void getDialog(){
-		GridBagConstraints csTexto = new GridBagConstraints();
-		GridBagConstraints csBoton = new GridBagConstraints();
-		
-		csTexto.weighty = 1;
-		csTexto.gridx = 0;
-		csTexto.gridy = 0;
-		
-		csBoton.weighty = 1;
-		csBoton.gridx = 0;
-		csBoton.gridy = 5;
-		
-		JLabel correcto = new JLabel("Casillas correctas");
-		correcto.setForeground(new Color(0x0095FF));
-		JLabel error = new JLabel("Casillas erróneas");
-		error.setForeground(Color.red);
-		JLabel seleccion = new JLabel("Casilla seleccionada");
-		seleccion.setForeground(Color.green);
-		JLabel amarillo = new JLabel("Casillas con número seleccionado");
-		amarillo.setForeground(Color.yellow);
-		JButton boton = new JButton("Cerrar");
-		
-		boton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				dialogGuide.dispose();
-			}
-			
-		});
-		
-		dialogGuide = new JDialog();
-		dialogGuide.setSize(300,200);
-		dialogGuide.setModal(false);
-		dialogGuide.setVisible(true);
-		dialogGuide.setLocationRelativeTo(this);
-		dialogGuide.setTitle("GUIDE");
-		
-		dialogGuide.setLayout(new GridBagLayout());
-		dialogGuide.getContentPane().setBackground(new Color(0x585858));
-	
-		dialogGuide.add(seleccion,csTexto);
-		csTexto.gridy = 1;
-		dialogGuide.add(amarillo,csTexto);
-		csTexto.gridy = 2;
-		dialogGuide.add(correcto,csTexto);
-		csTexto.gridy = 3;
-		dialogGuide.add(error,csTexto);
-		csTexto.gridy = 4;
-		dialogGuide.add(boton,csBoton);
-	}
-
-	
 	
 	@Override
 	public void update(Observable o, Object arg) {

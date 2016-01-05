@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -51,12 +50,6 @@ public class VentanaRegistro extends JFrame {
 	private JButton btnRegistro;
 	
 	private JButton btnAtras;
-	
-	private JLabel lblOlvido;
-	
-	
-
-
 	
 	private Dimension dimVentana = new Dimension(250, 375);
 	private Dimension dimAreaTexto = new Dimension(200, 25);

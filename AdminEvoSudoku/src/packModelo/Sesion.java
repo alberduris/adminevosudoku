@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
@@ -20,20 +18,12 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.swing.JOptionPane;
-
-import packBD.GestorBD;
-import packExcepciones.ExcepcionListaLlena;
-import packExcepciones.NoHaySudokuCargadoException;
-import packInterfazGrafica.VentanaTablero;
 
 public class Sesion extends Observable implements Observer {
 
     private static Sesion mSesion;
 	private String nombreUsuario;
-	private Iterator<Sudoku> iter;
 	private Tablero tablero;
-	private Date horaInicio;
 	private int pistas;
 	private int puntos;
 	private GestorBD bd = GestorBD.getGestorBD();
@@ -41,7 +31,7 @@ public class Sesion extends Observable implements Observer {
 	private Sesion()
 	{
 		Tablero.obtTablero().addObserver(this);
-		pistas = 100;
+		pistas = 0;
 	}
 	
 	public static Sesion obtSesion()
@@ -85,7 +75,7 @@ public class Sesion extends Observable implements Observer {
 	
 	public void ponNivel(int pNivel)
 	{
-		iter = CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(pNivel);
+		CatalogoSudoku.getCatalogoSudoku().obtIteradorSudokus(pNivel);
 	}
 	
 	public void ponNombreUsuario(String pNombre)
@@ -113,7 +103,7 @@ public class Sesion extends Observable implements Observer {
 			}
 			if(resultado[0] && resultado[1]){
 				String contrasena = SHA1.getStringMensageDigest(pContrasena);
-				bd.Insertar("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
+				bd.Update("INSERT INTO Jugadores (NombreUsuario, CorreoElectrónico, Contraseña) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
 				enviarCorreo(pCorreoElectronico, "Bienvenido", "Bienvenido a AdminEvoSudoku.\nSu nuevos datos de ingreso son:\nNombre de Usuario: "+pNombreUsuario.trim()+"\nContraseña: "+pContrasena);
 			}
 		} catch (SQLException e) {
@@ -150,20 +140,14 @@ public class Sesion extends Observable implements Observer {
 		Tablero tablero = Tablero.obtTablero();
 		if (tablero.finalDeJuego())
 		{
-			int puntosPartida  = 0;
-		    	if (tablero.obtNumErrores() == 0)
-			{
-			    Date horaFinal = new Date();
-			    int tiempo = (int)(horaFinal.getTime() - horaInicio.getTime())/1000;
-			    try
-			    {
-				puntosPartida = (30000*tablero.obtNivel()/tiempo);
-				this.puntos = Math.max(puntos,puntosPartida);
-			    } catch (NoHaySudokuCargadoException e)
-			    {
-			    }
-			}			
-			horaInicio = null;
+			/*int puntosPartida  = 0;
+	    	if (tablero.obtNumErrores() == 0){
+		    Date horaFinal = new Date();
+		    int tiempo = (int)(horaFinal.getTime() - horaInicio.getTime())/1000;
+		    puntosPartida = (30000*tablero.obtNivel()/tiempo);
+			this.puntos = Math.max(puntos,puntosPartida);
+		    }		
+			horaInicio = null;*/
 		}
 		
 	}
@@ -171,15 +155,8 @@ public class Sesion extends Observable implements Observer {
 	/**
 	 * @return
 	 */
-	public int obtNivel()
-	{
-	    try
-	    {
+	public int obtNivel(){
 		return Tablero.obtTablero().obtNivel();
-	    } catch (NoHaySudokuCargadoException e)
-	    {
-		return 1;
-	    }
 	}
 
 	/**
@@ -218,6 +195,9 @@ public class Sesion extends Observable implements Observer {
 	
 	public void borrarTablero(){
 		bd.Update("UPDATE Jugadores SET Tablero=NULL WHERE NombreUsuario='"+nombreUsuario+"'");
+		int id = tablero.obtIdSudoku();;
+		bd.Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nombreUsuario+"',"+id+",0)");
+
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){
@@ -299,8 +279,7 @@ public class Sesion extends Observable implements Observer {
 		for(int i = 0; i<8; i++){
 			cont += caracter[i];
 		}
-		return cont;
-		
+		return cont;	
 	}
 	
 	private void enviarCorreo(String pCorreoElectronico, String pAsunto, String pMensaje){
@@ -346,6 +325,32 @@ public class Sesion extends Observable implements Observer {
 			e.printStackTrace();
 		}
 		//http://www.chuidiang.com/java/herramientas/javamail/enviar-correo-javamail.php		
+	}
+	
+	public void lanzarSudoku(int pNivel, int pId, int pTiempo){
+		Tablero tab = Tablero.obtTablero();
+		try{
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Nivel="+pNivel+" AND Identificador NOT IN(SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombreUsuario+"' AND Puntuación!=0)ORDER BY RAND() LIMIT 1, 1");
+			if(res.next()){
+				byte[] b = res.getBytes("Sudoku");
+				ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
+				ObjectInputStream oos = new ObjectInputStream(byteArray);
+				Sudoku sud = (Sudoku) oos.readObject();
+				tab.inicializar(sud, null);
+			}else{
+				tab.reiniciar();
+			}
+			if(tablero != null){
+				borrarTablero();
+			}
+			tab.pausado(false);
+		}catch (ClassNotFoundException | SQLException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if(pTiempo != 0){
+			tab.configTiempo(pTiempo);
+		}
 	}
 }
 

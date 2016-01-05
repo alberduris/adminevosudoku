@@ -27,7 +27,11 @@ import packModelo.Sesion;
 
 public class VentanaInicial extends JDialog implements Observer {
 
-	  private JPanel panel = new JPanel();
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel panel = new JPanel();
 	  private BorderLayout borderLayout1 = new BorderLayout();
 	  private JPanel panelDatos = new JPanel();
 	  private JPanel panelOk = new JPanel();
@@ -36,7 +40,6 @@ public class VentanaInicial extends JDialog implements Observer {
 	  private JTextField textNombre = new JTextField();
 	  private JLabel labelNivel = new JLabel();
 	  private GridBagLayout gridBagLayout1 = new GridBagLayout();
-	  private Border border3;
 	  private JButton botonOk = new JButton();
 	  private Border border4;
 	  private Controlador controlador = new Controlador();
@@ -74,7 +77,7 @@ public class VentanaInicial extends JDialog implements Observer {
 
 
 	  void jbInit() throws Exception {
-	    border3 = BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.RAISED,Color.white,new Color(156, 156, 158)),BorderFactory.createEmptyBorder(10,10,10,10));
+	    BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.RAISED,Color.white,new Color(156, 156, 158)),BorderFactory.createEmptyBorder(10,10,10,10));
 	    border4 = BorderFactory.createCompoundBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.white,Color.white,new Color(109, 109, 110),new Color(156, 156, 158)),BorderFactory.createEmptyBorder(2,15,2,15));
 	    panel.setLayout(borderLayout1);
 	    labelNombre.setFont(new java.awt.Font("Dialog", 1, 14));

@@ -8,33 +8,20 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.Border;
 
-import packBD.GestorBD;
 import packModelo.Sesion;
-import packModelo.Sudoku;
-import packModelo.Tablero;
 
 public class VentanaConfigurarSudoku extends JFrame {
 
@@ -183,9 +170,14 @@ public class VentanaConfigurarSudoku extends JFrame {
 		for(int i = 0; i< 60; i++){
 			posibilidades[i] = String.valueOf(i);
 		}
-		seg = new JComboBox(posibilidades);
+		String[] posibilidades1 = new String[60];
+		for(int i = 1; i< 60; i++){
+			posibilidades1[i] = String.valueOf(i);
+		}
+		seg = new JComboBox<String>(posibilidades1);
+		seg.setSelectedIndex(1);
 		seg.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		min = new JComboBox(posibilidades);
+		min = new JComboBox<String>(posibilidades);
 		min.setAlignmentX(Component.LEFT_ALIGNMENT);
 		min.setEnabled(false);
 		seg.setEnabled(false);
@@ -209,34 +201,17 @@ public class VentanaConfigurarSudoku extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Tablero tab = Tablero.obtTablero();
-				String nombreUs = Sesion.obtSesion().obtNombreUsuario();
 				int niv = nivel.getSelectedIndex()+1;
-				try{
-					ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Nivel="+niv+" AND Identificador NOT IN(SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombreUs+"')ORDER BY RAND() LIMIT 1, 1");
-					if(res.next()){
-						byte[] b = res.getBytes("Sudoku");
-						ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
-						ObjectInputStream oos = new ObjectInputStream(byteArray);
-						Sudoku sud = (Sudoku) oos.readObject();
-						tab.inicializar(sud, null);
-						if(conTiempo.isSelected()){
-							int segu = seg.getSelectedIndex();
-							int minu = (min.getSelectedIndex())*60;
-							System.out.println(minu);
-							tab.configTiempo(segu+minu);
-						}else{
-							tab.reiniciar();
-						}
-						Sesion.obtSesion().borrarTablero();
-						tab.pausado(false);
-						new VentanaTablero();
-						dispose();
-					}
-				}catch (ClassNotFoundException | SQLException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(conTiempo.isSelected()){
+					int segu = seg.getSelectedIndex();
+					int minu = (min.getSelectedIndex())*60;
+					Sesion.obtSesion().lanzarSudoku(niv, 0, segu+minu);
+				}else{
+					Sesion.obtSesion().lanzarSudoku(niv, 0, 0);
 				}
+				dispose();
+				new VentanaTablero();
+				
 			}
 		});
 

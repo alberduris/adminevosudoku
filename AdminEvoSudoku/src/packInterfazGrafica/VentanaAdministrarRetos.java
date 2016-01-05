@@ -244,6 +244,7 @@ public class VentanaAdministrarRetos extends JFrame {
 				int id = Integer.parseInt(p.getText());
 				if(pAceptar){
 					gE.aceptarReto(nombre, id);
+					Sesion.obtSesion().borrarTablero();
 					new VentanaTablero();
 					dispose();
 				}else{

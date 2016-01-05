@@ -1,4 +1,3 @@
-//Forzar commit 2
 
 package packInterfazGrafica;
 
@@ -20,11 +19,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-
-import packModelo.GestorAdministrador;
 
 public class VentanaAdministrarSudokus extends JFrame {
 
@@ -126,7 +122,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaAnadirSudoku vnt = new VentanaAnadirSudoku();	
+					new VentanaAnadirSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
@@ -151,7 +147,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					VentanaEliminarSudoku vnt = new VentanaEliminarSudoku();	
+					new VentanaEliminarSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
@@ -182,7 +178,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaModificarSudoku vnt = new VentanaModificarSudoku();	
+					new VentanaModificarSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
@@ -209,7 +205,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaActivarSudoku vnt = new VentanaActivarSudoku();	
+					new VentanaActivarSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
@@ -236,7 +232,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaDesactivarSudoku vnt = new VentanaDesactivarSudoku();	
+					new VentanaDesactivarSudoku();	
 					dispose();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block

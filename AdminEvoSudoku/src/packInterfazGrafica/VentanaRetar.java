@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,9 +19,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
-import packBD.GestorBD;
+import packModelo.GestorBD;
+import packModelo.Tablero;
 
 public class VentanaRetar extends JFrame {
 
@@ -37,14 +36,9 @@ public class VentanaRetar extends JFrame {
 	private JLabel lblTitulo;
 	
 
-	private JLabel lblRetar;
 	private JComboBox<String> comboBoxJugadores;
 	private JButton btnRetar;
 	
-	
-	
-	
-
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(250, 175);
 
@@ -114,7 +108,7 @@ public class VentanaRetar extends JFrame {
 
 	
 	private void getComboBoxJugadores() {
-		comboBoxJugadores = new JComboBox(getJugadores());
+		comboBoxJugadores = new JComboBox<String>(getJugadores());
 		
 		
 		
@@ -129,16 +123,14 @@ public class VentanaRetar extends JFrame {
 	}
 	
 	private String[] getJugadores(){
-		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores");
-		
+		int id = Tablero.obtTablero().obtIdSudoku();
+		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
 		
 		String[] aux = null;
 		
-		//Conseguir el num de jugadores
 		try {
 			
 			if(count.next()){
-				System.out.println((int) count.getLong(1));
 				aux = new String[(int) count.getLong(1)];
 				
 			}
@@ -147,10 +139,8 @@ public class VentanaRetar extends JFrame {
 			e1.printStackTrace();
 		}
 		
-		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores");
-		int i = 0;
-		
-		//Conseguir los jugadores
+		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
+		int i = 0;		
 		
 		try {
 			while(resultado.next()){

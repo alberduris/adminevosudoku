@@ -6,8 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,14 +15,12 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
-import packModelo.CatalogoSudoku;
 import packModelo.GestorEstadisticas;
 import packModelo.Sesion;
 
@@ -92,7 +88,7 @@ public class VentanaPuntuaciones extends JFrame {
 
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
-		getTituloVentanaOpcionesAdmin();
+		getTituloVentanaTitulo();
 		
 		crearNorte("Todos");
 		
@@ -103,7 +99,7 @@ public class VentanaPuntuaciones extends JFrame {
 		setVisible(true);
 	}
 
-	private void getTituloVentanaOpcionesAdmin() {
+	private void getTituloVentanaTitulo() {
 	
 		lblTitulo = new JLabel("Ranking Global");
 		lblTitulo.setHorizontalAlignment(0);
@@ -136,7 +132,9 @@ public class VentanaPuntuaciones extends JFrame {
 			
 		});
 		JPanel centroNorte = new JPanel(new GridLayout());
-		centroNorte.add(new JLabel("Jugadores a mostrar: "));
+		JLabel est = new JLabel("Jugadores a mostrar: ");
+		est.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
+		centroNorte.add(est);
 		centroNorte.add(tam);
 		centro.add(centroNorte, BorderLayout.NORTH);
 	}

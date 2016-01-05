@@ -5,10 +5,11 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import packBD.GestorBD;
-import packExcepciones.NoHaySudokuCargadoException;
-
 public class Tablero extends Observable implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static Tablero miTablero = new Tablero();
 	private Sudoku sudoku;
 	private Matriz matrizJuego;
@@ -56,7 +57,7 @@ public class Tablero extends Observable implements Serializable{
     private void cambiarTiempo(){
     	if(tiempoAjustado){
     		if(tiempo == 0){
-    			noCompletado();
+    			terminar();
     		}else{
         		tiempo--;    			
     		}
@@ -167,23 +168,18 @@ public class Tablero extends Observable implements Serializable{
     /**
      * @return
      */
-    public int obtNivel() throws NoHaySudokuCargadoException
-    {
-	if (sudoku == null)
-	{
-	    throw new NoHaySudokuCargadoException();
-	 }
-	else
-	{
+    public int obtNivel(){
+	if (sudoku != null){
 	    return sudoku.obtDificultad();
+	}else{
+		return 0;
 	}
     }
 
     /**
      * @return
      */
-    public boolean finalDeJuego()
-    {
+    public boolean finalDeJuego(){
 	return terminado;
     }
 
@@ -213,11 +209,11 @@ public class Tablero extends Observable implements Serializable{
     /**
      * @return
      */
-    public int obtIdSudoku() throws NoHaySudokuCargadoException {
+    public int obtIdSudoku(){
 		if (sudoku != null)
 		return sudoku.obtIdentificador();
 		else
-		    throw new NoHaySudokuCargadoException();
+		  return 0;
 	}
     
     public void eliminateValues(){
@@ -249,10 +245,9 @@ public class Tablero extends Observable implements Serializable{
     	String nom = Sesion.obtSesion().obtNombreUsuario();
     	int id = sudoku.obtIdentificador();
     	int punt = obtPuntuacion();  
-    	System.out.println(nom);
     	GestorBD.getGestorBD().Update("UPDATE Jugadores SET Pistas="+Sesion.obtSesion().obtPistas()+" WHERE NombreUsuario='"+nom+"'");
     	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=0");
-    	GestorBD.getGestorBD().Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nom+"',"+id+","+punt+")");
+    	GestorBD.getGestorBD().Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación, Tiempo) VALUES ('"+nom+"',"+id+","+punt+", "+tiempo+")");
 	}
     
     public int obtPuntuacion(){
@@ -279,10 +274,5 @@ public class Tablero extends Observable implements Serializable{
     	matrizJuego = pTablero.getMatriz();
     	tiempoAjustado = pTablero.obtTiempoAjustado();
     	pausado = true;
-    }
-    
-    private void noCompletado(){
-    	
-    }
-    
+    }    
 }

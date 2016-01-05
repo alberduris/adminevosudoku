@@ -31,7 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import packBD.GestorBD;
+import packModelo.GestorBD;
 import packModelo.Sesion;
 import packModelo.Sudoku;
 import packModelo.Tablero;
@@ -813,10 +813,12 @@ public class VentanaTablero extends JDialog implements Observer {
 			dispose = true;
 			dispose();
 		}
-		if(tab.obtIntentos()==0 && vnt==null){
-			setEnabled(false);
-			tab.reiniciar();
-			vnt = new VentanaFinSudoku();
+		if(vnt == null){
+			if((tab.obtIntentos()==0) || (tab.obtTiempo()==0 && tab.obtTiempoAjustado())){
+				setEnabled(false);
+				tab.reiniciar();
+				vnt = new VentanaFinSudoku();
+			}
 		}
 	}
 	

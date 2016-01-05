@@ -1,21 +1,17 @@
 package packModelo;
 
-import java.beans.PropertyVetoException;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import packExcepciones.NoHayFicheroSudokusException;
 import packModelo.CatalogoSudoku;
-import packAdminSudoku.NoHayFicheroSudokusException;
 import packModelo.Sudoku;
 import packModelo.CogerSudokus;
-import packBD.GestorBD;
 
 public class CatalogoSudoku {
 	private ListaSudokus lista;
@@ -89,14 +85,6 @@ public class CatalogoSudoku {
 	public static void main(String[] arg){
 		CatalogoSudoku gS = CatalogoSudoku.getCatalogoSudoku();
 		gS.imprimir();
-		String[] lis = gS.obtListaIdent();
-		/*for(int i = 0; i<lis.length; i++){
-			System.out.print(lis[i] + ", ");
-			if(i == 999 | i == 1999 | i == 2999 | i == 3999 | i == 4999){
-				System.out.println("");
-				
-			}
-		}*/
 	}
 	
 	public boolean leerFichero(String fich){

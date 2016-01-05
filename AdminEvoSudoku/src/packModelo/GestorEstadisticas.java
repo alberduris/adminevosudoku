@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import packBD.GestorBD;
-
 public class GestorEstadisticas {
 	
 	private static GestorEstadisticas miGestorEstadisticas = new GestorEstadisticas();
@@ -105,5 +103,83 @@ public class GestorEstadisticas {
 			}
 		}		
 		return ranking;		
+	}
+	
+	public String[] obtSudokusJugados(){
+		String nombre = "Albe";//Sesion.obtSesion().obtNombreUsuario();
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+nombre+"' AND Puntuación != 0" );
+		int tam;
+		String[] lista = new String[0];
+		try {
+			res.next();
+			tam = res.getInt(1);
+			lista = new String[tam];
+			res = GestorBD.getGestorBD().Select("SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombre+"' AND Puntuación != 0" );
+			int i = 0;
+			while(res.next()){
+				lista[i] = String.valueOf(res.getInt("IdSudoku"));
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
+	public String[] obtInfoSudoku(int pId){
+		String[] info = new String[3];
+		try {
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Ranking WHERE Puntuación!=0 AND IdSudoku="+pId+"");
+			res.next();
+			info[0] = String.valueOf(res.getInt(1));
+			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.NombreUsuario), COUNT(DISTINCT(S.NombreUsuario)) FROM Ranking P, Ranking S WHERE S.Puntuación!=0 AND S.IdSudoku= P.IdSudoku AND P.IdSudoku="+pId+"");
+			res.next();
+			float p1 = res.getInt(1);
+			float result;
+			if(p1 == 0){
+				result = 0;
+			}else{
+				result = (float)(res.getInt(2))/(float)(p1)*100;
+			}
+			info[1] = String.valueOf(result);
+			res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuación!=0 AND IdSudoku="+pId+"");
+			res.next();
+			info[2] = String.valueOf(res.getLong(1));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return info;
+	}
+	
+	public String[] obtInfoUsuario(String pNombreUsuario){
+		String[] info = new String[7];
+		try {
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE Puntuación!=0 AND NombreUsuario='"+pNombreUsuario+"'");
+			res.next();
+			info[0] = String.valueOf(res.getInt(1));
+			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.IdSudoku), COUNT(DISTINCT(S.IdSudoku)) FROM Ranking P, Ranking S WHERE S.Puntuación!=0 AND S.IdSudoku= P.NombreUsuario AND P.NombreUsuario='"+pNombreUsuario+"'");
+			res.next();
+			float p1 = res.getInt(1);
+			float result;
+			if(p1 == 0){
+				result = 0;
+			}else{
+				result = (float)(res.getInt(2))/(float)(p1)*100;
+			}
+			info[1] = String.valueOf(result);
+			for(int i =1; i<6; i++){
+				res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuación!=0 AND NombreUsuario='"+pNombreUsuario+"' AND IdSudoku IN (SELECT Identificador FROM Sudokus WHERE Nivel="+i+")");
+				res.next();
+				info[i+1] = String.valueOf(res.getInt(1));
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return info;
 	}
 }

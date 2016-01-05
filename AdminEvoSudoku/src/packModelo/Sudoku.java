@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 public class Sudoku implements Serializable{
 
-    // Identificador del sudoku
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3074923738912891028L;
+	// Identificador del sudoku
     private int identificador;
     // Nivel de dificultad
     private int dificultad;

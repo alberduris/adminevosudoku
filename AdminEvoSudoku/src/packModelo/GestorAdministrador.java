@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Observable;
 
-import packBD.GestorBD;
-
 public class GestorAdministrador extends Observable{
 
 	private static GestorAdministrador miGestor;
@@ -118,12 +116,12 @@ public class GestorAdministrador extends Observable{
 	}
 	
 	public void eliminarSudoku(){
-		GestorBD.getGestorBD().Eliminar("DELETE FROM Sudokus WHERE Identificador="+sud.obtIdentificador()+"");
+		GestorBD.getGestorBD().Update("DELETE FROM Sudokus WHERE Identificador="+sud.obtIdentificador()+"");
 		CatalogoSudoku.getCatalogoSudoku().eliminarSudoku(sud.obtIdentificador());
 	}
 	
 	public void modificarEstadoSudoku(boolean pEstado){
-		GestorBD.getGestorBD().Eliminar("UPDATE Sudokus SET Activo="+pEstado+" WHERE Identificador="+sud.obtIdentificador()+"");
+		GestorBD.getGestorBD().Update("UPDATE Sudokus SET Activo="+pEstado+" WHERE Identificador="+sud.obtIdentificador()+"");
 		CatalogoSudoku.getCatalogoSudoku().modificarEstadoSudoku(sud.obtIdentificador(), pEstado);
 	}
 	

@@ -1,5 +1,3 @@
-//Forzar commit 2
-
 package packInterfazGrafica;
 
 import java.awt.BorderLayout;
@@ -18,8 +16,6 @@ import java.io.ObjectInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,7 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import packBD.GestorBD;
+import packModelo.GestorBD;
 import packModelo.Sesion;
 import packModelo.Tablero;
 

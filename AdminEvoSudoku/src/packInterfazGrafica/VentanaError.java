@@ -20,13 +20,14 @@ import javax.swing.border.TitledBorder;
 
 public class VentanaError extends JDialog {
 
-		  private JPanel panel = new JPanel();
+		  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+		private JPanel panel = new JPanel();
 		  private BorderLayout borderLayout1 = new BorderLayout();
 		  private JPanel panelOk = new JPanel();
 		  private JButton botonOk = new JButton();
-		  private Border border1;
-		  private Border border2;
-		  private TitledBorder titledBorder1;
 		  private JTextArea textMensaje = new JTextArea();
 		  private Border border3;
 		  private Controlador controlador;
@@ -58,9 +59,9 @@ public class VentanaError extends JDialog {
 		  }
 		  void jbInit() throws Exception {
 		    controlador = new Controlador(); 
-		    border1 = BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.RAISED,Color.white,new Color(156, 156, 158)),BorderFactory.createEmptyBorder(10,10,10,10));
-		    border2 = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.white,1),BorderFactory.createEmptyBorder(10,10,10,10));
-		    titledBorder1 = new TitledBorder("");
+		    BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.RAISED,Color.white,new Color(156, 156, 158)),BorderFactory.createEmptyBorder(10,10,10,10));
+		    BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.white,1),BorderFactory.createEmptyBorder(10,10,10,10));
+		    new TitledBorder("");
 		    border3 = BorderFactory.createCompoundBorder(new EtchedBorder(EtchedBorder.RAISED,Color.white,new Color(156, 156, 158)),BorderFactory.createEmptyBorder(10,10,10,10));
 		    panel.setLayout(borderLayout1);
 		    botonOk.setBorder(BorderFactory.createRaisedBevelBorder());

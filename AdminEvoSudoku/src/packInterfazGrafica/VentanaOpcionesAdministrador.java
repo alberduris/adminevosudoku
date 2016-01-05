@@ -34,13 +34,11 @@ public class VentanaOpcionesAdministrador extends JFrame {
 
 	private JButton btnAdministrarSudokus;
 	private JButton btnAdministrarPremios;
-	private JButton btnAdministrarRetos;
-	private JButton btnAdministrarEstadisticas;
 	
 	private JButton btnAtras;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(420, 350);
+	private Dimension dimVentana = new Dimension(420, 250);
 
 	/**
 	 * Launch the application.
@@ -83,8 +81,6 @@ public class VentanaOpcionesAdministrador extends JFrame {
 
 		getbtnAdministrarSudokus();
 		getbtnAdministrarPremios();
-		getbtnAdministrarRetos();
-		getbtnAdministrarEstadisticas();
 		
 		getBtnAtras();
 		
@@ -107,12 +103,7 @@ public class VentanaOpcionesAdministrador extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
 	
-	
-
-	
-
 	private void getbtnAdministrarSudokus() {
 		btnAdministrarSudokus = new JButton("Administrar Sudokus");
 		btnAdministrarSudokus.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -149,65 +140,13 @@ public class VentanaOpcionesAdministrador extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar premios");
-				
-			}
-			
-			
-				
+				new VentanaAdministrarPremios();
+			}				
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnAdministrarPremios);
 	}
-
-	
-	private void getbtnAdministrarRetos() {
-		btnAdministrarRetos = new JButton("Administrar retos");
-		btnAdministrarRetos.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnAdministrarRetos.setMinimumSize(dimBtn);
-		btnAdministrarRetos.setPreferredSize(dimBtn);
-		btnAdministrarRetos.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-
-		btnAdministrarRetos.setEnabled(true);
-		
-		btnAdministrarRetos.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar retos");
-				
-			}
-		});
-
-		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnAdministrarRetos);
-	}
-	
-	private void getbtnAdministrarEstadisticas() {
-		btnAdministrarEstadisticas = new JButton("Administrar estadisticas");
-		btnAdministrarEstadisticas.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnAdministrarEstadisticas.setMinimumSize(dimBtn);
-		btnAdministrarEstadisticas.setPreferredSize(dimBtn);
-		btnAdministrarEstadisticas.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-
-		btnAdministrarEstadisticas.setEnabled(true);
-		
-		btnAdministrarEstadisticas.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado administrar estadisticas");
-				
-			}
-		});
-
-		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnAdministrarEstadisticas);
-	}
-	
-	
-	
 	private void getBtnAtras() {
 		btnAtras = new JButton("<");
 		btnAtras.setEnabled(true);

@@ -101,12 +101,33 @@ public class GestorEstadisticas {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}		
+		}else{
+			String consulta;
+			int tamano = 0;
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(DISTINCT NombreUsuario) FROM Ranking WHERE IdSudoku="+pIdSudoku+"");
+			try {
+				if(res.next()){
+					tamano = res.getInt(1);
+				}
+				ranking = new String[tamano][2];
+				consulta = "SELECT NombreUsuario, Puntuación FROM Ranking WHERE IdSudoku="+pIdSudoku+" ORDER BY Puntuación DESC";
+				res = GestorBD.getGestorBD().Select(consulta);
+				int i = 0;
+				while(res.next()){
+					ranking[i][0] = res.getString("NombreUsuario");
+					ranking[i][1] = res.getString("Puntuación");
+					i++;
+				}			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return ranking;		
 	}
 	
 	public String[] obtSudokusJugados(){
-		String nombre = "Albe";//Sesion.obtSesion().obtNombreUsuario();
+		String nombre = Sesion.obtSesion().obtNombreUsuario();
 		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+nombre+"' AND Puntuación != 0" );
 		int tam;
 		String[] lista = new String[0];
@@ -118,6 +139,28 @@ public class GestorEstadisticas {
 			int i = 0;
 			while(res.next()){
 				lista[i] = String.valueOf(res.getInt("IdSudoku"));
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
+	public String[][] obtPuntSudokusJugados(String pNombre){
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+		int tam;
+		String[][] lista = new String[0][2];
+		try {
+			res.next();
+			tam = res.getInt(1);
+			lista = new String[tam][2];
+			res = GestorBD.getGestorBD().Select("SELECT IdSudoku, Puntuación FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+			int i = 0;
+			while(res.next()){
+				lista[i][0] = String.valueOf(res.getInt("IdSudoku"));
+				lista[i][1] = String.valueOf(res.getInt("Puntuación"));
 				i++;
 			}
 		} catch (SQLException e) {
@@ -177,9 +220,52 @@ public class GestorEstadisticas {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
+		}		
 		return info;
+	}
+	
+	public String[] obtJugadores(){
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores");
+		String[] lista = new String[0];
+		try {
+			res.next();
+			lista = new String[res.getInt(1)];
+			res = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores");
+			int i = 0;
+			while(res.next()){
+				lista[i] = res.getString("NombreUsuario");
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lista;		
+	}
+
+	public String[][] obtenerRetosFinalizados() {
+		int tamano;
+		String nom = Sesion.obtSesion().obtNombreUsuario();
+		String[][] list = new String[0][0];
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(*) FROM ListaRetos WHERE NombreUsuarioRetado='"+nom+"' AND Estado=0");
+		try {
+			if(res.next()){
+				tamano = res.getInt(1);
+				list = new String[tamano][4];
+				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuación, L.Estado FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado!=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
+				int i = 0;
+				while(res.next()){
+					list[i][0]=res.getString("NombreUsuario");
+					list[i][1]=String.valueOf(res.getInt("IdSudoku"));
+					list[i][2]=String.valueOf(res.getInt("Puntuación"));
+					list[i][3]=String.valueOf(res.getBoolean("Estado"));
+					i++;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return list;		
 	}
 }

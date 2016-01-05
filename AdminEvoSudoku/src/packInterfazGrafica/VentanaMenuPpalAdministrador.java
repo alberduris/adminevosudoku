@@ -49,12 +49,13 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 	private JButton btnPremios;
 	private JButton btnEstadisticas;
 	private JButton btnRanking;
+	private JButton btnHistorial;
 	private JButton btnOpciones;
 	private JButton btnOpcionesAdmin;
 	private JButton btnCerrarSesion;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(350, 430);
+	private Dimension dimVentana = new Dimension(350, 475);
 	
 	private Tablero tab;
 
@@ -100,6 +101,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		getbtnJugar();
 		getbtnPremios();
 		getbtnEstadisticas();
+		getbtnHistorial();
 		getbtnRanking();
 		getbtnOpciones();
 		getbtnOpcionesAdministrador();
@@ -203,8 +205,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Estadisticas");
-				
+				new VentanaEstadisticasAdmin();
 			}
 		});
 
@@ -232,6 +233,28 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnRanking);
+	}
+	
+	private void getbtnHistorial() {
+		btnHistorial = new JButton("Historial");
+		btnHistorial.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnHistorial.setMinimumSize(dimBtn);
+		btnHistorial.setPreferredSize(dimBtn);
+		btnHistorial.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+
+		btnHistorial.setEnabled(true);
+		
+		btnHistorial.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaHistorial();
+				dispose();
+			}
+		});
+
+		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
+		panelConBoxLayout.add(btnHistorial);
 	}
 	
 	private void getbtnOpciones() {

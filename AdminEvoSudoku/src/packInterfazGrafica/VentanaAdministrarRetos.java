@@ -121,8 +121,9 @@ public class VentanaAdministrarRetos extends JFrame {
 		lista.setAutoscrolls(false);
 		JButton btnAceptar, btnRechazar;
 		if(com.length == 0){				
-			centro.add(Box.createRigidArea(new Dimension(0, 15)));
-			centro.add(new JLabel("<html><big>No Existe Retos para Aceptar ni Rechazar</big></html>"));
+			JLabel txt = new JLabel("<html><big>No Existe Retos para Aceptar ni Rechazar</big></html>");
+			txt.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
+			centro.add(txt);
 		}else{
 			System.out.println(com.length);
 			combinaciones = new JPanel[com.length+1];

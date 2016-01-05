@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -38,7 +39,7 @@ public class VentanaPuntuaciones extends JFrame {
 	
 	private JPanel lista;
 	private JPanel[] combinaciones;
-	private JComboBox<String> tam;
+	private JComboBox<String> tam, principal;
 	
 	private JButton btnAtras;
 
@@ -90,9 +91,9 @@ public class VentanaPuntuaciones extends JFrame {
 
 		getTituloVentanaTitulo();
 		
-		crearNorte("Todos");
+		crearNorte("Total", 0);
 		
-		getLista();
+		getCentro();
 		
 		getBtnAtras();
 		
@@ -115,37 +116,113 @@ public class VentanaPuntuaciones extends JFrame {
 
 	}
 	
-	private void crearNorte(String pTam){	
+	private void crearNorte(String pPrincipal, int pTam){	
+		principal = null;
+		String[] valTamano = {"Total", "Sudoku"};
+		principal = new JComboBox<String>(valTamano);
+		principal.setSelectedItem(pPrincipal);
+		principal.addActionListener(new ActionListener(){
+		
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				centro.removeAll();
+				centro.updateUI();
+				crearNorte((String) principal.getSelectedItem(), 0);
+				getCentro();
+			}
+			
+		});
 		tam = null;
-		String[] valTamano = {"Todos", "5", "10", "50", "75"};
-		tam = new JComboBox<String>(valTamano);
-		tam.setSelectedItem(pTam);
+		if(pPrincipal == "Total"){
+			String[] valTamano1 = {"Todos", "5", "10", "50", "75"};
+			tam = new JComboBox<String>(valTamano1);
+		}else{
+			String[] valTamano1 = gE.obtSudokusJugados();
+			tam = new JComboBox<String>(valTamano1);
+		}
+		tam.setSelectedIndex(pTam);
 		tam.addActionListener(new ActionListener(){
 		
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				centro.removeAll();
-				getLista();
 				centro.updateUI();
-				crearNorte((String) tam.getSelectedItem());
+				crearNorte((String) principal.getSelectedItem(), tam.getSelectedIndex());
+				getCentro();
 			}
 			
 		});
-		JPanel centroNorte = new JPanel(new GridLayout());
-		JLabel est = new JLabel("Jugadores a mostrar: ");
+		JPanel centroNorte = new JPanel(new GridLayout(1,4));
+		JLabel prin = new JLabel("Ranking: ");
+		prin.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
+		JLabel est;
+		if(principal.getSelectedItem()=="Total"){
+			est = new JLabel("Sudoku: ");
+		}else{
+			est = new JLabel("Cantidad: ");
+		}
 		est.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
+		centroNorte.add(prin);
+		centroNorte.add(principal);
 		centroNorte.add(est);
 		centroNorte.add(tam);
 		centro.add(centroNorte, BorderLayout.NORTH);
 	}
 	
-	private void getLista() {
+	private void getCentro(){
+		if(principal.getSelectedItem()=="Total"){
+			getListaTotal();
+		}else{
+			getListaSudokus();
+		}
+	}
+	
+	private void getListaTotal() {
 		String[][] com = new String[0][0];
+		JLabel[] fila = new JLabel[3];
 		if(tam.getSelectedItem() == "Todos"){
 			com = gE.obtenerRanking(0, 0);
 		}else{
 			com = gE.obtenerRanking(Integer.valueOf((String) tam.getSelectedItem()),0);
 		}
+		lista = new JPanel(new GridLayout(com.length+1, 1));
+		lista.setAutoscrolls(false);
+		if(com.length == 0){				
+			JLabel txt = new JLabel("<html><big>No Existe Jugadores en el Ranking</big></html>"); 
+			txt.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
+			centro.add(txt);
+		}else{
+			combinaciones = new JPanel[com.length+1];
+			for(int i = 0; i<com.length+1; i++){
+				combinaciones[i] = new JPanel(new GridLayout(1, 3));
+				combinaciones[i].setBackground(Color.WHITE);
+				if(i==0){
+					fila[0] = new JLabel("<html><font SIZE=4><u>Posición</u></font></html>");
+					fila[1] = new JLabel("<html><font SIZE=4><u>Usuario</u></font></html>");
+					fila[2] = new JLabel("<html><font SIZE=4><u>Puntuación</u></font></html>");
+				}else{
+					
+					fila[0] = new JLabel(String.valueOf(i)+".");
+					fila[1] = new JLabel(com[i-1][0]);
+					fila[2] = new JLabel(com[i-1][1]);
+				}
+				for(int j = 0; j<3; j++){
+					fila[j].setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
+					combinaciones[i].add(fila[j]);
+				}
+				lista.add(combinaciones[i]);
+				JScrollPane scroll = new JScrollPane(lista);
+				centro.add(scroll, BorderLayout.CENTER);
+				
+				centro.add(Box.createRigidArea(new Dimension(0, 15)));
+				centro.add(scroll);
+			}			
+		}
+	}
+	
+	private void getListaSudokus() {
+		String[][] com = new String[0][0];
+		com = gE.obtenerRanking(0, Integer.valueOf((String) tam.getSelectedItem()));
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
 		if(com.length == 0){				

@@ -226,12 +226,7 @@ public class VentanaLogin extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaStart();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaStart();				
 				dispose();
 				
 			}

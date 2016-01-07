@@ -56,15 +56,7 @@ public class VentanaCambiarEmail extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaCambiarEmail();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaCambiarEmail();
 	}
 
 	/**
@@ -178,12 +170,7 @@ public class VentanaCambiarEmail extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaOpciones();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaOpciones();
 				dispose();
 				
 			}

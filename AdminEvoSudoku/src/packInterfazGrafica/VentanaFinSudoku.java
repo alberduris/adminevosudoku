@@ -34,7 +34,7 @@ public class VentanaFinSudoku extends JFrame {
 
 	private JLabel lblTitulo;
 	
-	private JLabel lblPuntuacion;
+	private JLabel lblPuntuacion, lblPremios;
 	
 
 	private JButton btnRetar;
@@ -42,7 +42,7 @@ public class VentanaFinSudoku extends JFrame {
 	private JButton btnMenu;
 	
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(325, 300);
+	private Dimension dimVentana = new Dimension(325, 350);
 	
 	private int punt;
 
@@ -50,15 +50,7 @@ public class VentanaFinSudoku extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaFinSudoku();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaFinSudoku();
 	}
 
 	/**
@@ -88,6 +80,7 @@ public class VentanaFinSudoku extends JFrame {
 		
 		getTituloFinSudoku();
 		getLblPuntuacion();
+		getLblPremios();
 		
 		getbtnRetar();
 		getbtnCompartir();
@@ -135,6 +128,24 @@ public class VentanaFinSudoku extends JFrame {
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(lblPuntuacion);
+	}
+	
+	private void getLblPremios() {
+		lblPremios = new JLabel();
+		int cantidadPremios = Tablero.obtTablero().obtPremios();
+		if(cantidadPremios == 0){
+			lblPremios.setText("No has conseguido ningún premio");
+		}else{
+			lblPremios.setText("Has conseguido "+String.valueOf(cantidadPremios)+" premios");	
+		}		
+		lblPremios.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblPremios.setHorizontalAlignment(0);
+		lblPremios.setMinimumSize(dimBtn);
+		lblPremios.setPreferredSize(dimBtn);
+		lblPremios.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+		
+		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
+		panelConBoxLayout.add(lblPremios);
 	}
 	
 
@@ -193,17 +204,12 @@ public class VentanaFinSudoku extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					if(Sesion.obtSesion().obtNombreUsuario().equals("Admin")){
-						new VentanaMenuPpalAdministrador();
-					}
-					else{
-						new VentanaMenuPpalUsuario();
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				if(Sesion.obtSesion().obtNombreUsuario().equals("Admin")){
+					new VentanaMenuPpalAdministrador();
 				}
-				
+				else{
+					new VentanaMenuPpalUsuario();
+				}
 				dispose();
 				
 			}

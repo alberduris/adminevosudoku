@@ -57,15 +57,7 @@ public class VentanaRecuperacion extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaRecuperacion();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaRecuperacion();
 	}
 
 	/**
@@ -171,12 +163,7 @@ public class VentanaRecuperacion extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaLogin();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaLogin();				
 				dispose();
 				
 			}
@@ -255,9 +242,9 @@ public class VentanaRecuperacion extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				new VentanaLogin();		
 				dialogExiste.dispose();
-				dispose();
-				new VentanaLogin();				
+				dispose();		
 			}
 			
 		});

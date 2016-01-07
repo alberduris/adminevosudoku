@@ -51,15 +51,7 @@ public class VentanaPuntuaciones extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaPuntuaciones();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaPuntuaciones();
 	}
 
 	/**
@@ -264,16 +256,12 @@ public class VentanaPuntuaciones extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
 					if(Sesion.obtSesion().obtNombreUsuario().equals("Admin")){
 						new VentanaMenuPpalAdministrador();
 					}
 					else{
 						new VentanaMenuPpalUsuario();
-					}				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+					}				
 				dispose();
 				
 			}

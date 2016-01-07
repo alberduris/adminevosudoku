@@ -59,15 +59,7 @@ public class VentanaRegistro extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaRegistro();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaRegistro();
 	}
 
 	/**
@@ -221,12 +213,7 @@ public class VentanaRegistro extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaStart();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaStart();
 				dispose();
 				
 			}

@@ -51,15 +51,7 @@ public class VentanaAdministrarRetos extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaAdministrarRetos();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaAdministrarRetos();
 	}
 
 	/**

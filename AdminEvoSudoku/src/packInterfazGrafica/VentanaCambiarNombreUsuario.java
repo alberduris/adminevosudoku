@@ -56,15 +56,7 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaCambiarNombreUsuario();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaCambiarNombreUsuario();
 	}
 
 	/**
@@ -180,14 +172,8 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaOpciones();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
-				dispose();
-				
+				new VentanaOpciones();
+				dispose();			
 			}
 		});
 

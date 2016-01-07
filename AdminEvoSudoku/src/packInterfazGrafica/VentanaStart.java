@@ -35,7 +35,7 @@ public class VentanaStart extends JFrame {
 	 * @throws LineUnavailableException 
 	 * @throws UnsupportedAudioFileException 
 	 */
-	public VentanaStart() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
+	public VentanaStart(){
 	
 		
 		//Opciones JFrame base, su ContentPane y su layout
@@ -45,18 +45,6 @@ public class VentanaStart extends JFrame {
 		setLocationRelativeTo(null);
 		crearContentPane();
 		setContentPane(contentPane);
-	
-		/*
-		sonido = AudioSystem.getClip();
-		Random rd = new Random();
-		if(rd.nextInt(2) == 0){
-			sonido.open(AudioSystem.getAudioInputStream(getClass().getResource("epico.wav")));
-		}else{
-			sonido.open(AudioSystem.getAudioInputStream(getClass().getResource("rancho.wav")));
-		}
-		sonido.start();
-		*/
-		
 		
 		//Anadir resto elementos
 		getBtnLogin();
@@ -67,16 +55,21 @@ public class VentanaStart extends JFrame {
 	
 
 	
-	private void crearContentPane() throws IOException {
-		contentPane = new JPanel(){
-			
-		private static final long serialVersionUID = 1L;
-			BufferedImage img = ImageIO.read(this.getClass().getResource("ad2.jpg"));
-			public void paintComponent(Graphics g){
-	            super.paintComponent(g);
-	            g.drawImage(img, 0, 0, 500, 500, this);
-	        }
-		};	
+	private void crearContentPane(){
+		try {
+			contentPane = new JPanel(){
+				
+			private static final long serialVersionUID = 1L;
+				BufferedImage img = ImageIO.read(this.getClass().getResource("ad2.jpg"));
+				public void paintComponent(Graphics g){
+			        super.paintComponent(g);
+			        g.drawImage(img, 0, 0, 500, 500, this);
+			    }
+			};
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		
 		FlowLayout fl1 = new FlowLayout(1);
 		contentPane.setLayout(fl1);

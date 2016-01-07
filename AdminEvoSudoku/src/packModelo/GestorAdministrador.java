@@ -125,4 +125,61 @@ public class GestorAdministrador extends Observable{
 		CatalogoSudoku.getCatalogoSudoku().modificarEstadoSudoku(sud.obtIdentificador(), pEstado);
 	}
 	
+	public boolean anadirPremio(String pNombrePremio, int pIdSudoku, int pLimite, String pTipo){
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(*) FROM Premios WHERE NombrePremio='"+pNombrePremio+"'");
+		boolean error = false;
+		try {
+			if(res.next()){
+				error = true;
+			}else{
+				GestorBD.getGestorBD().Update("INSERT Premios(NombrePremio, IdSudoku, Limite, Tipo) VALUES ('"+pNombrePremio+"',"+pIdSudoku+","+pLimite+",'"+pTipo+"')");
+				res.close();
+				if(pTipo.equals("Tiempo")){
+					res.close();
+					res = GestorBD.getGestorBD().Select("SELECT NombreUsuario WHERE IdSudoku="+pIdSudoku+" AND Tiempo<"+pLimite);
+					while(res.next()){
+						GestorBD.getGestorBD().Update("INSERT ListaPremiados(NombreUsuario, NombrePremio) VALUES ('"+res.getString("NombreUsuario")+"','"+pNombrePremio+"')");
+					}
+				}else{
+					res.close();
+					res = GestorBD.getGestorBD().Select("SELECT NombreUsuario WHERE IdSudoku="+pIdSudoku+" AND Puntuación>"+pLimite);
+					while(res.next()){
+						GestorBD.getGestorBD().Update("INSERT ListaPremiados(NombreUsuario, NombrePremio) VALUES ('"+res.getString("NombreUsuario")+"','"+pNombrePremio+"')");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return error;
+	}
+	
+	public void eliminarPremio(String pNombrePremio){
+		GestorBD.getGestorBD().Update("DELETE FROM Premios WHERE NombrePremio='"+pNombrePremio+"'");
+		GestorBD.getGestorBD().Update("DELETE FROM ListaPremiados WHERE NombrePremio='"+pNombrePremio+"'");
+	}
+	
+	public String[][] obtPremios(){
+		String[][] info = new String[0][0];
+		try {
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombrePremio) FROM Premios");
+			res.next();
+			info = new String[res.getInt(1)][4];
+			res = GestorBD.getGestorBD().Select("SELECT NombrePremio, IdSudoku, Limite, Tipo FROM Premios");
+			int i = 0;
+			while(res.next()){
+				info[i][0] = res.getString("NombrePremio");
+				info[i][1] = String.valueOf(res.getInt("IdSudoku"));
+				info[i][2] = String.valueOf(res.getInt("Limite"));
+				info[i][3] = res.getString("Tipo");
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return info;
+	}
+	
 }

@@ -1,6 +1,8 @@
 package packModelo;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +20,7 @@ public class Tablero extends Observable implements Serializable{
 	private boolean tiempoAjustado = false;
 	private int intentos;
 	
-	private int tiempo;
+	private int tiempo, tiempoAux;
 	private static Timer time;
 
 	private Tablero() {
@@ -48,6 +50,7 @@ public class Tablero extends Observable implements Serializable{
     public void configTiempo(int pTiempo){
     	tiempoAjustado = true;
     	tiempo = pTiempo;
+    	tiempoAux = pTiempo;
     }
     
     public void pausado (boolean pEstado){
@@ -78,6 +81,10 @@ public class Tablero extends Observable implements Serializable{
 
     public int obtTiempo(){
     	return tiempo;
+    }
+    
+    public int obtTiempoAux(){
+    	return tiempoAux;
     }
     
     /**
@@ -253,7 +260,10 @@ public class Tablero extends Observable implements Serializable{
     public int obtPuntuacion(){
 		int puntuacion = 0;
 		double pen = 0;
-    	if(tiempo != 0){
+		if(tiempoAjustado){
+			tiempo = tiempoAux-tiempo;
+		}
+		if(tiempo != 0){
     		pen = (double)(tiempo)/(double)(sudoku.obtDificultad()*1000);
 			puntuacion = (int) (1000/pen);
     	}		
@@ -262,6 +272,37 @@ public class Tablero extends Observable implements Serializable{
     
     public void reiniciar(){
     	tiempo = 0;
+    }
+    
+    public int obtPremios(){
+    	int cantPremios = 0;
+    	String nomb = Sesion.obtSesion().obtNombreUsuario();
+    	ResultSet res = GestorBD.getGestorBD().Select("SELECT NombrePremio, Limite, Tipo FROM Premios WHERE IdSudoku="+sudoku.obtIdentificador()+"");
+		try {
+			while(res.next()){
+				if(res.getString("Tipo").equals("Tiempo")){
+					if(tiempo < res.getInt("Limite")){
+						cantPremios++;
+						GestorBD.getGestorBD().Update("INSERT INTO ListaPremiados (NombreUsuario, NombrePremio) VALUES ('"+nomb+"','"+res.getString("NombrePremio")+"')");
+					}
+				}else{
+					if(obtPuntuacion() > res.getInt("Limite")){
+						cantPremios++;
+						GestorBD.getGestorBD().Update("INSERT INTO ListaPremiados (NombreUsuario, NombrePremio) VALUES ('"+nomb+"','"+res.getString("NombrePremio")+"')");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return cantPremios;
+    }
+    
+    public void retar(String pNombreUsuario){
+    	String nom = Sesion.obtSesion().obtNombreUsuario();
+    	int id = sudoku.obtIdentificador();
+    	GestorBD.getGestorBD().Update("INSERT INTO ListaRetos(NombreUsuario, NombreUsuarioRetado, IdSudoku, Estado) VALUES('"+nom+"','"+pNombreUsuario+"',"+id+", 0)");
     }
     
     public Sudoku getSudoku(){return sudoku;}
@@ -273,6 +314,7 @@ public class Tablero extends Observable implements Serializable{
     	sudoku = pTablero.getSudoku();
     	matrizJuego = pTablero.getMatriz();
     	tiempoAjustado = pTablero.obtTiempoAjustado();
+    	tiempoAux = pTablero.obtTiempoAux();
     	pausado = true;
     }    
 }

@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import packModelo.GestorBD;
+import packModelo.Sesion;
 import packModelo.Tablero;
 
 public class VentanaRetar extends JFrame {
@@ -46,15 +47,7 @@ public class VentanaRetar extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaRetar();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaRetar();
 	}
 
 	/**
@@ -108,10 +101,8 @@ public class VentanaRetar extends JFrame {
 
 	
 	private void getComboBoxJugadores() {
-		comboBoxJugadores = new JComboBox<String>(getJugadores());
-		
-		
-		
+		comboBoxJugadores = new JComboBox<String>(Sesion.obtSesion().obtJugadores());
+				
 		comboBoxJugadores.setAlignmentX(Component.CENTER_ALIGNMENT);
 		comboBoxJugadores.setMinimumSize(dimBtn);
 		comboBoxJugadores.setPreferredSize(dimBtn);
@@ -122,39 +113,7 @@ public class VentanaRetar extends JFrame {
 		panelConBoxLayout.add(comboBoxJugadores);
 	}
 	
-	private String[] getJugadores(){
-		int id = Tablero.obtTablero().obtIdSudoku();
-		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
-		
-		String[] aux = null;
-		
-		try {
-			
-			if(count.next()){
-				aux = new String[(int) count.getLong(1)];
-				
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
-		int i = 0;		
-		
-		try {
-			while(resultado.next()){
-				aux[i] = resultado.getString("NombreUsuario");
-				i++;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return aux;
-	}
+	
 	
 	private void getBtnRetar() {
 		btnRetar = new JButton("Retar");
@@ -167,12 +126,9 @@ public class VentanaRetar extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				JOptionPane.showMessageDialog(contentPane, "Has lanzado un reto!");
-				
+				Tablero.obtTablero().retar((String) comboBoxJugadores.getSelectedItem());
 			}
-		});
-		
+		});		
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnRetar);

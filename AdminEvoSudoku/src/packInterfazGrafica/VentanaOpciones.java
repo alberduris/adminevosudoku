@@ -49,15 +49,7 @@ public class VentanaOpciones extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaOpciones();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaOpciones();
 	}
 
 	/**
@@ -125,12 +117,7 @@ public class VentanaOpciones extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaCambiarNombreUsuario();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaCambiarNombreUsuario();
 				dispose();
 				
 			}
@@ -151,18 +138,9 @@ public class VentanaOpciones extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					new VentanaCambiarEmail();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
-				dispose();
-				
+				new VentanaCambiarEmail();				
+				dispose();	
 			}
-			
-			
-				
 		});
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -183,12 +161,7 @@ public class VentanaOpciones extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaCambiarPassword();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaCambiarPassword();				
 				dispose();
 				
 			}
@@ -208,12 +181,7 @@ public class VentanaOpciones extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaMenuPpalUsuario();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaMenuPpalUsuario();				
 				dispose();
 				
 			}

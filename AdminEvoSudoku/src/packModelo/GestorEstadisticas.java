@@ -268,4 +268,27 @@ public class GestorEstadisticas {
 		}		
 		return list;		
 	}
+	
+	public String[][] obtInfoPremios(String pNom){
+		String[][] info = new String[0][0];
+		try {
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM ListaPremiados WHERE NombreUsuario='"+pNom+"'");
+			res.next();
+			info = new String[res.getInt(1)][5];
+			res = GestorBD.getGestorBD().Select("SELECT LP.NombrePremio, LP.Fecha, P.Limite, P.IdSudoku, P.Tipo FROM ListaPremiados LP, Premios P WHERE LP.NombreUsuario='"+pNom+"' AND P.NombrePremio=LP.NombrePremio");
+			int i = 0;
+			while(res.next()){
+				info[i][0] = res.getString("NombrePremio");
+				info[i][1] = res.getDate("Fecha").toString();
+				info[i][2] = String.valueOf(res.getInt("Limite"));
+				info[i][3] = String.valueOf(res.getInt("IdSudoku"));
+				info[i][4] = res.getString("Tipo");
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return info;
+	}
 }

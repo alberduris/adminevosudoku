@@ -60,15 +60,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaMenuPpalUsuario();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaMenuPpalUsuario();
 	}
 
 	/**
@@ -268,12 +260,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaOpciones();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaOpciones();
 				dispose();
 				
 			}
@@ -296,12 +283,8 @@ public class VentanaMenuPpalUsuario extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Sesion.obtSesion().finSesion(false);
-					new VentanaStart();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				Sesion.obtSesion().finSesion(false);
+				new VentanaStart();
 				
 				dispose();
 				

@@ -352,5 +352,39 @@ public class Sesion extends Observable implements Observer {
 			tab.configTiempo(pTiempo);
 		}
 	}
+	
+	public String[] obtJugadores(){
+		int id = Tablero.obtTablero().obtIdSudoku();
+		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
+		
+		String[] aux = null;
+		
+		try {
+			
+			if(count.next()){
+				aux = new String[(int) count.getLong(1)];
+				
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuación!=0)");
+		int i = 0;		
+		
+		try {
+			while(resultado.next()){
+				aux[i] = resultado.getString("NombreUsuario");
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return aux;
+	}
 }
 

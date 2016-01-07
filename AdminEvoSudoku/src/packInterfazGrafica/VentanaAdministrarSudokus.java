@@ -49,15 +49,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaAdministrarSudokus();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaAdministrarSudokus();
 	}
 
 	/**
@@ -256,8 +248,7 @@ public class VentanaAdministrarSudokus extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					VentanaOpcionesAdministrador frame = new VentanaOpcionesAdministrador();
-					frame.setVisible(true);
+					new VentanaOpcionesAdministrador();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

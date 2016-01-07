@@ -57,15 +57,7 @@ public class VentanaCambiarPassword extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaCambiarPassword();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaCambiarPassword();
 	}
 
 	/**
@@ -195,12 +187,7 @@ public class VentanaCambiarPassword extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaOpciones();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaOpciones();
 				dispose();
 				
 			}

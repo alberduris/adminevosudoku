@@ -52,15 +52,7 @@ public class VentanaConfigurarSudoku extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaConfigurarSudoku();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaConfigurarSudoku();
 	}
 
 	/**
@@ -229,16 +221,11 @@ public class VentanaConfigurarSudoku extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					if(Sesion.obtSesion().obtNombreUsuario().trim().equalsIgnoreCase("Admin")){
-						new VentanaMenuPpalAdministrador();
-					}else{
-						new VentanaMenuPpalUsuario();
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				if(Sesion.obtSesion().obtNombreUsuario().trim().equalsIgnoreCase("Admin")){
+					new VentanaMenuPpalAdministrador();
+				}else{
+					new VentanaMenuPpalUsuario();
 				}
-				
 				dispose();
 				
 			}

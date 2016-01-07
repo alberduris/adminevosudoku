@@ -423,8 +423,7 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				VentanaAdministrarSudokus vnt = new VentanaAdministrarSudokus();
-				vnt.setVisible(true);
+				new VentanaAdministrarSudokus();
 				dispose();
 			}
 		});
@@ -484,8 +483,7 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				VentanaAdministrarSudokus vnt = new VentanaAdministrarSudokus();
-				vnt.setVisible(true);
+				new VentanaAdministrarSudokus();
 				dialogFinal.dispose();
 				dispose();
 			}
@@ -538,9 +536,9 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				new VentanaAdministrarSudokus();
 				dialogExiste.dispose();
-				dispose();
-				new VentanaAdministrarSudokus();				
+				dispose();				
 			}
 			
 		});

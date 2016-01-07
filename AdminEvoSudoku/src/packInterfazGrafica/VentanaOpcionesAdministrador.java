@@ -44,15 +44,7 @@ public class VentanaOpcionesAdministrador extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new VentanaOpcionesAdministrador();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new VentanaOpcionesAdministrador();
 	}
 
 	/**
@@ -115,12 +107,7 @@ public class VentanaOpcionesAdministrador extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaAdministrarSudokus();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaAdministrarSudokus();
 				dispose();
 			}
 		});
@@ -157,12 +144,7 @@ public class VentanaOpcionesAdministrador extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new VentanaMenuPpalAdministrador();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				
+				new VentanaMenuPpalAdministrador();
 				dispose();
 				
 			}

@@ -1,10 +1,14 @@
 package packModelo;
 
+import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 public class GestorEstadisticas {
 	
@@ -126,16 +130,15 @@ public class GestorEstadisticas {
 		return ranking;		
 	}
 	
-	public String[] obtSudokusJugados(){
-		String nombre = Sesion.obtSesion().obtNombreUsuario();
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+nombre+"' AND Puntuación != 0" );
+	public String[] obtSudokusJugados(String pNombre){
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
 		int tam;
 		String[] lista = new String[0];
 		try {
 			res.next();
 			tam = res.getInt(1);
 			lista = new String[tam];
-			res = GestorBD.getGestorBD().Select("SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombre+"' AND Puntuación != 0" );
+			res = GestorBD.getGestorBD().Select("SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
 			int i = 0;
 			while(res.next()){
 				lista[i] = String.valueOf(res.getInt("IdSudoku"));
@@ -290,5 +293,16 @@ public class GestorEstadisticas {
 			e.printStackTrace();
 		}		
 		return info;
+	}
+	
+	public void compartir(String pMensaje){
+		try{			
+			if(java.awt.Desktop.isDesktopSupported()){
+				Desktop dk = Desktop.getDesktop();
+				dk.browse(new URI("www.twitter.com/home?status="+pMensaje));
+			}
+		}catch(Exception e1){
+			JOptionPane.showMessageDialog(null,  "Error: "+e1);
+		}	
 	}
 }

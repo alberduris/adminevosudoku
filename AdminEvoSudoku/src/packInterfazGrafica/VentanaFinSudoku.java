@@ -3,11 +3,12 @@ package packInterfazGrafica;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -44,7 +45,7 @@ public class VentanaFinSudoku extends JFrame {
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(325, 350);
 	
-	private int punt;
+	private int punt, cantidadPremios, id;
 
 	/**
 	 * Launch the application.
@@ -62,6 +63,9 @@ public class VentanaFinSudoku extends JFrame {
 		setLocationRelativeTo(null);
 
 		Tablero.obtTablero().terminar();
+		cantidadPremios = Tablero.obtTablero().obtPremios();
+		id = Tablero.obtTablero().obtIdSudoku();
+		punt = Tablero.obtTablero().obtPuntuacion();
 		
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -76,7 +80,6 @@ public class VentanaFinSudoku extends JFrame {
 		contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
-		punt = Tablero.obtTablero().obtPuntuacion();
 		
 		getTituloFinSudoku();
 		getLblPuntuacion();
@@ -132,7 +135,6 @@ public class VentanaFinSudoku extends JFrame {
 	
 	private void getLblPremios() {
 		lblPremios = new JLabel();
-		int cantidadPremios = Tablero.obtTablero().obtPremios();
 		if(cantidadPremios == 0){
 			lblPremios.setText("No has conseguido ningún premio");
 		}else{
@@ -181,7 +183,15 @@ public class VentanaFinSudoku extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado compartir");
+				try{
+					if(java.awt.Desktop.isDesktopSupported()){
+						String textoAPoner="He%20conseguido%20"+punt+"%20puntos%20y%20"+cantidadPremios+"%20premios%20al%20completar%20el%20sudoku%20"+id+"%20de%20%23AdminEvoSudoku.%20¿A%20que%20no%20lo%20superas?";
+						Desktop dk = Desktop.getDesktop();
+						dk.browse(new URI("www.twitter.com/home?status="+textoAPoner));
+					}
+				}catch(Exception e1){
+					JOptionPane.showMessageDialog(null,  "Error: "+e1);
+				}
 			}
 			
 		});

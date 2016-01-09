@@ -88,7 +88,7 @@ public class VentanaHistorial extends JFrame {
 
 	private void getTituloVentanaTitulo() {
 	
-		lblTitulo = new JLabel("Estad√≠sticas");
+		lblTitulo = new JLabel("Estadisticas");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 23));
 		lblTitulo.setOpaque(true);
@@ -164,6 +164,7 @@ public class VentanaHistorial extends JFrame {
 		com = gE.obtPuntSudokusJugados((String)usuarios.getSelectedItem());
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
+		JButton btnCompartir = null;
 		if(com.length == 0){		
 			JLabel txt = new JLabel("<html><big>No Existe Sudokus jugados por "+(String)usuarios.getSelectedItem()+"</big></html>");
 			txt.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
@@ -176,15 +177,30 @@ public class VentanaHistorial extends JFrame {
 				JLabel l1, l2;
 				if(i==0){
 					l1 = new JLabel("<html><font SIZE=4><u>IdSudoku</u></font></html>");
-					l2 = new JLabel("<html><font SIZE=4><u>Puntuaci√≥n</u></font></html>");
+					l2 = new JLabel("<html><font SIZE=4><u>Puntuacion</u></font></html>");
 				}else{
 					l1 = new JLabel(com[i-1][0]);
 					l2 = new JLabel(com[i-1][1]);
+					btnCompartir = new JButton("Compartir");
+					btnCompartir.setActionCommand(String.valueOf(i));
+					btnCompartir.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int num = Integer.valueOf(e.getActionCommand());
+							getCompartir(num);
+						}
+					});
 				}
 				l1.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
 				l2.setHorizontalAlignment((int) Component.CENTER_ALIGNMENT);
 				combinaciones[i].add(l1);
 				combinaciones[i].add(l2);
+				if(i==0){
+					combinaciones[i].add(new JLabel());
+				}else{
+					combinaciones[i].add(btnCompartir);	
+				}
 				lista.add(combinaciones[i]);
 				JScrollPane scroll = new JScrollPane(lista);
 				centro.add(scroll, BorderLayout.CENTER);
@@ -200,20 +216,21 @@ public class VentanaHistorial extends JFrame {
 		String[][] com = gE.obtenerRetosFinalizados();
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
+		JButton btnCompartir = null;
 		if(com.length == 0){				
 			JLabel txt = new JLabel("<html><big>No Existe Retos finalizados</big></html>");
 			txt.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
 			centro.add(txt);
 		}else{
-			System.out.println(com.length);
 			combinaciones = new JPanel[com.length+1];
 			for(int i = 0; i<com.length+1; i++){
 				combinaciones[i] = new JPanel(new GridLayout(1, 5));
 				if(i==0){
 					combinaciones[i].add(new JLabel("<html><font SIZE=4><u>Usuario</u></font></html>"));
 					combinaciones[i].add(new JLabel("<html><font SIZE=4><u>IdSudoku</u></font></html>"));
-					combinaciones[i].add(new JLabel("<html><font SIZE=4><u>Puntuaci√≥n</u></font></html>"));
+					combinaciones[i].add(new JLabel("<html><font SIZE=4><u>Puntuacion</u></font></html>"));
 					combinaciones[i].add(new JLabel("<html><font SIZE=4><u>Estado</u></font></html>"));
+					combinaciones[i].add(new JLabel());
 				}else{
 					combinaciones[i].add(new JLabel(com[i-1][0]));
 					combinaciones[i].add(new JLabel(com[i-1][1]));
@@ -223,6 +240,17 @@ public class VentanaHistorial extends JFrame {
 					}else{
 						combinaciones[i].add(new JLabel("NO SUPERADO"));
 					}
+					btnCompartir = new JButton("Compartir");
+					btnCompartir.setActionCommand(String.valueOf(i));
+					btnCompartir.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int num = Integer.valueOf(e.getActionCommand());
+							getCompartir(num);
+						}
+					});
+					combinaciones[i].add(btnCompartir);
 				}
 				lista.add(combinaciones[i]);
 			}
@@ -239,14 +267,15 @@ public class VentanaHistorial extends JFrame {
 		String[][] com = gE.obtInfoPremios((String)usuarios.getSelectedItem());
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
+		JButton btnCompartir = null;
 		if(com.length == 0){				
-			JLabel txt = new JLabel("<html><big>Este usuario no ha obtenido ning√∫n premio</big></html>");
+			JLabel txt = new JLabel("<html><big>Este usuario no ha obtenido ningun premio</big></html>");
 			txt.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
 			centro.add(txt);
 		}else{
 			combinaciones = new JPanel[com.length+1];
 			for(int i = 0; i<com.length+1; i++){
-				combinaciones[i] = new JPanel(new GridLayout(1, 3));
+				combinaciones[i] = new JPanel(new GridLayout(1, 4));
 				combinaciones[i].setBackground(Color.WHITE);
 				JLabel nom, obj, fech;
 				if(i==0){
@@ -258,16 +287,31 @@ public class VentanaHistorial extends JFrame {
 					if(com[i-1][4].equals("Tiempo")){
 						obj = new JLabel("<html>Se ha completado el<br>sudoku "+com[i-1][3]+" en un<br>tiempo menor a "+com[i-1][2]+"</html>");
 					}else{
-						obj = new JLabel("<html>Se ha completado el<br> sudoku "+com[i-1][3]+" con una<br>puntuaci√≥n mayor a "+com[i-1][2]+"</html>");
+						obj = new JLabel("<html>Se ha completado el<br> sudoku "+com[i-1][3]+" con una<br>puntuacion mayor a "+com[i-1][2]+"</html>");
 					}
 					fech = new JLabel("<html>"+com[i-1][1]+"</html>");
-				}				
+					btnCompartir = new JButton("Compartir");
+					btnCompartir.setActionCommand(String.valueOf(i));
+					btnCompartir.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int num = Integer.valueOf(e.getActionCommand());
+							getCompartir(num);
+						}
+					});
+				}		
 				nom.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
 				obj.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
 				fech.setHorizontalAlignment((int)Component.CENTER_ALIGNMENT);
 				combinaciones[i].add(nom);
 				combinaciones[i].add(obj);
 				combinaciones[i].add(fech);
+				if(i==0){
+					combinaciones[i].add(new JLabel());
+				}else{
+					combinaciones[i].add(btnCompartir);	
+				}
 				lista.add(combinaciones[i]);
 			}
 			JScrollPane scroll = new JScrollPane(lista);
@@ -280,7 +324,7 @@ public class VentanaHistorial extends JFrame {
 	}	
 
 	private void getBtnAtras() {
-		btnAtras = new JButton("Atr√°s");
+		btnAtras = new JButton("Atras");
 		btnAtras.setEnabled(true);
 		
 		btnAtras.addActionListener(new ActionListener() {
@@ -299,6 +343,62 @@ public class VentanaHistorial extends JFrame {
 		panelBox.add(leftJustify(btnAtras));
 		sur.add(panelBox);
 		
+	}
+	
+	private void getCompartir(int num) {
+		String textoAPoner;
+		if(tipos.getSelectedItem().equals("Premios")){
+			JLabel jL = (JLabel) combinaciones[num].getComponent(0);
+			String nom = jL.getText();
+			jL = (JLabel) combinaciones[num].getComponent(1);
+			String obj = jL.getText();
+			textoAPoner="He conseguido el premio "+nom+" con el objetivo de '"+obj+"' en %23AdminEvoSudoku. øA que no lo consigues?";
+		}else if(tipos.getSelectedItem().equals("Retos")){
+			JLabel jL = (JLabel) combinaciones[num].getComponent(2);
+			int punt = Integer.valueOf(jL.getText().trim());
+			jL = (JLabel) combinaciones[num].getComponent(1);
+			int id = Integer.valueOf(jL.getText().trim());
+			jL = (JLabel) combinaciones[num].getComponent(0);
+			String nombre = jL.getText().trim();
+			jL = (JLabel) combinaciones[num].getComponent(0);
+			if(jL.getText().trim().equals("SUPERADO")){
+				textoAPoner="He ganado un reto al jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. øA que no lo superas?";
+			}else{
+				textoAPoner="He perdido un reto con el jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. øA que no lo superas?";
+			}
+		}else{
+			JLabel jL = (JLabel) combinaciones[num].getComponent(1);
+			int punt = Integer.valueOf(jL.getText().trim());
+			jL = (JLabel) combinaciones[num].getComponent(0);
+			int id = Integer.valueOf(jL.getText().trim());
+			textoAPoner="He conseguido "+punt+" puntos al completar el sudoku "+id+" de %23AdminEvoSudoku. øA que no lo superas?";
+		}
+		gE.compartir(quitarEspacios(textoAPoner));
+				
+	}	
+	
+	private String quitarEspacios(String pTxt){
+		String texto = "";
+		int i = 0;
+		while(i<pTxt.length()){
+			if(pTxt.charAt(i) == ' '){
+				texto+="%20";
+				i++;
+			}else if(pTxt.charAt(i) == '<'){
+				int j = 1;
+				while(pTxt.charAt(i+j)!='>'){
+					j++;
+				}
+				i += j+1;
+				if(j==3){
+					texto+="%20";
+				}
+			}else{
+				texto+=pTxt.charAt(i);
+				i++;
+			}
+		}
+		return texto;
 	}
 	
 	

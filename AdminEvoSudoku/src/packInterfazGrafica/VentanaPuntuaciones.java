@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -129,7 +127,7 @@ public class VentanaPuntuaciones extends JFrame {
 			String[] valTamano1 = {"Todos", "5", "10", "50", "75"};
 			tam = new JComboBox<String>(valTamano1);
 		}else{
-			String[] valTamano1 = gE.obtSudokusJugados();
+			String[] valTamano1 = gE.obtSudokusJugados(Sesion.obtSesion().obtNombreUsuario());
 			tam = new JComboBox<String>(valTamano1);
 		}
 		tam.setSelectedIndex(pTam);

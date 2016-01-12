@@ -3,12 +3,10 @@ package packInterfazGrafica;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,7 +14,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -183,15 +180,8 @@ public class VentanaFinSudoku extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try{
-					if(java.awt.Desktop.isDesktopSupported()){
-						String textoAPoner="He%20conseguido%20"+punt+"%20puntos%20y%20"+cantidadPremios+"%20premios%20al%20completar%20el%20sudoku%20"+id+"%20de%20%23AdminEvoSudoku.%20¿A%20que%20no%20lo%20superas?";
-						Desktop dk = Desktop.getDesktop();
-						dk.browse(new URI("www.twitter.com/home?status="+textoAPoner));
-					}
-				}catch(Exception e1){
-					JOptionPane.showMessageDialog(null,  "Error: "+e1);
-				}
+				String textoAPoner="He%20conseguido%20"+punt+"%20puntos%20y%20"+cantidadPremios+"%20premios%20al%20completar%20el%20sudoku%20"+id+"%20de%20%23AdminEvoSudoku.%20¿A%20que%20no%20lo%20superas?";
+				Sesion.obtSesion().compartir(textoAPoner);	
 			}
 			
 		});

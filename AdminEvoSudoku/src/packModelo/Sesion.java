@@ -1,10 +1,12 @@
 package packModelo;
 
+import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Observable;
@@ -18,6 +20,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 public class Sesion extends Observable implements Observer {
 
@@ -382,9 +385,18 @@ public class Sesion extends Observable implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		return aux;
+	}
+	
+	public void compartir(String pMensaje){
+		try{			
+			if(java.awt.Desktop.isDesktopSupported()){
+				Desktop dk = Desktop.getDesktop();
+				dk.browse(new URI("www.twitter.com/home?status="+pMensaje));
+			}
+		}catch(Exception e1){
+			JOptionPane.showMessageDialog(null,  "Error: "+e1);
+		}	
 	}
 }
 

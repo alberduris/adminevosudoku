@@ -1,14 +1,10 @@
 package packModelo;
 
-import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.swing.JOptionPane;
 
 public class GestorEstadisticas {
 	
@@ -293,16 +289,5 @@ public class GestorEstadisticas {
 			e.printStackTrace();
 		}		
 		return info;
-	}
-	
-	public void compartir(String pMensaje){
-		try{			
-			if(java.awt.Desktop.isDesktopSupported()){
-				Desktop dk = Desktop.getDesktop();
-				dk.browse(new URI("www.twitter.com/home?status="+pMensaje));
-			}
-		}catch(Exception e1){
-			JOptionPane.showMessageDialog(null,  "Error: "+e1);
-		}	
 	}
 }

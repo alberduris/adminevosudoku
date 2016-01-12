@@ -373,7 +373,7 @@ public class VentanaHistorial extends JFrame {
 			int id = Integer.valueOf(jL.getText().trim());
 			textoAPoner="He conseguido "+punt+" puntos al completar el sudoku "+id+" de %23AdminEvoSudoku. ¿A que no lo superas?";
 		}
-		gE.compartir(quitarEspacios(textoAPoner));
+		Sesion.obtSesion().compartir(quitarEspacios(textoAPoner));
 				
 	}	
 	

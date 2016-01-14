@@ -44,7 +44,6 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	
 
 	private JButton btnJugar;
-	private JButton btnPremios;
 	private JButton btnEstadisticas;
 	private JButton btnHistorial;
 	private JButton btnRanking;
@@ -52,7 +51,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	private JButton btnCerrarSesion;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(350, 425);
+	private Dimension dimVentana = new Dimension(350, 385);
 
 	private Tablero tab = Tablero.obtTablero();
 	/**
@@ -88,7 +87,6 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		
 
 		getbtnJugar();
-		getbtnPremios();
 		getbtnEstadisticas();
 		getbtnHistorial();
 		getbtnRanking();
@@ -100,7 +98,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 
 	private void getTituloMenuPpalUsuario() {
 	
-		lblTitulo = new JLabel("Menú principal");
+		lblTitulo = new JLabel("MenÃº principal");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -157,30 +155,6 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		panelConBoxLayout.add(btnJugar);
 	}
 
-	private void getbtnPremios() {
-		btnPremios = new JButton("Premios");
-		btnPremios.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnPremios.setMinimumSize(dimBtn);
-		btnPremios.setPreferredSize(dimBtn);
-		btnPremios.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-		
-		btnPremios.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "Has pulsado Premios");
-				
-			}
-			
-			
-				
-		});
-
-		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
-		panelConBoxLayout.add(btnPremios);
-	}
-
-	
 	private void getbtnEstadisticas() {
 		btnEstadisticas = new JButton("Estadisticas");
 		btnEstadisticas.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -307,8 +281,8 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		csBoton.gridx = 0;
 		csBoton.gridy = 1;
 		
-		JLabel texto = new JLabel("¿Quiere continuar el Sudoku guardado?");
-		JButton botonSi = new JButton("Sí");
+		JLabel texto = new JLabel("Â¿Quiere continuar el Sudoku guardado?");
+		JButton botonSi = new JButton("SÃ­");
 		
 		botonSi.addActionListener(new ActionListener(){
 

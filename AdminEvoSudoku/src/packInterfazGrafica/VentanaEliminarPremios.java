@@ -91,7 +91,7 @@ public class VentanaEliminarPremios extends JFrame{
 
 	private void getTituloVentanaOpcionesAdmin() {
 	
-		lblTitulo = new JLabel("Administrar Retos");
+		lblTitulo = new JLabel("Administrar Premios");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);

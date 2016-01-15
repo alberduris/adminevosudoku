@@ -28,7 +28,6 @@ public class Sesion extends Observable implements Observer {
 	private String nombreUsuario;
 	private Tablero tablero;
 	private int pistas;
-	private int puntos;
 	private GestorBD bd = GestorBD.getGestorBD();
 
 	private Sesion()
@@ -87,13 +86,13 @@ public class Sesion extends Observable implements Observer {
 	}
 	
 	public boolean[] registrarse(String pNombreUsuario, String pCorreoElectronico, String pContrasena){
-		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrÛnico FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrÛnico='"+pCorreoElectronico+"'");
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectr√≥nico FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectr√≥nico='"+pCorreoElectronico+"'");
 		boolean[] resultado = new boolean[2];
 		resultado[0] = true;
 		resultado[1] = true;
 		try {
 			while(res.next()){
-				String correo = res.getString("CorreoElectrÛnico");
+				String correo = res.getString("CorreoElectr√≥nico");
 				String nombre = res.getString("NombreUsuario");
 				if(correo.trim().equals(pCorreoElectronico.trim())){
 					resultado[1] = false;
@@ -106,8 +105,8 @@ public class Sesion extends Observable implements Observer {
 			}
 			if(resultado[0] && resultado[1]){
 				String contrasena = SHA1.getStringMensageDigest(pContrasena);
-				bd.Update("INSERT INTO Jugadores (NombreUsuario, CorreoElectrÛnico, ContraseÒa) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
-				enviarCorreo(pCorreoElectronico, "Bienvenido", "Bienvenido a AdminEvoSudoku.\nSu nuevos datos de ingreso son:\nNombre de Usuario: "+pNombreUsuario.trim()+"\nContraseÒa: "+pContrasena);
+				bd.Update("INSERT INTO Jugadores (NombreUsuario, CorreoElectr√≥nico, Contrase√±a) VALUES ('"+pNombreUsuario+"', '"+pCorreoElectronico+"','"+contrasena+"')");
+				enviarCorreo(pCorreoElectronico, "Bienvenido", "Bienvenido a AdminEvoSudoku.\nSu nuevos datos de ingreso son:\nNombre de Usuario: "+pNombreUsuario.trim()+"\nContrase√±a: "+pContrasena);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -117,13 +116,13 @@ public class Sesion extends Observable implements Observer {
 	}
 
 	public boolean[] identificarse(String pNombreUsuario, String pContrasena){
-		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrÛnico, ContraseÒa, Pistas FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectrÛnico='"+pNombreUsuario+"'");
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectr√≥nico, Contrase√±a, Pistas FROM Jugadores WHERE NombreUsuario='"+pNombreUsuario+"' or CorreoElectr√≥nico='"+pNombreUsuario+"'");
 		boolean[] resultado = new boolean[2];
 		resultado[0] = true;
 		resultado[1] = true;
 		try {
 			if(res.next()){
-				if(!SHA1.getStringMensageDigest(pContrasena).equals(res.getString("ContraseÒa"))){
+				if(!SHA1.getStringMensageDigest(pContrasena).equals(res.getString("Contrase√±a"))){
 					resultado[1] = false;
 				}else{
 					nombreUsuario = res.getString("NombreUsuario");
@@ -162,17 +161,6 @@ public class Sesion extends Observable implements Observer {
 		return Tablero.obtTablero().obtNivel();
 	}
 
-	/**
-	 * 
-	 */
-	public void actualizarPuntuaciones()
-	{
-	   Jugador jugador = new Jugador(nombreUsuario);
-	   jugador.actualizarPuntos(puntos);
-	   
-	   //TODO
-    }
-	
 	public void actualizarPistas(int pCantidad){
 		pistas += pCantidad;
 	}
@@ -201,7 +189,7 @@ public class Sesion extends Observable implements Observer {
 		
 		if(tablero != null){
 			int id = tablero.obtIdSudoku();;
-			bd.Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, PuntuaciÛn) VALUES ('"+nombreUsuario+"',"+id+",0)");
+			bd.Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuaci√≥n) VALUES ('"+nombreUsuario+"',"+id+",0)");
 		}
 	}
 	
@@ -211,15 +199,15 @@ public class Sesion extends Observable implements Observer {
 	
 	public boolean recuperarCotrasena(String pCampo){
 		
-		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectrÛnico FROM Jugadores WHERE NombreUsuario='"+pCampo+"' OR CorreoElectrÛnico='"+pCampo+"'");
+		ResultSet res =bd.Select("SELECT NombreUsuario, CorreoElectr√≥nico FROM Jugadores WHERE NombreUsuario='"+pCampo+"' OR CorreoElectr√≥nico='"+pCampo+"'");
 		String correo;
 		boolean resultado = true;
 		try {
 			if(res.next()){
-				correo = res.getString("CorreoElectrÛnico");
+				correo = res.getString("CorreoElectr√≥nico");
 				String contrasena = crearContrasena();
-				enviarCorreo(correo, "RecuperaciÛn de contraseÒa", "Su nueva contraseÒa es: " + contrasena);
-				bd.Update("UPDATE Jugadores SET ContraseÒa ='"+SHA1.getStringMensageDigest(contrasena)+"' WHERE CorreoElectrÛnico = '"+correo+"'");
+				enviarCorreo(correo, "Recuperaci√≥n de contrase√±a", "Su nueva contrase√±a es: " + contrasena);
+				bd.Update("UPDATE Jugadores SET Contrase√±a ='"+SHA1.getStringMensageDigest(contrasena)+"' WHERE CorreoElectr√≥nico = '"+correo+"'");
 			}else{
 				resultado = false;
 			}
@@ -243,19 +231,19 @@ public class Sesion extends Observable implements Observer {
 		
 		String pUsuario = obtSesion().nombreUsuario;
 		
-		bd.Update("UPDATE Jugadores SET CorreoElectrÛnico ='"+pEmail+"' "
+		bd.Update("UPDATE Jugadores SET CorreoElectr√≥nico ='"+pEmail+"' "
 				+ "WHERE NombreUsuario = '"+pUsuario+"'");
 		
 	}
 	
 	public boolean actualizarPassword(String pAnteriorPass, String pPass){
 		boolean correcto = false;
-		ResultSet res = bd.Select("SELECT ContraseÒa FROM Jugadores WHERE NombreUsuario='"+nombreUsuario+"'");
+		ResultSet res = bd.Select("SELECT Contrase√±a FROM Jugadores WHERE NombreUsuario='"+nombreUsuario+"'");
 		try {
 			if(res.next()){
-				if(SHA1.getStringMensageDigest(pAnteriorPass).equals(res.getString("ContraseÒa"))){
+				if(SHA1.getStringMensageDigest(pAnteriorPass).equals(res.getString("Contrase√±a"))){
 					String contrasena = SHA1.getStringMensageDigest(pPass);
-					bd.Update("UPDATE Jugadores SET ContraseÒa ='"+contrasena+"' "
+					bd.Update("UPDATE Jugadores SET Contrase√±a ='"+contrasena+"' "
 							+ "WHERE NombreUsuario = '"+nombreUsuario+"'");
 					correcto = true;
 				}
@@ -295,7 +283,7 @@ public class Sesion extends Observable implements Observer {
 		// Nombre del host de correo, es smtp.gmail.com
 		props.setProperty("mail.smtp.host", "smtp.gmail.com");
 
-		// TLS si est· disponible
+		// TLS si est√° disponible
 		props.setProperty("mail.smtp.starttls.enable", "true");
 
 		// Puerto de gmail para envio de correos
@@ -307,7 +295,7 @@ public class Sesion extends Observable implements Observer {
 		// Si requiere o no usuario y password para conectarse.
 		props.setProperty("mail.smtp.auth", "true");
 		
-		//Iniciamos sesiÛn
+		//Iniciamos sesi√≥n
 		Session session = Session.getDefaultInstance(props);
 		
 		//Creamos el mensaje
@@ -335,7 +323,7 @@ public class Sesion extends Observable implements Observer {
 	public void lanzarSudoku(int pNivel, int pId, int pTiempo){
 		Tablero tab = Tablero.obtTablero();
 		try{
-			ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Nivel="+pNivel+" AND Identificador NOT IN(SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombreUsuario+"' AND PuntuaciÛn!=0)ORDER BY RAND() LIMIT 1, 1");
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Nivel="+pNivel+" AND Identificador NOT IN(SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+nombreUsuario+"' AND Puntuaci√≥n!=0)ORDER BY RAND() LIMIT 1, 1");
 			if(res.next()){
 				byte[] b = res.getBytes("Sudoku");
 				ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
@@ -360,7 +348,7 @@ public class Sesion extends Observable implements Observer {
 	
 	public String[] obtJugadores(){
 		int id = Tablero.obtTablero().obtIdSudoku();
-		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND PuntuaciÛn!=0)");
+		ResultSet count = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuaci√≥n!=0)");
 		
 		String[] aux = null;
 		
@@ -375,7 +363,7 @@ public class Sesion extends Observable implements Observer {
 			e1.printStackTrace();
 		}
 		
-		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND PuntuaciÛn!=0)");
+		ResultSet resultado = GestorBD.getGestorBD().Select("SELECT NombreUsuario FROM Jugadores WHERE NombreUsuario NOT IN(SELECT NombreUsuario FROM Ranking WHERE IdSudoku="+id+" AND Puntuaci√≥n!=0)");
 		int i = 0;		
 		
 		try {

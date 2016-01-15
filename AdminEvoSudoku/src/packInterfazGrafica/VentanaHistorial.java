@@ -337,7 +337,6 @@ public class VentanaHistorial extends JFrame {
 					new VentanaMenuPpalUsuario();					
 				}
 				dispose();
-				
 			}
 		});
 		JPanel panelBox = new JPanel();

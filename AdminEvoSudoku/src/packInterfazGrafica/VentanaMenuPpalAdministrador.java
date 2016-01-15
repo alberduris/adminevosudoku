@@ -45,6 +45,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 	
 
 	private JButton btnJugar;
+	private JButton btnAdministrarRetos;
 	private JButton btnEstadisticas;
 	private JButton btnRanking;
 	private JButton btnHistorial;
@@ -53,7 +54,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 	private JButton btnCerrarSesion;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(350, 430);
+	private Dimension dimVentana = new Dimension(350, 480);
 	
 	private Tablero tab;
 
@@ -89,6 +90,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		
 
 		getbtnJugar();
+		getbtnAdministrarRetos();
 		getbtnEstadisticas();
 		getbtnHistorial();
 		getbtnRanking();
@@ -101,7 +103,7 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 
 	private void getTituloMenuPpalUsuario() {
 	
-		lblTitulo = new JLabel("Menú administador");
+		lblTitulo = new JLabel("Menu administador");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -114,11 +116,6 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
-	
-	
-
-	
 
 	private void getbtnJugar() {
 		btnJugar = new JButton("Jugar");
@@ -157,6 +154,27 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 		panelConBoxLayout.add(btnJugar);
 	}
 
+	private void getbtnAdministrarRetos() {
+		btnAdministrarRetos = new JButton("AdministrarRetos");
+		btnAdministrarRetos.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarRetos.setMinimumSize(dimBtn);
+		btnAdministrarRetos.setPreferredSize(dimBtn);
+		btnAdministrarRetos.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+
+		btnAdministrarRetos.setEnabled(true);
+		
+		btnAdministrarRetos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaAdministrarRetos();				
+			}
+		});
+
+		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
+		panelConBoxLayout.add(btnAdministrarRetos);
+	}
+	
 	private void getbtnEstadisticas() {
 		btnEstadisticas = new JButton("Estadisticas");
 		btnEstadisticas.setAlignmentX(Component.CENTER_ALIGNMENT);

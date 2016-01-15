@@ -44,6 +44,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	
 
 	private JButton btnJugar;
+	private JButton btnAdministrarRetos;
 	private JButton btnEstadisticas;
 	private JButton btnHistorial;
 	private JButton btnRanking;
@@ -51,7 +52,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	private JButton btnCerrarSesion;
 
 	private Dimension dimBtn = new Dimension(200, 30);
-	private Dimension dimVentana = new Dimension(350, 385);
+	private Dimension dimVentana = new Dimension(350, 430);
 
 	private Tablero tab = Tablero.obtTablero();
 	/**
@@ -87,6 +88,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		
 
 		getbtnJugar();
+		getbtnAdministrarRetos();
 		getbtnEstadisticas();
 		getbtnHistorial();
 		getbtnRanking();
@@ -98,7 +100,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 
 	private void getTituloMenuPpalUsuario() {
 	
-		lblTitulo = new JLabel("Menú principal");
+		lblTitulo = new JLabel("Menu principal");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -111,11 +113,6 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
-	
-	
-
-	
 
 	private void getbtnJugar() {
 		btnJugar = new JButton("Jugar");
@@ -153,6 +150,27 @@ public class VentanaMenuPpalUsuario extends JFrame {
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnJugar);
+	}
+	
+	private void getbtnAdministrarRetos() {
+		btnAdministrarRetos = new JButton("AdministrarRetos");
+		btnAdministrarRetos.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnAdministrarRetos.setMinimumSize(dimBtn);
+		btnAdministrarRetos.setPreferredSize(dimBtn);
+		btnAdministrarRetos.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+
+		btnAdministrarRetos.setEnabled(true);
+		
+		btnAdministrarRetos.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new VentanaAdministrarRetos();				
+			}
+		});
+
+		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
+		panelConBoxLayout.add(btnAdministrarRetos);
 	}
 
 	private void getbtnEstadisticas() {

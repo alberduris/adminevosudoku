@@ -331,7 +331,11 @@ public class VentanaHistorial extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new VentanaMenuPpalAdministrador();
+				if(Sesion.obtSesion().obtNombreUsuario() == "Admin"){
+					new VentanaMenuPpalAdministrador();
+				}else{
+					new VentanaMenuPpalUsuario();					
+				}
 				dispose();
 				
 			}
@@ -352,7 +356,7 @@ public class VentanaHistorial extends JFrame {
 			String nom = jL.getText();
 			jL = (JLabel) combinaciones[num].getComponent(1);
 			String obj = jL.getText();
-			textoAPoner="He conseguido el premio "+nom+" con el objetivo de '"+obj+"' en %23AdminEvoSudoku. ¿A que no lo consigues?";
+			textoAPoner="He conseguido el premio "+nom+" con el objetivo de '"+obj+"' en %23AdminEvoSudoku. Â¿A que no lo consigues?";
 		}else if(tipos.getSelectedItem().equals("Retos")){
 			JLabel jL = (JLabel) combinaciones[num].getComponent(2);
 			int punt = Integer.valueOf(jL.getText().trim());
@@ -362,16 +366,16 @@ public class VentanaHistorial extends JFrame {
 			String nombre = jL.getText().trim();
 			jL = (JLabel) combinaciones[num].getComponent(0);
 			if(jL.getText().trim().equals("SUPERADO")){
-				textoAPoner="He ganado un reto al jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. ¿A que no lo superas?";
+				textoAPoner="He ganado un reto al jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. Â¿A que no lo superas?";
 			}else{
-				textoAPoner="He perdido un reto con el jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. ¿A que no lo superas?";
+				textoAPoner="He perdido un reto con el jugador "+nombre+" con una puntuacion de "+punt+" puntos en el% sudoku "+id+" de %23AdminEvoSudoku. Â¿A que no lo superas?";
 			}
 		}else{
 			JLabel jL = (JLabel) combinaciones[num].getComponent(1);
 			int punt = Integer.valueOf(jL.getText().trim());
 			jL = (JLabel) combinaciones[num].getComponent(0);
 			int id = Integer.valueOf(jL.getText().trim());
-			textoAPoner="He conseguido "+punt+" puntos al completar el sudoku "+id+" de %23AdminEvoSudoku. ¿A que no lo superas?";
+			textoAPoner="He conseguido "+punt+" puntos al completar el sudoku "+id+" de %23AdminEvoSudoku. Â¿A que no lo superas?";
 		}
 		Sesion.obtSesion().compartir(quitarEspacios(textoAPoner));
 				

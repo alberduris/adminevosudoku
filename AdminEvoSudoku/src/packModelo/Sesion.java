@@ -34,7 +34,7 @@ public class Sesion extends Observable implements Observer {
 	private Sesion()
 	{
 		Tablero.obtTablero().addObserver(this);
-		pistas = 0;
+		pistas = 10;
 	}
 	
 	public static Sesion obtSesion()

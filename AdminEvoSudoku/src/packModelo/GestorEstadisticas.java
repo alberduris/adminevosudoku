@@ -250,7 +250,7 @@ public class GestorEstadisticas {
 		try {
 			if(res.next()){
 				tamano = res.getInt(1);
-				System.out.println("Tamano: "+tamano);
+				
 				list = new String[tamano][4];
 				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuación, L.Estado FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado!=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
 				int i = 0;

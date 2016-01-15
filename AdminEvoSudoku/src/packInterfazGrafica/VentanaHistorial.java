@@ -88,7 +88,7 @@ public class VentanaHistorial extends JFrame {
 
 	private void getTituloVentanaTitulo() {
 	
-		lblTitulo = new JLabel("Estadisticas");
+		lblTitulo = new JLabel("Historial");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 23));
 		lblTitulo.setOpaque(true);

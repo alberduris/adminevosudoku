@@ -198,9 +198,11 @@ public class Sesion extends Observable implements Observer {
 	
 	public void borrarTablero(){
 		bd.Update("UPDATE Jugadores SET Tablero=NULL WHERE NombreUsuario='"+nombreUsuario+"'");
-		int id = tablero.obtIdSudoku();;
-		bd.Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nombreUsuario+"',"+id+",0)");
-
+		
+		if(tablero != null){
+			int id = tablero.obtIdSudoku();;
+			bd.Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación) VALUES ('"+nombreUsuario+"',"+id+",0)");
+		}
 	}
 	
 	public void anadirSudokuEnJuego(Tablero pTablero){

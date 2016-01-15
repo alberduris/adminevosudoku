@@ -146,7 +146,7 @@ public class DialogoPausa extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane, "El sudoku se continuará la proxima vez que juege");
+				JOptionPane.showMessageDialog(contentPane, "El Sudoku no se guardará y se cerrará la aplicación");
 				Sesion.obtSesion().borrarTablero();
 				Sesion.obtSesion().finSesion(false);
 				System.exit(EXIT_ON_CLOSE);

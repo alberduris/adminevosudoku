@@ -104,7 +104,7 @@ public class VentanaLogin extends JFrame {
 
 	private void getTituloLogin() {
 	
-		lblTitulo = new JLabel("Login - Beta");
+		lblTitulo = new JLabel("Login");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);

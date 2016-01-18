@@ -30,12 +30,12 @@ public class GestorEstadisticas {
 			if(res.next()){
 				tamano = res.getInt(1);
 				list = new String[tamano][3];
-				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuación FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
+				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuacion FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
 				int i = 0;
 				while(res.next()){
 					list[i][0]=res.getString("NombreUsuario");
 					list[i][1]=String.valueOf(res.getInt("IdSudoku"));
-					list[i][2]=String.valueOf(res.getInt("Puntuación"));
+					list[i][2]=String.valueOf(res.getInt("Puntuacion"));
 					i++;
 				}
 			}
@@ -56,7 +56,7 @@ public class GestorEstadisticas {
 				Sudoku sud = (Sudoku) oos.readObject();
 				Tablero.obtTablero().inicializar(sud, null);
 				String nombre = Sesion.obtSesion().obtNombreUsuario();
-				GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nombre+"' AND IdSUdoku="+pId+"");
+				GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=3 WHERE NombreUsuarioRetado='"+nombre+"' AND NombreUsuario='"+pNombre+"' AND IdSudoku="+pId+"");
 			}
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			// TODO Auto-generated catch block
@@ -69,7 +69,7 @@ public class GestorEstadisticas {
 		GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nombre+"' AND IdSudoku="+pId+" AND NombreUsuario='"+pNombre+"'");
 	}
 	
-	public String[][] obtenerRanking(int pTamano, int pIdSudoku){
+	public String[][] obtRanking(int pTamano, int pIdSudoku){
 		String[][] ranking = new String[0][0];
 		if(pIdSudoku == 0){
 			String consulta;
@@ -81,20 +81,20 @@ public class GestorEstadisticas {
 				}
 				if(pTamano == 0){
 					ranking = new String[tamano][2];
-					consulta = "SELECT NombreUsuario, SUM(Puntuación) AS Puntuación FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuación DESC";
+					consulta = "SELECT NombreUsuario, SUM(Puntuacion) AS Puntuacion FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuacion DESC";
 				}else{
 					if(tamano >= pTamano){
 						ranking = new String[pTamano][2];
 					}else{
 						ranking = new String[tamano][2];
 					}
-					consulta = "SELECT NombreUsuario, SUM(Puntuación) AS Puntuación FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuación DESC LIMIT 0,"+pTamano+"";
+					consulta = "SELECT NombreUsuario, SUM(Puntuacion) AS Puntuacion FROM Ranking GROUP BY NombreUsuario ORDER BY Puntuacion DESC LIMIT 0,"+pTamano+"";
 				}
 				res = GestorBD.getGestorBD().Select(consulta);
 				int i = 0;
 				while(res.next()){
 					ranking[i][0] = res.getString("NombreUsuario");
-					ranking[i][1] = res.getString("Puntuación");
+					ranking[i][1] = String.valueOf(res.getInt("Puntuacion"));
 					i++;
 				}			
 			} catch (SQLException e) {
@@ -110,12 +110,12 @@ public class GestorEstadisticas {
 					tamano = res.getInt(1);
 				}
 				ranking = new String[tamano][2];
-				consulta = "SELECT NombreUsuario, Puntuación FROM Ranking WHERE IdSudoku="+pIdSudoku+" ORDER BY Puntuación DESC";
+				consulta = "SELECT NombreUsuario, Puntuacion FROM Ranking WHERE IdSudoku="+pIdSudoku+" ORDER BY Puntuacion DESC";
 				res = GestorBD.getGestorBD().Select(consulta);
 				int i = 0;
 				while(res.next()){
 					ranking[i][0] = res.getString("NombreUsuario");
-					ranking[i][1] = res.getString("Puntuación");
+					ranking[i][1] = res.getString("Puntuacion");
 					i++;
 				}			
 			} catch (SQLException e) {
@@ -127,14 +127,14 @@ public class GestorEstadisticas {
 	}
 	
 	public String[] obtSudokusJugados(String pNombre){
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuacion != 0" );
 		int tam;
 		String[] lista = new String[0];
 		try {
 			res.next();
 			tam = res.getInt(1);
 			lista = new String[tam];
-			res = GestorBD.getGestorBD().Select("SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+			res = GestorBD.getGestorBD().Select("SELECT IdSudoku FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuacion != 0" );
 			int i = 0;
 			while(res.next()){
 				lista[i] = String.valueOf(res.getInt("IdSudoku"));
@@ -148,18 +148,18 @@ public class GestorEstadisticas {
 	}
 	
 	public String[][] obtPuntSudokusJugados(String pNombre){
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuacion != 0" );
 		int tam;
 		String[][] lista = new String[0][2];
 		try {
 			res.next();
 			tam = res.getInt(1);
 			lista = new String[tam][2];
-			res = GestorBD.getGestorBD().Select("SELECT IdSudoku, Puntuación FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuación != 0" );
+			res = GestorBD.getGestorBD().Select("SELECT IdSudoku, Puntuacion FROM Ranking WHERE NombreUsuario='"+pNombre+"' AND Puntuacion != 0" );
 			int i = 0;
 			while(res.next()){
 				lista[i][0] = String.valueOf(res.getInt("IdSudoku"));
-				lista[i][1] = String.valueOf(res.getInt("Puntuación"));
+				lista[i][1] = String.valueOf(res.getInt("Puntuacion"));
 				i++;
 			}
 		} catch (SQLException e) {
@@ -172,10 +172,10 @@ public class GestorEstadisticas {
 	public String[] obtInfoSudoku(int pId){
 		String[] info = new String[3];
 		try {
-			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Ranking WHERE Puntuación!=0 AND IdSudoku="+pId+"");
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(NombreUsuario) FROM Ranking WHERE Puntuacion!=0 AND IdSudoku="+pId+"");
 			res.next();
 			info[0] = String.valueOf(res.getInt(1));
-			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.NombreUsuario), COUNT(DISTINCT(S.NombreUsuario)) FROM Ranking P, Ranking S WHERE S.Puntuación!=0 AND S.IdSudoku= P.IdSudoku AND P.IdSudoku="+pId+"");
+			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.NombreUsuario), COUNT(DISTINCT(S.NombreUsuario)) FROM Ranking P, Ranking S WHERE S.Puntuacion!=0 AND S.IdSudoku= P.IdSudoku AND P.IdSudoku="+pId+"");
 			res.next();
 			float p1 = res.getInt(1);
 			float result;
@@ -185,7 +185,7 @@ public class GestorEstadisticas {
 				result = (float)(res.getInt(2))/(float)(p1)*100;
 			}
 			info[1] = String.valueOf(result);
-			res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuación!=0 AND IdSudoku="+pId+"");
+			res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuacion!=0 AND IdSudoku="+pId+"");
 			res.next();
 			info[2] = String.valueOf(res.getLong(1));
 		} catch (SQLException e) {
@@ -198,10 +198,10 @@ public class GestorEstadisticas {
 	public String[] obtInfoUsuario(String pNombreUsuario){
 		String[] info = new String[7];
 		try {
-			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE Puntuación!=0 AND NombreUsuario='"+pNombreUsuario+"'");
+			ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(IdSudoku) FROM Ranking WHERE Puntuacion!=0 AND NombreUsuario='"+pNombreUsuario+"'");
 			res.next();
 			info[0] = String.valueOf(res.getInt(1));
-			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.IdSudoku), COUNT(DISTINCT(S.IdSudoku)) FROM Ranking P, Ranking S WHERE S.Puntuación!=0 AND S.IdSudoku= P.NombreUsuario AND P.NombreUsuario='"+pNombreUsuario+"'");
+			res = GestorBD.getGestorBD().Select("SELECT COUNT(P.IdSudoku), COUNT(DISTINCT(S.IdSudoku)) FROM Ranking P, Ranking S WHERE S.Puntuacion!=0 AND S.IdSudoku= P.NombreUsuario AND P.NombreUsuario='"+pNombreUsuario+"'");
 			res.next();
 			float p1 = res.getInt(1);
 			float result;
@@ -212,7 +212,7 @@ public class GestorEstadisticas {
 			}
 			info[1] = String.valueOf(result);
 			for(int i =1; i<6; i++){
-				res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuación!=0 AND NombreUsuario='"+pNombreUsuario+"' AND IdSudoku IN (SELECT Identificador FROM Sudokus WHERE Nivel="+i+")");
+				res = GestorBD.getGestorBD().Select("SELECT AVG(Tiempo) FROM Ranking WHERE Puntuacion!=0 AND NombreUsuario='"+pNombreUsuario+"' AND IdSudoku IN (SELECT Identificador FROM Sudokus WHERE Nivel="+i+")");
 				res.next();
 				info[i+1] = String.valueOf(res.getInt(1));
 			}			
@@ -242,23 +242,22 @@ public class GestorEstadisticas {
 		return lista;		
 	}
 
-	public String[][] obtenerRetosFinalizados() {
+	public String[][] obtRetosFinalizados(String pNombre) {
 		int tamano;
-		String nom = Sesion.obtSesion().obtNombreUsuario();
 		String[][] list = new String[0][0];
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(*) FROM ListaRetos WHERE NombreUsuarioRetado='"+nom+"' AND Estado=0");
+		ResultSet res = GestorBD.getGestorBD().Select("SELECT COUNT(*) FROM ListaRetos WHERE NombreUsuarioRetado='"+pNombre+"' AND Estado!=0 AND Estado!=3");
 		try {
 			if(res.next()){
 				tamano = res.getInt(1);
 				
 				list = new String[tamano][4];
-				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuación, L.Estado FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+nom+"' AND L.Estado!=0 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
+				res = GestorBD.getGestorBD().Select("SELECT L.NombreUsuario, L.IdSudoku, R.Puntuacion, L.Estado FROM ListaRetos L JOIN Ranking R  WHERE NombreUsuarioRetado='"+pNombre+"' AND L.Estado!=0 AND L.Estado!=3 AND L.NombreUsuario=R.NombreUsuario AND L.IdSudoku=R.IdSudoku ORDER BY L.IdSudoku");
 				int i = 0;
 				while(res.next() && i < tamano){
 					list[i][0]=res.getString("NombreUsuario");
 					list[i][1]=String.valueOf(res.getInt("IdSudoku"));
-					list[i][2]=String.valueOf(res.getInt("Puntuación"));
-					list[i][3]=String.valueOf(res.getBoolean("Estado"));
+					list[i][2]=String.valueOf(res.getInt("Puntuacion"));
+					list[i][3]=String.valueOf(res.getInt("Estado"));
 					i++;
 				}
 			}

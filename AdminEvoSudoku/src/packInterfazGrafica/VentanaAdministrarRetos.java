@@ -77,7 +77,6 @@ public class VentanaAdministrarRetos extends JFrame {
 		BoxLayout box = new BoxLayout(panelConBoxLayout, BoxLayout.Y_AXIS);
 		panelConBoxLayout.setLayout(box);
 
-		//contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
 		getTituloVentanaOpcionesAdmin();

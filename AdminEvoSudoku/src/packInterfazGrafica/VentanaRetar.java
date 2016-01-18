@@ -85,18 +85,13 @@ public class VentanaRetar extends JFrame {
 		lblTitulo.setOpaque(true);
 		lblTitulo.setForeground(Color.black);
 		
-		/*
-		Border paddingBorder = BorderFactory.createEmptyBorder(10,10,10,10);
-		Border border = BorderFactory.createBevelBorder(0);
-		lblTitulo.setBorder(BorderFactory.createCompoundBorder(border,paddingBorder));
-		 */
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
 
 	
 	private void getComboBoxJugadores() {
-		comboBoxJugadores = new JComboBox<String>(Sesion.obtSesion().obtJugadores());
+		comboBoxJugadores = new JComboBox<String>(Sesion.obtSesion().obtenerJugadores());
 				
 		comboBoxJugadores.setAlignmentX(Component.CENTER_ALIGNMENT);
 		comboBoxJugadores.setMinimumSize(dimBtn);

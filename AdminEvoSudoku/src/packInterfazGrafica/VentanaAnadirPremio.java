@@ -93,7 +93,7 @@ public class VentanaAnadirPremio extends JFrame {
 
 	private void getTituloDialogoConfig() {
 	
-		lblTitulo = new JLabel("<html><center>Añadir<br>Premios</center></html>");
+		lblTitulo = new JLabel("<html><center>A�adir<br>Premios</center></html>");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);
@@ -135,7 +135,7 @@ public class VentanaAnadirPremio extends JFrame {
 
 	private void getTipoSelec() {
 		ButtonGroup grupo = new ButtonGroup();
-		puntuacion = new JRadioButton("Puntuación");
+		puntuacion = new JRadioButton("Puntuacion");
 		puntuacion.setAlignmentX(Component.CENTER_ALIGNMENT);
 		puntuacion.setMinimumSize(dimBtn);
 		puntuacion.setPreferredSize(dimBtn);
@@ -161,7 +161,7 @@ public class VentanaAnadirPremio extends JFrame {
 		limite.setEditable(true);
 		limite.setHorizontalAlignment(JTextField.CENTER);
 
-		lm.add(new JLabel("Límite: " ));
+		lm.add(new JLabel("Limite: " ));
 		lm.add(limite);
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(lm);
@@ -169,7 +169,7 @@ public class VentanaAnadirPremio extends JFrame {
 
 	
 	private void getbtnAnadir() {
-		btnAnadir = new JButton("Añadir");
+		btnAnadir = new JButton("A�adir");
 		btnAnadir.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAnadir.setMinimumSize(dimBtn);
 		btnAnadir.setPreferredSize(dimBtn);

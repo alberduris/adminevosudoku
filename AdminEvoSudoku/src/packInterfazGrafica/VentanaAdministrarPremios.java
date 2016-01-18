@@ -94,7 +94,7 @@ public class VentanaAdministrarPremios extends JFrame {
 	}
 	
 	private void getbtnAnadirPremio() {
-		btnAnadirPremio = new JButton("AÃ±adir Premio");
+		btnAnadirPremio = new JButton("Añadir Premio");
 		btnAnadirPremio.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAnadirPremio.setMinimumSize(dimBtn);
 		btnAnadirPremio.setPreferredSize(dimBtn);

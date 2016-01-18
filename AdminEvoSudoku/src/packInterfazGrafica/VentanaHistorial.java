@@ -213,7 +213,7 @@ public class VentanaHistorial extends JFrame {
 	
 	
 	private void getRetos(){
-		String[][] com = gE.obtenerRetosFinalizados();
+		String[][] com = gE.obtRetosFinalizados((String)usuarios.getSelectedItem());
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
 		JButton btnCompartir = null;
@@ -235,7 +235,7 @@ public class VentanaHistorial extends JFrame {
 					combinaciones[i].add(new JLabel(com[i-1][0]));
 					combinaciones[i].add(new JLabel(com[i-1][1]));
 					combinaciones[i].add(new JLabel(com[i-1][2]));
-					if(com[i-1][3] == "true"){
+					if(com[i-1][3].equals("1")){
 						combinaciones[i].add(new JLabel("SUPERADO"));
 					}else{
 						combinaciones[i].add(new JLabel("NO SUPERADO"));

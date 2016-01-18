@@ -102,7 +102,7 @@ public class VentanaRegistro extends JFrame {
 
 	private void getTituloRegistro() {
 	
-		lblTitulo = new JLabel("Registro - Beta");
+		lblTitulo = new JLabel("Registro");
 		lblTitulo.setHorizontalAlignment(0);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
 		lblTitulo.setOpaque(true);

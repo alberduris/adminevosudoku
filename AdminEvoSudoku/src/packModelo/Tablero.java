@@ -255,7 +255,19 @@ public class Tablero extends Observable implements Serializable{
     	GestorBD.getGestorBD().Update("UPDATE Jugadores SET Pistas="+Sesion.obtSesion().obtPistas()+" WHERE NombreUsuario='"+nom+"'");
     	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=0");
     	GestorBD.getGestorBD().Update("INSERT INTO Ranking (NombreUsuario, IdSudoku, Puntuación, Tiempo) VALUES ('"+nom+"',"+id+","+punt+", "+tiempo+")");
-	}
+    	ResultSet res = GestorBD.getGestorBD().Select("SELECT Puntuacion FROM Ranking R, ListaRetos L WHERE L.NombreUsuarioRetado ='"+nom+"' AND L.NombreUsuario=R.NombreUsuario");
+    	try {
+			res.next();
+	    	if(res.getInt("Puntuacion") < punt){
+	        	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=1 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=3");
+	    	}else{
+	        	GestorBD.getGestorBD().Update("UPDATE ListaRetos SET Estado=2 WHERE NombreUsuarioRetado='"+nom+"' AND IdSudoku="+id+" AND Estado=3");
+	    	}
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    
+    }
     
     public int obtPuntuacion(){
 		int puntuacion = 0;

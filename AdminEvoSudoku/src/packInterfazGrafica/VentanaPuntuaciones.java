@@ -171,9 +171,9 @@ public class VentanaPuntuaciones extends JFrame {
 		String[][] com = new String[0][0];
 		JLabel[] fila = new JLabel[3];
 		if(tam.getSelectedItem() == "Todos"){
-			com = gE.obtenerRanking(0, 0);
+			com = gE.obtRanking(0, 0);
 		}else{
-			com = gE.obtenerRanking(Integer.valueOf((String) tam.getSelectedItem()),0);
+			com = gE.obtRanking(Integer.valueOf((String) tam.getSelectedItem()),0);
 		}
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
@@ -212,7 +212,7 @@ public class VentanaPuntuaciones extends JFrame {
 	
 	private void getListaSudokus() {
 		String[][] com = new String[0][0];
-		com = gE.obtenerRanking(0, Integer.valueOf((String) tam.getSelectedItem()));
+		com = gE.obtRanking(0, Integer.valueOf((String) tam.getSelectedItem()));
 		lista = new JPanel(new GridLayout(com.length+1, 1));
 		lista.setAutoscrolls(false);
 		if(com.length == 0){				

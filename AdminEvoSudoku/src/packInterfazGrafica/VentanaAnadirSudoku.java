@@ -325,9 +325,11 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 				public void actionPerformed(ActionEvent arg0) {
 					boolean[][] error = finalizar();
 					if(error == null){
-						System.out.println("NO COMPLETO");
+						crearDialogoNoCompleto();
 					}else if(error.length != 0){
 						mostrarErrores(error);
+					}else{
+						crearDialogoFinal();
 					}
 				}
 			});
@@ -478,24 +480,90 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		return comp;
 	}
 	
+	private void crearDialogoNoCompleto(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		final JDialog dialogFinal = new JDialog();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("El Sudoku no esta completo");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				btn1.setEnabled(true);
+				dialogFinal.dispose();
+				
+			}
+			
+		});
+		
+		dialogFinal.setSize(300,125);
+		dialogFinal.setAlwaysOnTop(true);
+		dialogFinal.setModal(false);
+		dialogFinal.setVisible(true);
+		dialogFinal.setLocationRelativeTo(this);
+		dialogFinal.setTitle("Error");
+		
+		dialogFinal.setLayout(new GridBagLayout());
+	
+		dialogFinal.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogFinal.add(boton,csBoton);
+	}
+	
+	
+	private void crearDialogoFinal(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		final JDialog dialogFinal = new JDialog();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("El Sudoku se ha añadido correctamente");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				btn1.setEnabled(true);
+				dialogFinal.dispose();
+				
+			}
+			
+		});
+		
+		dialogFinal.setSize(300,125);
+		dialogFinal.setAlwaysOnTop(true);
+		dialogFinal.setModal(false);
+		dialogFinal.setVisible(true);
+		dialogFinal.setLocationRelativeTo(this);
+		dialogFinal.setTitle("CORRECTO");
+		
+		dialogFinal.setLayout(new GridBagLayout());
+	
+		dialogFinal.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogFinal.add(boton,csBoton);
+	}
+	
 	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		new VentanaAnadirSudoku();
 	}
-	
-	public void completar(){
-		Random rnd = new Random();
-		int num;
-		for(int i = 0; i<MAX; i++){
-			for(int j = 0; j<MAX; j++){
-				num = rnd.nextInt(9) + 1;
-				cajas[i][j].setText(String.valueOf(num));
-				if(rnd.nextBoolean()){
-					cajas[i][j].setBackground(Color.BLACK);
-					cajas[i][j].setForeground(Color.WHITE);
-					desactivar();
-				}
-			}
-		}
-	}
-
 }

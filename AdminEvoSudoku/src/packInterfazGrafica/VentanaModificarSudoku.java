@@ -363,16 +363,42 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 				public void actionPerformed(ActionEvent arg0) {
 					boolean[][] error = finalizar();
 					if(error == null){
-						System.out.println("NO COMPLETO");
+						crearDialogoNoCompleto();
 					}else if(error.length != 0){
 						mostrarErrores(error);
 					}else{
-					//	gA.modificarSudoku(pDif, pSud, pFijas)
+						boolean[][] pFijas = obtFijas();
+						int[][] sud = obtSud();
+						gA.modificarSudoku(dif.getSelectedIndex()+1, sud, pFijas);
 					}
 				}
 			});
 		}
 		return btn1;
+	}
+	
+	private boolean[][] obtFijas(){
+		boolean[][] fij = new boolean[MAX][MAX];
+		for(int i = 0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				if(cajas[i][j].getBackground() == Color.BLACK){
+					fij[i][j] = true;
+				}else{
+					fij[i][j] = false;
+				}
+			}
+		}
+		return fij;
+	}
+	
+	private int[][] obtSud(){
+		int[][] sud = new int[MAX][MAX];
+		for(int i = 0; i<MAX; i++){
+			for(int j = 0; j<MAX; j++){
+				sud[i][j] = Integer.valueOf(cajas[i][j].getText());
+			}
+		}
+		return sud;
 	}
 		
 	private void mostrarErrores(boolean[][] pCasillasFallo){
@@ -431,14 +457,6 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 		
 	}
 	
-	@Override
-	public void update(Observable o, Object arg) {
-		for(int j = 0; j<MAX; j++){
-			for(int i=0; i<MAX; i++){
-			}
-		}
-	}
-	
 	private boolean[][] finalizar(){
 		int[][] casillas= new int[MAX][MAX];
 		boolean[][] fijas = new boolean[MAX][MAX];
@@ -462,6 +480,56 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 			result = null;
 		}
 		return result;
+	}
+		
+	private void crearDialogoNoCompleto(){
+		GridBagConstraints csTexto = new GridBagConstraints();
+		GridBagConstraints csBoton = new GridBagConstraints();
+		final JDialog dialogFinal = new JDialog();
+		
+		csTexto.weighty = 1;
+		csTexto.gridx = 0;
+		csTexto.gridy = 0;
+		
+		csBoton.weighty = 1;
+		csBoton.gridx = 0;
+		csBoton.gridy = 1;
+		
+		JLabel txt = new JLabel("El sudoku no esta completo");
+		JButton boton = new JButton("Continuar");
+		
+		boton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dialogFinal.dispose();
+				dispose();
+				new VentanaAdministrarSudokus();				
+			}
+			
+		});
+		
+		dialogFinal.setSize(300,125);
+		dialogFinal.setAlwaysOnTop(true);
+		dialogFinal.setModal(false);
+		dialogFinal.setVisible(true);
+		dialogFinal.setLocationRelativeTo(this);
+		dialogFinal.setTitle("ERROR");
+		
+		dialogFinal.setLayout(new GridBagLayout());
+	
+		dialogFinal.add(txt,csTexto);
+		csTexto.gridy = 1;
+		dialogFinal.add(boton,csBoton);
+		
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		for(int j = 0; j<MAX; j++){
+			for(int i=0; i<MAX; i++){
+			}
+		}
 	}
 	
 	private void getDialogFinal(){

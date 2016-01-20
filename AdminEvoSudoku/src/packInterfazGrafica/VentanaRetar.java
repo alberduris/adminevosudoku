@@ -39,13 +39,6 @@ public class VentanaRetar extends JFrame {
 	private Dimension dimVentana = new Dimension(250, 175);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaRetar();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaRetar() {
@@ -73,10 +66,7 @@ public class VentanaRetar extends JFrame {
 		setVisible(true);
 
 	}
-
-
 	
-
 	private void getLblTitulo() {
 		
 		lblTitulo = new JLabel("Retar");
@@ -88,7 +78,6 @@ public class VentanaRetar extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
 	
 	private void getComboBoxJugadores() {
 		comboBoxJugadores = new JComboBox<String>(Sesion.obtSesion().obtenerJugadores());
@@ -102,8 +91,6 @@ public class VentanaRetar extends JFrame {
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(comboBoxJugadores);
 	}
-	
-	
 	
 	private void getBtnRetar() {
 		btnRetar = new JButton("Retar");
@@ -123,25 +110,4 @@ public class VentanaRetar extends JFrame {
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(btnRetar);
 	}
-
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

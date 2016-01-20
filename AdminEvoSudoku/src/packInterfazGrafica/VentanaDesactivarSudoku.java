@@ -428,8 +428,4 @@ public class VentanaDesactivarSudoku extends JDialog implements Observer {
 			}
 		}
 	}
-		
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		new VentanaDesactivarSudoku();
-	}
 }

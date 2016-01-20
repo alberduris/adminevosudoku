@@ -46,13 +46,6 @@ public class VentanaHistorial extends JFrame {
 	private Dimension dimVentana = new Dimension(490, 500);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaHistorial();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 

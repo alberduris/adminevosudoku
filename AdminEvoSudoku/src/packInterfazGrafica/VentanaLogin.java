@@ -59,13 +59,6 @@ public class VentanaLogin extends JFrame {
 	private Dimension dimBoton = new Dimension(150,30);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaLogin();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaLogin() {
@@ -150,9 +143,7 @@ public class VentanaLogin extends JFrame {
 		txtPass.setPreferredSize(dimAreaTexto);
 	
 		
-		panelConBoxLayout.add(txtPass);
-		
-		
+		panelConBoxLayout.add(txtPass);	
 	}
 	
 	private void getBtnLogin(){
@@ -211,7 +202,6 @@ public class VentanaLogin extends JFrame {
 		});
 		
 		panelConBoxLayout.add(lblOlvido);
-		
 		
 	}
 	

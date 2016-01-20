@@ -80,13 +80,8 @@ public class CatalogoSudoku {
 		}	
 		return lanzar;
 	}
-
 	
-	public static void main(String[] arg){
-		CatalogoSudoku gS = CatalogoSudoku.getCatalogoSudoku();
-		gS.imprimir();
-	}
-	
+	//Método de Sudoku anterior para ficheros en vez de BD
 	public boolean leerFichero(String fich){
 		boolean descargadoConExito = true;
 		boolean lanzar = true;

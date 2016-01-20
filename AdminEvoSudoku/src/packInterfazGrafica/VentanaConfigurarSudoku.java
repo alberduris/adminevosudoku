@@ -41,18 +41,8 @@ public class VentanaConfigurarSudoku extends JFrame {
 	private JComboBox<String> seg, min;
 	private JButton btnSalirYGuardar, btnAtras;
 	
-	
-	
-
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(250, 400);
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaConfigurarSudoku();
-	}
 
 	/**
 	 * Create the frame.

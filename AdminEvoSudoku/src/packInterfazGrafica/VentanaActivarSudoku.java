@@ -47,7 +47,6 @@ public class VentanaActivarSudoku extends JDialog implements Observer {
 	
 	int filaColumna = 0;
 	
-	//boolean flag;
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
@@ -203,12 +202,9 @@ public class VentanaActivarSudoku extends JDialog implements Observer {
 		Color blanco = Color.decode("0xFAFAFA");
 		if(((pI == 0 || pI == 2) && (pJ == 0 || pJ ==2)) || ((pI == 1 || pI == 3) && (pJ == 1 || pJ ==3))){
 			paneles[pI][pJ].setBackground(blanco);
-		}
-		else{
+		}else{
 			paneles[pI][pJ].setBackground(gris);
-
 		}
-		
 	}
 		
 	private void crearCajas(){
@@ -420,9 +416,5 @@ public class VentanaActivarSudoku extends JDialog implements Observer {
 			for(int i=0; i<MAX; i++){
 			}
 		}
-	}
-		
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		new VentanaActivarSudoku();
 	}
 }

@@ -42,22 +42,10 @@ public class VentanaRecuperacion extends JFrame {
 	private JButton btnRecuperar;
 	
 	private JButton btnAtras;
-
-	
-	
-
-
 	
 	private Dimension dimVentana = new Dimension(350, 265);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaRecuperacion();
-	}
 
 	/**
 	 * Create the frame.
@@ -148,9 +136,6 @@ public class VentanaRecuperacion extends JFrame {
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0,25)));
 		panelConBoxLayout.add(btnRecuperar);
 	}
-	
-	
-	
 	
 	private void getBtnAtras() {
 		btnAtras = new JButton("<");

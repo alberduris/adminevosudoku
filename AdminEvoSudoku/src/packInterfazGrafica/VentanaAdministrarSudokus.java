@@ -45,13 +45,6 @@ public class VentanaAdministrarSudokus extends JFrame {
 	private Dimension dimVentana = new Dimension(350, 380);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaAdministrarSudokus();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaAdministrarSudokus() {
@@ -270,9 +263,4 @@ public class VentanaAdministrarSudokus extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-
 }

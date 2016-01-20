@@ -38,13 +38,6 @@ public class VentanaAdministrarPremios extends JFrame {
 	private Dimension dimVentana = new Dimension(420, 250);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-			new VentanaAdministrarPremios();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaAdministrarPremios() {

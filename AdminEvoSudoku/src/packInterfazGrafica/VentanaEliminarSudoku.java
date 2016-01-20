@@ -209,7 +209,6 @@ public class VentanaEliminarSudoku extends JDialog implements Observer {
 		}
 		else{
 			paneles[pI][pJ].setBackground(gris);
-
 		}
 		
 	}
@@ -433,8 +432,4 @@ public class VentanaEliminarSudoku extends JDialog implements Observer {
 			}
 		}
 	}
-		
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		new VentanaEliminarSudoku();
-	}	
 }

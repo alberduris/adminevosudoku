@@ -42,21 +42,9 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 	
 	private JButton btnAtras;
 
-	
-	
-
-
-	
 	private Dimension dimVentana = new Dimension(285, 300);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaCambiarNombreUsuario();
-	}
 
 	/**
 	 * Create the frame.
@@ -165,8 +153,7 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 		btnAtras = new JButton("<");
 		btnAtras.setEnabled(true);
 		btnAtras.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		
+				
 		btnAtras.addActionListener(new ActionListener() {
 			
 			@Override
@@ -189,18 +176,4 @@ public class VentanaCambiarNombreUsuario extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

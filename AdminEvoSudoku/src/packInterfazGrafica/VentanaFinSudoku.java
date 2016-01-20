@@ -45,13 +45,6 @@ public class VentanaFinSudoku extends JFrame {
 	private int punt, cantidadPremios, id;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaFinSudoku();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaFinSudoku() {
@@ -122,9 +115,6 @@ public class VentanaFinSudoku extends JFrame {
 		lblPuntuacion.setMinimumSize(dimBtn);
 		lblPuntuacion.setPreferredSize(dimBtn);
 		lblPuntuacion.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-		
-		
-	
 
 		panelConBoxLayout.add(Box.createRigidArea(new Dimension(0, 15)));
 		panelConBoxLayout.add(lblPuntuacion);

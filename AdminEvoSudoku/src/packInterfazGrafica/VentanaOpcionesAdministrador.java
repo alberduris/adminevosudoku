@@ -39,13 +39,6 @@ public class VentanaOpcionesAdministrador extends JFrame {
 	private Dimension dimVentana = new Dimension(420, 250);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaOpcionesAdministrador();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaOpcionesAdministrador() {
@@ -161,9 +154,4 @@ public class VentanaOpcionesAdministrador extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-
 }

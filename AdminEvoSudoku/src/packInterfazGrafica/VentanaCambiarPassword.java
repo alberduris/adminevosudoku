@@ -43,21 +43,9 @@ public class VentanaCambiarPassword extends JFrame {
 	
 	private JButton btnAtras;
 
-	
-	
-
-
-	
 	private Dimension dimVentana = new Dimension(340, 280);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaCambiarPassword();
-	}
 
 	/**
 	 * Create the frame.
@@ -107,7 +95,6 @@ public class VentanaCambiarPassword extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
 
 	private void getLbl() {
 		lbl = new JLabel("Contraseña");
@@ -174,8 +161,6 @@ public class VentanaCambiarPassword extends JFrame {
 	}
 	
 	
-	
-	
 	private void getBtnAtras() {
 		btnAtras = new JButton("<");
 		btnAtras.setEnabled(true);
@@ -205,18 +190,4 @@ public class VentanaCambiarPassword extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

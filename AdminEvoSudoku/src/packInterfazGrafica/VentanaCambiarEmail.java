@@ -41,22 +41,10 @@ public class VentanaCambiarEmail extends JFrame {
 	private JButton btnAccion;
 	
 	private JButton btnAtras;
-
-	
-	
-
-
 	
 	private Dimension dimVentana = new Dimension(285, 265);
 	private Dimension dimAreaTexto = new Dimension(200, 25);
 	private Dimension dimBoton = new Dimension(150,30);
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaCambiarEmail();
-	}
 
 	/**
 	 * Create the frame.
@@ -156,9 +144,6 @@ public class VentanaCambiarEmail extends JFrame {
 		panelConBoxLayout.add(btnAccion);
 	}
 	
-	
-	
-	
 	private void getBtnAtras() {
 		btnAtras = new JButton("<");
 		btnAtras.setEnabled(true);
@@ -188,18 +173,4 @@ public class VentanaCambiarEmail extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

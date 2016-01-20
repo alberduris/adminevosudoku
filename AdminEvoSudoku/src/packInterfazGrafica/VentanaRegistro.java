@@ -55,13 +55,6 @@ public class VentanaRegistro extends JFrame {
 	private Dimension dimBoton = new Dimension(150,30);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaRegistro();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaRegistro() {
@@ -162,11 +155,8 @@ public class VentanaRegistro extends JFrame {
 		
 		txtPass = new JPasswordField(10);
 		txtPass.setPreferredSize(dimAreaTexto);
-	
-		
+			
 		panelConBoxLayout.add(txtPass);
-		
-		
 	}
 	
 	private void getBtnRegistro(){
@@ -230,16 +220,4 @@ public class VentanaRegistro extends JFrame {
 	  
 	    return b;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

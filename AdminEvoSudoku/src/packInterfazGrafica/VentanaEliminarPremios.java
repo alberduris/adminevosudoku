@@ -46,13 +46,6 @@ public class VentanaEliminarPremios extends JFrame{
 	private Dimension dimVentana = new Dimension(500, 400);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaEliminarPremios();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaEliminarPremios() {
@@ -76,7 +69,6 @@ public class VentanaEliminarPremios extends JFrame{
 		BoxLayout box = new BoxLayout(panelConBoxLayout, BoxLayout.Y_AXIS);
 		panelConBoxLayout.setLayout(box);
 
-		//contentPane.add(panelConBorderLayout);
 		panelConBorderLayout.add(panelConBoxLayout, BorderLayout.CENTER);
 
 		getTituloVentanaOpcionesAdmin();
@@ -227,8 +219,6 @@ public class VentanaEliminarPremios extends JFrame{
 				setEnabled(true);
 				dialogSeguro.dispose();
 			}
-			
-			
 		});
 		
 		JButton botonNo = new JButton("No");

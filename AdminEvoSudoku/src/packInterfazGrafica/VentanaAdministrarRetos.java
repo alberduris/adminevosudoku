@@ -47,13 +47,6 @@ public class VentanaAdministrarRetos extends JFrame {
 	private Dimension dimVentana = new Dimension(500, 400);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaAdministrarRetos();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaAdministrarRetos() {
@@ -264,7 +257,6 @@ public class VentanaAdministrarRetos extends JFrame {
 				dialogSeguro.dispose();
 			}
 			
-			
 		});
 		
 		dialogSeguro.setSize(300,125);
@@ -285,7 +277,6 @@ public class VentanaAdministrarRetos extends JFrame {
 		
 		dialogSeguro.add(texto,csTexto);
 		dialogSeguro.add(respuesta, csBoton);	
-
 	}
 
 }

@@ -46,13 +46,6 @@ public class VentanaPuntuaciones extends JFrame {
 	private Dimension dimVentana = new Dimension(400, 400);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaPuntuaciones();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaPuntuaciones() {

@@ -33,10 +33,5 @@ public class SHA1 {
 			System.out.println("Error creando Digest");
 		}
 		return aHexadecimal(digest);
-	}
-	
-	public static void main(String arg[]){
-		System.out.println(SHA1.getStringMensageDigest("HOOOOLAAAA"));
-	}
-	
+	}	
 }

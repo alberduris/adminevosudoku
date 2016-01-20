@@ -36,20 +36,9 @@ public class VentanaOpciones extends JFrame {
 	private JButton btnCambiarPassword;
 	
 	private JButton btnAtras;
-	
-	
 
 	private Dimension dimBtn = new Dimension(200, 30);
 	private Dimension dimVentana = new Dimension(250, 300);
-
-	
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaOpciones();
-	}
 
 	/**
 	 * Create the frame.
@@ -99,11 +88,6 @@ public class VentanaOpciones extends JFrame {
 		panelConBorderLayout.add(lblTitulo, BorderLayout.NORTH);
 
 	}
-
-	
-	
-
-	
 
 	private void getbtnCambiarNombreUsuario() {
 		btnCambiarNombreUsuario = new JButton("Cambiar nombre usuario");

@@ -52,13 +52,6 @@ public class VentanaAnadirPremio extends JFrame {
 	private Dimension dimVentana = new Dimension(250, 420);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaAnadirPremio();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaAnadirPremio() {

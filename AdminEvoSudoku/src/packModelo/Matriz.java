@@ -8,13 +8,10 @@ public class Matriz implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 3583073981134219483L;
-	// ATRIBUTOS DE LA CLASE
-    // Dimensi�n del Sudoko
+	
     private final int DIMENSION = 9;
-    // Matriz para recoger los valores del Sudoku
     private Casilla[][] matriz;
 
-    // Constructora
     public Matriz() {
         matriz = new Casilla[9][9];
         for (int i=0; i<9; i++)
@@ -242,7 +239,7 @@ public class Matriz implements Serializable{
      * @todo Implement this packsudoku.IMatriz method
      */
     private boolean hayRepetidosZona(int pIdZona) {
-       pIdZona = pIdZona - 1;//S�lo si las zonas se numeran de 1-9
+       pIdZona = pIdZona - 1;
        boolean repe = false;
        int auxZona = pIdZona/3;
        int filaIni = auxZona * 3;

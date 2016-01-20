@@ -258,11 +258,4 @@ public class Sudoku implements Serializable{
 		}
 		return esta;
 	}
-    
-	/*public boolean estaEn(ListaPuntuaciones pLista){
-		return pLista.esta(identificador);
-	}*/	
-/*	public boolean estaEn(ListaPuntuaciones pLista){
-		return pLista.esta(identificador);
-	}*/	
 }

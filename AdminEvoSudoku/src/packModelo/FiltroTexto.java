@@ -36,27 +36,4 @@ public class FiltroTexto {
 		
 		return pass; 
 	}
-	
-	
-
-	public static void main(String[] args) {
-		
-		System.out.println(esEmail("Alber"));
-		System.out.println(esEmail("4lb3rduris@gmail.com")+"\n\n");
-		
-		System.out.println(caracterAdmitido("alber"));
-		System.out.println(caracterAdmitido("alber8295"));
-		System.out.println(caracterAdmitido("alber-alber"));
-		System.out.println(caracterAdmitido("alber_alber"));
-		System.out.println(caracterAdmitido("alber!"));
-		System.out.println(caracterAdmitido("alber?"));
-		System.out.println(caracterAdmitido("!?!?"));
-		System.out.println(caracterAdmitido("(alber)"));
-		System.out.println(caracterAdmitido("[alber]"));
-		
-		
-		
-
-	}
-
 }

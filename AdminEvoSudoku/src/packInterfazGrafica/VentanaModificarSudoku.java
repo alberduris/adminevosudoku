@@ -53,7 +53,6 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 	
 	int filaColumna = 0;
 	
-	//boolean flag;
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
@@ -227,15 +226,10 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 		keyListener = new KeyListener(){
 
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -243,7 +237,6 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 				if(Character.isDigit(num)&& num != '0'){
 					if(activado[0]>=0){
 						cajas[activado[0]][activado[1]].setText(num+"");
-						//tab.asgValor(activado[0], activado[1],(int)(num-'0'));
 					}
 				}
 				
@@ -291,7 +284,6 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 						activado[1] = -1;
 					}
 				}
-				//todosLosNumeros(tab.obtValorCasilla(pI, pJ));
 				j.updateUI();					
 			}
 			@Override
@@ -624,9 +616,4 @@ public class VentanaModificarSudoku extends JDialog implements Observer {
 		csTexto.gridy = 1;
 		dialogExiste.add(boton,csBoton);
 	}	
-	
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		GestorAdministrador.getGestorAdministrador();
-		new VentanaModificarSudoku();
-	}
 }

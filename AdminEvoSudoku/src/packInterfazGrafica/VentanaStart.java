@@ -26,9 +26,7 @@ public class VentanaStart extends JFrame {
 	private JButton btnRegistro;
 	
 	private Dimension dimBoton = new Dimension(150,30);
-	
-	//private static Clip sonido;
-	
+		
 	/**
 	 * Create the frame.
 	 * @throws IOException 
@@ -37,16 +35,13 @@ public class VentanaStart extends JFrame {
 	 */
 	public VentanaStart(){
 	
-		
-		//Opciones JFrame base, su ContentPane y su layout
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 500);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		crearContentPane();
 		setContentPane(contentPane);
-		
-		//Anadir resto elementos
+
 		getBtnLogin();
 		getBtnRegistro();
 		

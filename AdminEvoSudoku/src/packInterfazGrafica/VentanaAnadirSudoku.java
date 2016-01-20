@@ -17,7 +17,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -55,7 +54,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 	int dificultad = 0;
 	int filaColumna = 0;
 	
-	//boolean flag;
 	static final int MAX = 9;
 	int[] activado;
 	GestorAdministrador gA = GestorAdministrador.getGestorAdministrador();
@@ -76,7 +74,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		setVisible(true);
 		norte = new JPanel();
 		tiempo = new JLabel();
-		
 		
 		crearListener();
 		centro = new JPanel();
@@ -175,15 +172,10 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		keyListener = new KeyListener(){
 
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -191,7 +183,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 				if(Character.isDigit(num)&& num != '0'){
 					if(activado[0]>=0){
 						cajas[activado[0]][activado[1]].setText(num+"");
-						//tab.asgValor(activado[0], activado[1],(int)(num-'0'));
 					}
 				}
 				
@@ -239,7 +230,6 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 						activado[1] = -1;
 					}
 				}
-				//todosLosNumeros(tab.obtValorCasilla(pI, pJ));
 				j.updateUI();					
 			}
 			@Override
@@ -561,9 +551,5 @@ public class VentanaAnadirSudoku extends JDialog implements Observer {
 		dialogFinal.add(txt,csTexto);
 		csTexto.gridy = 1;
 		dialogFinal.add(boton,csBoton);
-	}
-	
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		new VentanaAnadirSudoku();
 	}
 }

@@ -14,11 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,9 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import packModelo.GestorBD;
 import packModelo.Sesion;
-import packModelo.Sudoku;
 import packModelo.Tablero;
 
 public class VentanaTablero extends JDialog implements Observer {
@@ -57,7 +51,6 @@ public class VentanaTablero extends JDialog implements Observer {
 	int pI = 0;
 	int filaColumna = 0;
 	
-	//boolean flag;
 	private boolean dispose = false;
 	static final int MAX = 9;
 	int[] activado;
@@ -442,15 +435,10 @@ public class VentanaTablero extends JDialog implements Observer {
 		keyListener = new KeyListener(){
 
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -821,26 +809,4 @@ public class VentanaTablero extends JDialog implements Observer {
 			}
 		}
 	}
-	
-	public static void main(String arg[]) throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		Tablero tb = Tablero.obtTablero();
-		Sudoku sud;
-		ResultSet res = GestorBD.getGestorBD().Select("SELECT Sudoku FROM Sudokus WHERE Identificador = 1400");
-		try {
-			res.next();
-			byte[] b = res.getBytes("Sudoku");
-			ByteArrayInputStream byteArray = new ByteArrayInputStream(b);
-			ObjectInputStream oos = new ObjectInputStream(byteArray);
-			sud = (Sudoku) oos.readObject();
-			tb.inicializar(sud, null);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		new VentanaTablero();
-	}
-
 }

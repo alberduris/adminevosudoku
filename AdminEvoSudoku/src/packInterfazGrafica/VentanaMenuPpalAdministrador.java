@@ -59,13 +59,6 @@ public class VentanaMenuPpalAdministrador extends JFrame {
 	private Tablero tab;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaMenuPpalAdministrador();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaMenuPpalAdministrador() {

@@ -54,13 +54,7 @@ public class VentanaMenuPpalUsuario extends JFrame {
 	private Dimension dimVentana = new Dimension(350, 430);
 
 	private Tablero tab = Tablero.obtTablero();
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaMenuPpalUsuario();
-	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -349,6 +343,4 @@ public class VentanaMenuPpalUsuario extends JFrame {
 		dialogContinuar.add(respuesta, csBoton);	
 
 	}
-	
-
 }

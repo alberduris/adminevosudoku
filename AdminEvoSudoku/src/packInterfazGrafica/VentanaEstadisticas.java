@@ -43,13 +43,6 @@ public class VentanaEstadisticas extends JFrame {
 	private Dimension dimVentana = new Dimension(350, 500);
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		new VentanaEstadisticas();
-	}
-
-	/**
 	 * Create the frame.
 	 */
 
